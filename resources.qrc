@@ -2,4 +2,8 @@
     <qresource prefix="/stylesheets">
         <file>stylesheet.qss</file>
     </qresource>
+    <qresource prefix="/img">
+        <file>left-arrow.png</file>
+        <file>right-arrow.png</file>
+    </qresource>
 </RCC>
