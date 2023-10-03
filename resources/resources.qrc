@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/left-arrow.png</file>
+        <file>img/right-arrow.png</file>
+        <file>styles/stylesheet.qss</file>
+    </qresource>
+</RCC>
