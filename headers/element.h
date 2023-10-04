@@ -7,11 +7,12 @@
 class Element
 {
 private:
-    std::string full_name;
+    std::string fullname;
     ElementIO io;
     std::string value;
+
 public:
-    Element(std::string fullname, ElementIO io, std::string value);
+    Element(const std::string &fullname, const ElementIO &io, const std::string &value);
     ~Element();
 };
 

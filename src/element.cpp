@@ -1,13 +1,9 @@
 #include "headers/element.h"
 
-Element::Element(std::string fullname, ElementIO io, std::string value)
-{
-    this->full_name = fullname;
-    this->io = io;
-    this->value = value;
-}
+Element::Element(const std::string &fullname, const ElementIO &io, const std::string &value)
+    : fullname(fullname)
+    , io(io)
+    , value(value)
+{}
 
-Element::~Element()
-{
-
-}
+Element::~Element() {}

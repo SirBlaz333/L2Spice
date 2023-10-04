@@ -6,14 +6,15 @@
 class ElementIO
 {
 private:
-    std::string input_id;
-    std::string output_id;
+    std::string inputId;
+    std::string outputId;
+
 public:
-    ElementIO();
-    ElementIO(std::string input_id, std::string output_id);
+    ElementIO(const std::string &inputId, const std::string &outputId);
     ~ElementIO();
-    std::string getInputID();
-    std::string getOutputID();
+
+    std::string getInputId() const;
+    std::string getOutputId() const;
 };
 
 #endif // ELEMENTIO_H
