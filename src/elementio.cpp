@@ -12,6 +12,11 @@ ElementIO::ElementIO(std::string input_id, std::string output_id)
     this->output_id = output_id;
 }
 
+ElementIO::~ElementIO()
+{
+
+}
+
 std::string ElementIO::getInputID()
 {
     return this->input_id;

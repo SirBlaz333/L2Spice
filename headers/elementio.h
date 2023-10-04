@@ -11,6 +11,7 @@ private:
 public:
     ElementIO();
     ElementIO(std::string input_id, std::string output_id);
+    ~ElementIO();
     std::string getInputID();
     std::string getOutputID();
 };

@@ -12,6 +12,7 @@ private:
     std::string value;
 public:
     Element(std::string fullname, ElementIO io, std::string value);
+    ~Element();
 };
 
 #endif // ELEMENT_H

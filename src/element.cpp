@@ -6,3 +6,8 @@ Element::Element(std::string fullname, ElementIO io, std::string value)
     this->io = io;
     this->value = value;
 }
+
+Element::~Element()
+{
+
+}
