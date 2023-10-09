@@ -1,5 +1,7 @@
 #include "headers/netlistparser.h"
 
+#include <headers/circuit.h>
+
 NetlistParser::NetlistParser()
 {
 

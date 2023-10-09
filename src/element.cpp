@@ -1,9 +1,11 @@
 #include "headers/element.h"
 
-Element::Element(const std::string &fullname, const ElementIO &io, const std::string &value)
+Element::Element(const std::string &fullname,
+                 const ElementIO &io,
+                 const std::vector<Attribute> &attributes)
     : fullname(fullname)
     , io(io)
-    , value(value)
+    , attributes(attributes)
 {}
 
 Element::~Element() {}
