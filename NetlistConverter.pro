@@ -10,6 +10,8 @@ CONFIG += c++17
 
 SOURCES += \
     src/attribute.cpp \
+    src/attributetype.cpp \
+    src/attributeunit.cpp \
     src/circuit.cpp \
     src/element.cpp \
     src/elementio.cpp \
@@ -20,12 +22,14 @@ SOURCES += \
 
 HEADERS += \
     headers/attribute.h \
+    headers/attributetype.h \
     headers/circuit.h \
     headers/element.h \
     headers/elementio.h \
     headers/mainwindow.h \
     headers/netlistparser.h \
-    headers/signal.h
+    headers/signal.h \
+    headers/attributeunit.h
 
 FORMS += \
     ui/mainwindow.ui

@@ -1,0 +1,14 @@
+#ifndef ATTRIBUTETYPE_H
+#define ATTRIBUTETYPE_H
+
+
+enum AttributeType
+{
+    VOLTAGE,
+    CURRENT,
+    RESISTANCE,
+    INDUCTANCE,
+    CAPACITANCE
+};
+
+#endif // ATTRIBUTETYPE_H
