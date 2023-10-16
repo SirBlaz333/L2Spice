@@ -10,7 +10,6 @@ CONFIG += c++17
 
 SOURCES += \
     src/attribute.cpp \
-    src/attributetype.cpp \
     src/circuit.cpp \
     src/component.cpp \
     src/element.cpp \
