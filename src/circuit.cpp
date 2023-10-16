@@ -1,33 +1,33 @@
 #include "headers/circuit.h"
 
-std::string Circuit::getUuid() const
-{
-    return uuid;
-}
-
-std::string Circuit::getName() const
-{
-    return name;
-}
-
-std::vector<Signal> Circuit::getSignalVector() const
-{
-    return signalVector;
-}
-
-std::vector<Element> Circuit::getElementVector() const
-{
-    return elementVector;
-}
-
-Circuit::Circuit(const std::string &uuid,
-                 const std::string &name,
-                 const std::vector<Signal> &signalVector,
-                 const std::vector<Element> &elementVector)
-    : uuid(uuid)
-    , name(name)
-    , signalVector(signalVector)
-    , elementVector(elementVector)
-{}
-
 Circuit::~Circuit() {}
+
+Variant Circuit::getVariant() const
+{
+    return variant;
+}
+
+NetClass Circuit::getNetclass() const
+{
+    return netclass;
+}
+
+std::map<std::string, Net> Circuit::getNetMap() const
+{
+    return netMap;
+}
+
+std::map<std::string, Component> Circuit::getComponentMap() const
+{
+    return componentMap;
+}
+
+Circuit::Circuit(const Variant &variant,
+                 const NetClass &netclass,
+                 const std::map<std::string, Net> &netMap,
+                 const std::map<std::string, Component> &componentMap)
+    : variant(variant)
+    , netclass(netclass)
+    , netMap(netMap)
+    , componentMap(componentMap)
+{}

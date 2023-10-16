@@ -3,7 +3,6 @@
 
 #include <headers/ElementIO.h>
 #include <string>
-#include <vector>
 
 class Element
 {

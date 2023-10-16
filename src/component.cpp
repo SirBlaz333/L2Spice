@@ -4,8 +4,8 @@ Component::Component(const std::string &libComponent,
                      const std::string &libVariant,
                      const std::string &value,
                      bool lockAssembly,
-                     const std::vector<Attribute> &attributeVector,
-                     const std::vector<Signal> &signalVector,
+                     const std::list<Attribute> &attributeList,
+                     const std::list<Signal> &signalList,
                      const std::string &uuid,
                      const std::string &name)
     : Element(uuid, name)
@@ -13,8 +13,8 @@ Component::Component(const std::string &libComponent,
     , libVariant(libVariant)
     , value(value)
     , lockAssembly(lockAssembly)
-    , attributeVector(attributeVector)
-    , signalVector(signalVector)
+    , attributeList(attributeList)
+    , signalList(signalList)
 {}
 
 Component::~Component() {}

@@ -1,29 +1,30 @@
 #ifndef CIRCUIT_H
 #define CIRCUIT_H
 
-#include "headers/element.h"
-#include "headers/signal.h"
+#include "component.h"
+#include "net.h"
+#include "variant.h"
+#include <map>
 #include <string>
-#include <vector>
 
 class Circuit
 {
 private:
-    std::string uuid;
-    std::string name;
-    std::vector<Signal> signalVector;
-    std::vector<Element> elementVector;
+    Variant variant;
+    NetClass netclass;
+    std::map<std::string, Net> netMap;
+    std::map<std::string, Component> componentMap;
 
 public:
-    Circuit(const std::string &uuid,
-            const std::string &name,
-            const std::vector<Signal> &signalVector,
-            const std::vector<Element> &elementVector);
+    Circuit(const Variant &variant,
+            const NetClass &netclass,
+            const std::map<std::string, Net> &netMap,
+            const std::map<std::string, Component> &componentMap);
     ~Circuit();
-    std::string getUuid() const;
-    std::string getName() const;
-    std::vector<Signal> getSignalVector() const;
-    std::vector<Element> getElementVector() const;
+    Variant getVariant() const;
+    NetClass getNetclass() const;
+    std::map<std::string, Net> getNetMap() const;
+    std::map<std::string, Component> getComponentMap() const;
 };
 
 #endif // CIRCUIT_H

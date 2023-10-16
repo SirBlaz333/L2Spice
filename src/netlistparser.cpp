@@ -1,29 +1,75 @@
 #include "headers/netlistparser.h"
 
 #include <headers/circuit.h>
+#include <list>
 #include <regex>
+
+std::string NetlistParser::nextWord(std::string::iterator iterator)
+{
+    std::string result = "";
+    while (isWordComponent(*iterator)) {
+        result += *iterator;
+        iterator++;
+    }
+    return result;
+}
+
+void NetlistParser::parseComponents(std::string::iterator iterator)
+{
+    while (depth != 0) {
+        char current = *iterator;
+        if (isLeftParanthesis(current)) {
+            depth++;
+        } else if (isRightParanthesis(current)) {
+            depth--;
+        } else if (isWordComponent(current)) {
+            processWord(iterator);
+        }
+        iterator++;
+    }
+}
+
+void NetlistParser::processWord(std::string::iterator iterator)
+{
+    std::string word = nextWord(iterator);
+}
+
+bool NetlistParser::isWordComponent(char c)
+{
+    return std::isalnum(c) || c == '-' || c == '_';
+}
+
+bool NetlistParser::isLeftParanthesis(char c)
+{
+    return c == '(';
+}
+
+bool NetlistParser::isRightParanthesis(char c)
+{
+    return c == ')';
+}
+
+bool NetlistParser::isQuotes(char c)
+{
+    return c == '"';
+}
+
+bool NetlistParser::isWhitespaceCharacter(char c)
+{
+    return std::isspace(c);
+}
 
 NetlistParser::NetlistParser() {}
 
 Circuit NetlistParser::parseLibreNotation(std::string input){
-}
-
-bool hasMatches(std::string input, std::regex regex)
-{
-    return std::regex_search(input, regex);
-}
-
-bool isMatch(std::string input, std::regex regex)
-{
-    return std::regex_match(input, regex);
-}
-
-std::vector<std::string> findAllMatches(std::string input, std::regex regex)
-{
-    std::vector<std::string> vector;
-    std::smatch match;
-    while (std::regex_search(input, match, regex)) {
-        vector.push_back(match.suffix().str());
+    std::string::iterator currentCharacter = input.begin();
+    char front = *currentCharacter;
+    currentCharacter++;
+    if (isLeftParanthesis(front) && nextWord(currentCharacter) == "librepcb_circuit") {
+        depth++;
+        currentCharacter++;
+        parseComponents(currentCharacter);
     }
-    return vector;
+
+    return Circuit(*variant, *netClass, netMap, componentMap);
 }
