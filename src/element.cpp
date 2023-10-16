@@ -1,7 +1,25 @@
 #include "headers/element.h"
 
-Component::Component(const std::string &uuid, const std::string &name) : uuid(uuid),
-    name(name)
-{}
+std::string Element::getUuid() const
+{
+    return uuid;
+}
 
-Component::~Component() {}
+void Element::setUuid(const std::string &newUuid)
+{
+    uuid = newUuid;
+}
+
+std::string Element::getName() const
+{
+    return name;
+}
+
+void Element::setName(const std::string &newName)
+{
+    name = newName;
+}
+
+Element::Element() {}
+
+Element::~Element() {}

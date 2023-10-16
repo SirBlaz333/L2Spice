@@ -6,7 +6,7 @@
 class NetClass : Element
 {
 public:
-    NetClass(const std::string &uuid, const std::string &name);
+    NetClass();
     ~NetClass();
 };
 

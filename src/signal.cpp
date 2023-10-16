@@ -10,9 +10,16 @@ std::string Signal::getNetUuid() const
     return netUuid;
 }
 
-Signal::Signal(const std::string &uuid, const std::string &netUuid)
-    : uuid(uuid)
-    , netUuid(netUuid)
-{}
+void Signal::setUuid(const std::string &newUuid)
+{
+    uuid = newUuid;
+}
+
+void Signal::setNetUuid(const std::string &newNetUuid)
+{
+    netUuid = newNetUuid;
+}
+
+Signal::Signal() {}
 
 Signal::~Signal() {}

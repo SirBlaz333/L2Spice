@@ -10,11 +10,13 @@ private:
     std::string netUuid;
 
 public:
-    Signal(const std::string &uuid, const std::string &netUuid);
+    Signal();
     ~Signal();
 
     std::string getUuid() const;
+    void setUuid(const std::string &newUuid);
     std::string getNetUuid() const;
+    void setNetUuid(const std::string &newNetUuid);
 };
 
 #endif // SIGNAL_H

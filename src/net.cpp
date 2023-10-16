@@ -1,9 +1,25 @@
 #include "../headers/net.h"
 
-Net::Net(bool autoMode, const NetClass &netclass, const std::string &uuid, const std::string &name)
-    : NetClass(uuid, name)
-    , autoMode(autoMode)
-    , netclass(netclass)
-{}
+bool Net::getAutoMode() const
+{
+    return autoMode;
+}
+
+void Net::setAutoMode(bool newAutoMode)
+{
+    autoMode = newAutoMode;
+}
+
+NetClass Net::getNetclass() const
+{
+    return netclass;
+}
+
+void Net::setNetclass(const NetClass &newNetclass)
+{
+    netclass = newNetclass;
+}
+
+Net::Net() {}
 
 Net::~Net() {}

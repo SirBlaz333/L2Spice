@@ -17,15 +17,21 @@ private:
     std::list<Signal> signalList;
 
 public:
-    Component(const std::string &libComponent,
-              const std::string &libVariant,
-              const std::string &value,
-              bool lockAssembly,
-              const std::list<Attribute> &attributeList,
-              const std::list<Signal> &signalList,
-              const std::string &uuid,
-              const std::string &name);
+    Component();
     ~Component();
+
+    std::string getLibComponent() const;
+    void setLibComponent(const std::string &newLibComponent);
+    std::string getLibVariant() const;
+    void setLibVariant(const std::string &newLibVariant);
+    std::string getValue() const;
+    void setValue(const std::string &newValue);
+    bool getLockAssembly() const;
+    void setLockAssembly(bool newLockAssembly);
+    std::list<Attribute> getAttributeList() const;
+    void setAttributeList(const std::list<Attribute> &newAttributeList);
+    std::list<Signal> getSignalList() const;
+    void setSignalList(const std::list<Signal> &newSignalList);
 };
 
 #endif // COMPONENT_H

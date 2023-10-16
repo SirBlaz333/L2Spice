@@ -1,20 +1,65 @@
 #include "../headers/component.h"
 
-Component::Component(const std::string &libComponent,
-                     const std::string &libVariant,
-                     const std::string &value,
-                     bool lockAssembly,
-                     const std::list<Attribute> &attributeList,
-                     const std::list<Signal> &signalList,
-                     const std::string &uuid,
-                     const std::string &name)
-    : Element(uuid, name)
-    , libComponent(libComponent)
-    , libVariant(libVariant)
-    , value(value)
-    , lockAssembly(lockAssembly)
-    , attributeList(attributeList)
-    , signalList(signalList)
-{}
+std::string Component::getLibComponent() const
+{
+    return libComponent;
+}
+
+void Component::setLibComponent(const std::string &newLibComponent)
+{
+    libComponent = newLibComponent;
+}
+
+std::string Component::getLibVariant() const
+{
+    return libVariant;
+}
+
+void Component::setLibVariant(const std::string &newLibVariant)
+{
+    libVariant = newLibVariant;
+}
+
+std::string Component::getValue() const
+{
+    return value;
+}
+
+void Component::setValue(const std::string &newValue)
+{
+    value = newValue;
+}
+
+bool Component::getLockAssembly() const
+{
+    return lockAssembly;
+}
+
+void Component::setLockAssembly(bool newLockAssembly)
+{
+    lockAssembly = newLockAssembly;
+}
+
+std::list<Attribute> Component::getAttributeList() const
+{
+    return attributeList;
+}
+
+void Component::setAttributeList(const std::list<Attribute> &newAttributeList)
+{
+    attributeList = newAttributeList;
+}
+
+std::list<Signal> Component::getSignalList() const
+{
+    return signalList;
+}
+
+void Component::setSignalList(const std::list<Signal> &newSignalList)
+{
+    signalList = newSignalList;
+}
+
+Component::Component() {}
 
 Component::~Component() {}

@@ -9,8 +9,10 @@ private:
     std::string description;
 
 public:
-    Variant(const std::string &description, const std::string &uuid, const std::string &name);
+    Variant();
     ~Variant();
+
+    std::string getDescription() const;
 };
 
 #endif // VARIANT_H
