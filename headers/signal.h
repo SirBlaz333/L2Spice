@@ -7,13 +7,14 @@ class Signal
 {
 private:
     std::string uuid;
-    std::string name;
+    std::string netUuid;
 
 public:
-    Signal(std::string uuid, std::string name);
+    Signal(const std::string &uuid, const std::string &netUuid);
     ~Signal();
-    std::string getUUID();
-    std::string getName();
+
+    std::string getUuid() const;
+    std::string getNetUuid() const;
 };
 
 #endif // SIGNAL_H

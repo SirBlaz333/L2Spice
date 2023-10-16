@@ -1,19 +1,18 @@
 #include "headers/signal.h"
 
-Signal::Signal(std::string uuid, std::string name)
+std::string Signal::getUuid() const
 {
-    this->uuid = uuid;
-    this->name = name;
+    return uuid;
 }
+
+std::string Signal::getNetUuid() const
+{
+    return netUuid;
+}
+
+Signal::Signal(const std::string &uuid, const std::string &netUuid)
+    : uuid(uuid)
+    , netUuid(netUuid)
+{}
 
 Signal::~Signal() {}
-
-std::string Signal::getUUID()
-{
-    return this->getUUID();
-}
-
-std::string Signal::getName()
-{
-    return this->name;
-}

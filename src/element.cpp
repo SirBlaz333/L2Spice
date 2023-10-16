@@ -1,11 +1,7 @@
 #include "headers/element.h"
 
-Element::Element(const std::string &fullname,
-                 const ElementIO &io,
-                 const std::vector<Attribute> &attributes)
-    : fullname(fullname)
-    , io(io)
-    , attributes(attributes)
+Component::Component(const std::string &uuid, const std::string &name) : uuid(uuid),
+    name(name)
 {}
 
-Element::~Element() {}
+Component::~Component() {}
