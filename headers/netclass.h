@@ -3,7 +3,7 @@
 
 #include "element.h"
 
-class NetClass : Element
+class NetClass : public Element
 {
 public:
     NetClass();

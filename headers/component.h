@@ -6,7 +6,7 @@
 #include "headers/signal.h"
 #include <list>
 
-class Component : Element
+class Component : public Element
 {
 private:
     std::string libComponent;

@@ -3,7 +3,7 @@
 
 #include "netclass.h"
 
-class Net : NetClass
+class Net : public NetClass
 {
 private:
     bool autoMode;

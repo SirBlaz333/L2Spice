@@ -3,7 +3,7 @@
 
 #include "element.h"
 
-class Variant : Element
+class Variant : public Element
 {
 private:
     std::string description;
@@ -13,6 +13,7 @@ public:
     ~Variant();
 
     std::string getDescription() const;
+    void setDescription(const std::string &newDescription);
 };
 
 #endif // VARIANT_H
