@@ -71,5 +71,5 @@ Circuit NetlistParser::parseLibreNotation(std::string input){
         parseComponents(currentCharacter);
     }
 
-    return Circuit(*variant, *netClass, netMap, componentMap);
+    return Circuit(variant, netClass, netMap, componentMap);
 }

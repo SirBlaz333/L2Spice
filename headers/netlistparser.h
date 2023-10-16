@@ -11,8 +11,8 @@
 class NetlistParser
 {
 private:
-    Variant *variant = NULL;
-    NetClass *netClass = NULL;
+    Variant variant;
+    NetClass netClass;
     std::map<std::string, Net> netMap;
     std::map<std::string, Component> componentMap;
     int depth = 0;
