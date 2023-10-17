@@ -32,6 +32,22 @@ void NetlistParser::parseComponents(std::string::iterator iterator)
 void NetlistParser::processWord(std::string::iterator iterator)
 {
     std::string word = nextWord(iterator);
+    if (depth == 1 &&
+        (word == "variant" || word == "netclass" || word == "net" || word == "component")
+        /*|| word == "attribute"*/) {
+        lastElementName = word;
+        lastPropertyName = "";
+    } else if (lastPropertyName == "") {
+        lastPropertyName = word;
+    } else {
+        processProperty(word);
+        lastPropertyName = "";
+    }
+}
+
+void NetlistParser::processProperty(std::string property)
+{
+
 }
 
 bool NetlistParser::isWordComponent(char c)
@@ -71,5 +87,5 @@ Circuit NetlistParser::parseLibreNotation(std::string input){
         parseComponents(currentCharacter);
     }
 
-    return Circuit(variant, netClass, netMap, componentMap);
+    return Circuit(Variant(), NetClass(), netMap, componentMap);
 }

@@ -5,19 +5,23 @@ bool Net::getAutoMode() const
     return autoMode;
 }
 
-void Net::setAutoMode(bool newAutoMode)
-{
-    autoMode = newAutoMode;
-}
-
 NetClass Net::getNetclass() const
 {
     return netclass;
 }
 
-void Net::setNetclass(const NetClass &newNetclass)
+void Net::setChildProperty(const std::string &propertyName, const std::string &property)
 {
-    netclass = newNetclass;
+    if (propertyName == "auto") {
+        autoMode = (property == "true");
+    }
+}
+
+void Net::setProperty(const std::string &propertyName, const Element &property)
+{
+    if (propertyName == "netclass") {
+        netclass = *((NetClass *) &property);
+    }
 }
 
 Net::Net() {}

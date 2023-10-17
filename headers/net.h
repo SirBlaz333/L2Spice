@@ -13,9 +13,9 @@ public:
     ~Net();
 
     bool getAutoMode() const;
-    void setAutoMode(bool newAutoMode);
     NetClass getNetclass() const;
-    void setNetclass(const NetClass &newNetclass);
+    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setProperty(const std::string &propertyName, const Element &property);
 };
 
 #endif // NET_H

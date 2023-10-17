@@ -1,23 +1,17 @@
 #include "headers/signal.h"
 
-std::string Signal::getUuid() const
+Net Signal::getNet() const
 {
-    return uuid;
+    return net;
 }
 
-std::string Signal::getNetUuid() const
-{
-    return netUuid;
-}
+void Signal::setChildProperty(const std::string &propertyName, const std::string &property) {}
 
-void Signal::setUuid(const std::string &newUuid)
+void Signal::setProperty(const std::string &propertyName, const Element &property)
 {
-    uuid = newUuid;
-}
-
-void Signal::setNetUuid(const std::string &newNetUuid)
-{
-    netUuid = newNetUuid;
+    if (propertyName == "net") {
+        net = *((Net *) &property);
+    }
 }
 
 Signal::Signal() {}

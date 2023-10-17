@@ -11,9 +11,9 @@ private:
 public:
     Variant();
     ~Variant();
-
     std::string getDescription() const;
-    void setDescription(const std::string &newDescription);
+    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setProperty(const std::string &propertyName, const Element &property);
 };
 
 #endif // VARIANT_H

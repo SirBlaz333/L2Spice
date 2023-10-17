@@ -11,15 +11,17 @@
 class NetlistParser
 {
 private:
-    Variant variant;
-    NetClass netClass;
+    int depth = 0;
+    std::string lastElementName;
+    std::string lastPropertyName;
+    std::map<std::string, std::map<std::string, std::string>> elementMap;
     std::map<std::string, Net> netMap;
     std::map<std::string, Component> componentMap;
-    int depth = 0;
 
     std::string nextWord(std::string::iterator iterator);
     void parseComponents(std::string::iterator iterator);
     void processWord(std::string::iterator iterator);
+    void processProperty(std::string property);
     bool isWordComponent(char c);
     bool isLeftParanthesis(char c);
     bool isRightParanthesis(char c);

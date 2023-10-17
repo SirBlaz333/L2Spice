@@ -21,17 +21,13 @@ public:
     ~Component();
 
     std::string getLibComponent() const;
-    void setLibComponent(const std::string &newLibComponent);
     std::string getLibVariant() const;
-    void setLibVariant(const std::string &newLibVariant);
     std::string getValue() const;
-    void setValue(const std::string &newValue);
     bool getLockAssembly() const;
-    void setLockAssembly(bool newLockAssembly);
     std::list<Attribute> getAttributeList() const;
-    void setAttributeList(const std::list<Attribute> &newAttributeList);
     std::list<Signal> getSignalList() const;
-    void setSignalList(const std::list<Signal> &newSignalList);
+    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setProperty(const std::string &propertyName, const Element &property);
 };
 
 #endif // COMPONENT_H

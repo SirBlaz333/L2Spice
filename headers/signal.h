@@ -1,22 +1,22 @@
 #ifndef SIGNAL_H
 #define SIGNAL_H
 
+#include "element.h"
+#include "net.h"
+
 #include <string>
 
-class Signal
+class Signal : public Element
 {
 private:
-    std::string uuid;
-    std::string netUuid;
+    Net net;
 
 public:
     Signal();
     ~Signal();
-
-    std::string getUuid() const;
-    void setUuid(const std::string &newUuid);
-    std::string getNetUuid() const;
-    void setNetUuid(const std::string &newNetUuid);
+    Net getNet() const;
+    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setProperty(const std::string &propertyName, const Element &property);
 };
 
 #endif // SIGNAL_H

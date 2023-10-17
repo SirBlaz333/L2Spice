@@ -5,19 +5,20 @@ std::string Element::getUuid() const
     return uuid;
 }
 
-void Element::setUuid(const std::string &newUuid)
-{
-    uuid = newUuid;
-}
-
 std::string Element::getName() const
 {
     return name;
 }
 
-void Element::setName(const std::string &newName)
+void Element::setProperty(const std::string &propertyName, const std::string &property)
 {
-    name = newName;
+    if (propertyName == "name") {
+        name = property;
+    } else if (propertyName == "uuid") {
+        uuid = property;
+    } else {
+        setChildProperty(propertyName, property);
+    }
 }
 
 Element::Element() {}
