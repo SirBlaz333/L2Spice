@@ -1,5 +1,8 @@
 #include "../headers/netclass.h"
 
-NetClass::NetClass() {}
+NetClass::NetClass()
+{
+    type = "netclass";
+}
 
 NetClass::~NetClass() {}

@@ -8,7 +8,6 @@
 class Attribute : public Element
 {
 private:
-    std::string name;
     std::string type;
     std::string unit;
     std::string value;

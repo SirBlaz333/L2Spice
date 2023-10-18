@@ -10,13 +10,16 @@ private:
     std::string name;
 
 protected:
+    std::string type;
     void setChildProperty(const std::string &propertyName, const std::string &property);
+
 public:
     Element();
     ~Element();
 
     std::string getUuid() const;
     std::string getName() const;
+    std::string getType() const;
     void setProperty(const std::string &propertyName, const std::string &property);
     void setProperty(const std::string &propertyName, const Element &property);
 };

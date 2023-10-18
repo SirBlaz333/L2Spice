@@ -12,6 +12,9 @@ void Variant::setChildProperty(const std::string &propertyName, const std::strin
     }
 }
 
-Variant::Variant() {}
+Variant::Variant()
+{
+    type = "variant";
+}
 
 Variant::~Variant() {}

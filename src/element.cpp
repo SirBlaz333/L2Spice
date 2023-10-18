@@ -10,6 +10,11 @@ std::string Element::getName() const
     return name;
 }
 
+std::string Element::getType() const
+{
+    return type;
+}
+
 void Element::setProperty(const std::string &propertyName, const std::string &property)
 {
     if (propertyName == "name") {
