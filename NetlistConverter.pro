@@ -13,7 +13,6 @@ SOURCES += \
     src/circuit.cpp \
     src/component.cpp \
     src/element.cpp \
-    src/elementio.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/net.cpp \
@@ -27,7 +26,6 @@ HEADERS += \
     headers/circuit.h \
     headers/component.h \
     headers/element.h \
-    headers/elementio.h \
     headers/mainwindow.h \
     headers/net.h \
     headers/netclass.h \
