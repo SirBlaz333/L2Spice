@@ -17,7 +17,7 @@ private:
     std::list<Attribute> attributes;
 
     std::string nextWord(std::string::iterator iterator);
-    void parseComponents(std::string::iterator iterator);
+    void parseComponents(std::string::iterator iterator, std::string::iterator last);
     void processWord(std::string::iterator iterator);
     void processProperty(std::string propertyName, std::string property);
     void createNewElement(std::string name, std::string uuid);

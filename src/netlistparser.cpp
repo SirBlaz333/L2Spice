@@ -8,6 +8,7 @@
 std::string NetlistParser::nextWord(std::string::iterator iterator)
 {
     std::string result = "";
+    //if it is called before word were found
     while (isWhitespaceCharacter(*iterator) || isQuotes(*iterator)) {
         iterator++;
     }
@@ -18,9 +19,9 @@ std::string NetlistParser::nextWord(std::string::iterator iterator)
     return result;
 }
 
-void NetlistParser::parseComponents(std::string::iterator iterator)
+void NetlistParser::parseComponents(std::string::iterator iterator, std::string::iterator last)
 {
-    while (depth != 0) {
+    while (depth != 0 && iterator != last) {
         char current = *iterator;
         if (isLeftParanthesis(current)) {
             depth++;
@@ -118,7 +119,7 @@ Circuit NetlistParser::parseLibreNotation(std::string input){
     if (isLeftParanthesis(front) && nextWord(currentCharacter) == "librepcb_circuit") {
         depth++;
         currentCharacter++;
-        parseComponents(currentCharacter);
+        parseComponents(currentCharacter, input.end());
     }
 
     std::map<std::string, Net> netMap;
