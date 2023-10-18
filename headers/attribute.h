@@ -1,18 +1,21 @@
 #ifndef ATTRIBUTE_H
 #define ATTRIBUTE_H
 
+#include "element.h"
+
 #include <string>
 
-class Attribute
+class Attribute : public Element
 {
 private:
     std::string name;
     std::string type;
     std::string unit;
-    double value;
+    std::string value;
 public:
-    Attribute(const std::string &name, const std::string &type, const std::string &unit, double value);
+    Attribute();
     ~Attribute();
+    void setChildProperty(const std::string &propertyName, const std::string &property);
 };
 
 #endif // ATTRIBUTE_H

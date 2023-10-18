@@ -2,26 +2,25 @@
 #define NETLISTPARSER_H
 
 #include "circuit.h"
-#include "variant.h"
-#include "headers/component.h"
-#include "headers/net.h"
 #include <list>
+#include <vector>
 
 
 class NetlistParser
 {
 private:
     int depth = 0;
+    std::string currentUuid;
     std::string lastElementName;
     std::string lastPropertyName;
-    std::map<std::string, std::map<std::string, std::string>> elementMap;
-    std::map<std::string, Net> netMap;
-    std::map<std::string, Component> componentMap;
+    std::map<std::string, Element> elementMap;
+    std::list<Attribute> attributes;
 
     std::string nextWord(std::string::iterator iterator);
     void parseComponents(std::string::iterator iterator);
     void processWord(std::string::iterator iterator);
-    void processProperty(std::string property);
+    void processProperty(std::string propertyName, std::string property);
+    void createNewElement(std::string name, std::string uuid);
     bool isWordComponent(char c);
     bool isLeftParanthesis(char c);
     bool isRightParanthesis(char c);

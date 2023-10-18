@@ -3,10 +3,14 @@
 #include <headers/circuit.h>
 #include <list>
 #include <regex>
+#include <set>
 
 std::string NetlistParser::nextWord(std::string::iterator iterator)
 {
     std::string result = "";
+    while (isWhitespaceCharacter(*iterator) || isQuotes(*iterator)) {
+        iterator++;
+    }
     while (isWordComponent(*iterator)) {
         result += *iterator;
         iterator++;
@@ -21,6 +25,9 @@ void NetlistParser::parseComponents(std::string::iterator iterator)
         if (isLeftParanthesis(current)) {
             depth++;
         } else if (isRightParanthesis(current)) {
+            if (depth == 1) {
+                currentUuid = "";
+            }
             depth--;
         } else if (isWordComponent(current)) {
             processWord(iterator);
@@ -32,22 +39,49 @@ void NetlistParser::parseComponents(std::string::iterator iterator)
 void NetlistParser::processWord(std::string::iterator iterator)
 {
     std::string word = nextWord(iterator);
-    if (depth == 1 &&
-        (word == "variant" || word == "netclass" || word == "net" || word == "component")
-        /*|| word == "attribute"*/) {
-        lastElementName = word;
+    std::set<std::string> elementNames = {"variant", "netclass", "net", "component"};
+    if (depth == 1 && elementNames.count(word)) {
+        createNewElement(word, nextWord(iterator));
         lastPropertyName = "";
-    } else if (lastPropertyName == "") {
+        return;
+    }
+    if (word == "attribute") {
+        return;
+    }
+    if (lastPropertyName == "") {
         lastPropertyName = word;
-    } else {
-        processProperty(word);
-        lastPropertyName = "";
+        return;
+    }
+    processProperty(lastPropertyName, word);
+}
+
+void NetlistParser::processProperty(std::string propertyName, std::string property)
+{
+    if (!currentUuid.empty()) {
+        Element element = elementMap.at(currentUuid);
+        if (attributes.empty()) {
+            element.setProperty(propertyName, property);
+        } else {
+            element.setProperty("attribute", attributes.back());
+            attributes.pop_back();
+        }
     }
 }
 
-void NetlistParser::processProperty(std::string property)
+void NetlistParser::createNewElement(std::string name, std::string uuid)
 {
-
+    Element element;
+    if (name == "variant") {
+        Element element = Variant();
+    } else if (name == "netclass") {
+        Element element = NetClass();
+    } else if (name == "net") {
+        Element element = Net();
+    } else if (name == "component") {
+        Element element = Component();
+    }
+    element.setProperty("uuid", uuid);
+    elementMap.insert(std::pair<std::string, Element>(uuid, element));
 }
 
 bool NetlistParser::isWordComponent(char c)
@@ -87,5 +121,7 @@ Circuit NetlistParser::parseLibreNotation(std::string input){
         parseComponents(currentCharacter);
     }
 
+    std::map<std::string, Net> netMap;
+    std::map<std::string, Component> componentMap;
     return Circuit(Variant(), NetClass(), netMap, componentMap);
 }

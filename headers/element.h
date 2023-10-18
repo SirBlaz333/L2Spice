@@ -10,7 +10,7 @@ private:
     std::string name;
 
 protected:
-    virtual void setChildProperty(const std::string &propertyName, const std::string &property) = 0;
+    void setChildProperty(const std::string &propertyName, const std::string &property);
 public:
     Element();
     ~Element();
@@ -18,7 +18,7 @@ public:
     std::string getUuid() const;
     std::string getName() const;
     void setProperty(const std::string &propertyName, const std::string &property);
-    virtual void setProperty(const std::string &propertyName, const Element &property) = 0;
+    void setProperty(const std::string &propertyName, const Element &property);
 };
 
 #endif // ELEMENT_H

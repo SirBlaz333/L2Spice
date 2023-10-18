@@ -15,6 +15,7 @@ private:
     bool lockAssembly;
     std::list<Attribute> attributeList;
     std::list<Signal> signalList;
+    void setChildProperty(const std::string &propertyName, const std::string &property);
 
 public:
     Component();
@@ -26,7 +27,6 @@ public:
     bool getLockAssembly() const;
     std::list<Attribute> getAttributeList() const;
     std::list<Signal> getSignalList() const;
-    void setChildProperty(const std::string &propertyName, const std::string &property);
     void setProperty(const std::string &propertyName, const Element &property);
 };
 

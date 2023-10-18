@@ -1,13 +1,16 @@
 #include "../headers/attribute.h"
 
-Attribute::Attribute(const std::string &name,
-                     const std::string &type,
-                     const std::string &unit,
-                     double value)
-    : name(name)
-    , type(type)
-    , unit(unit)
-    , value(value)
-{}
+Attribute::Attribute() {}
 
 Attribute::~Attribute() {}
+
+void Attribute::setChildProperty(const std::string &propertyName, const std::string &property)
+{
+    if (propertyName == "type") {
+        type = property;
+    } else if (propertyName == "unit") {
+        unit = property;
+    } else if (propertyName == "value") {
+        value = property;
+    }
+}
