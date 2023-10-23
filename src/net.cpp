@@ -5,7 +5,7 @@ bool Net::getAutoMode() const
     return autoMode;
 }
 
-NetClass Net::getNetclass() const
+NetClass* Net::getNetclass() const
 {
     return netclass;
 }
@@ -17,10 +17,10 @@ void Net::setChildProperty(const std::string &propertyName, const std::string &p
     }
 }
 
-void Net::setProperty(const std::string &propertyName, const Element &property)
+void Net::setProperty(const std::string &propertyName, const Element* property)
 {
     if (propertyName == "netclass") {
-        netclass = *((NetClass *) &property);
+        netclass = (NetClass *) &property;
     }
 }
 

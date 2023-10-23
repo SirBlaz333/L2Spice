@@ -12,3 +12,10 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
+
+void MainWindow::on_pushButton_clicked()
+{
+    Circuit circuit = parser.parseLibreNotation(
+        ui->textEdit->toPlainText().toStdString());
+}
+

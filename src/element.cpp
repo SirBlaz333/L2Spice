@@ -26,10 +26,6 @@ void Element::setProperty(const std::string &propertyName, const std::string &pr
     }
 }
 
-void Element::setProperty(const std::string &propertyName, const Element &property) {}
+void Element::setProperty(const std::string &propertyName, const Element *property) {}
 
 void Element::setChildProperty(const std::string &propertyName, const std::string &property) {}
-
-Element::Element() {}
-
-Element::~Element() {}

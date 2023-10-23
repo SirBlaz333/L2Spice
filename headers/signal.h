@@ -10,12 +10,13 @@ class Signal : public Element
 {
 private:
     Net net;
-    void setProperty(const std::string &propertyName, const Element &property);
+    void setProperty(const std::string &propertyName, const Element* property);
 
 public:
     Signal();
     ~Signal();
     Net getNet() const;
+
 };
 
 #endif // SIGNAL_H

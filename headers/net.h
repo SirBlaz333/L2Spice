@@ -7,15 +7,15 @@ class Net : public NetClass
 {
 private:
     bool autoMode;
-    NetClass netclass;
+    NetClass* netclass;
     void setChildProperty(const std::string &propertyName, const std::string &property);
 public:
     Net();
     ~Net();
 
     bool getAutoMode() const;
-    NetClass getNetclass() const;
-    void setProperty(const std::string &propertyName, const Element &property);
+    NetClass* getNetclass() const;
+    void setProperty(const std::string &propertyName, const Element* property);
 };
 
 #endif // NET_H

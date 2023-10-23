@@ -4,23 +4,22 @@
 #include "circuit.h"
 #include <list>
 #include <vector>
+#include <bits/unique_ptr.h>
 
 
 class NetlistParser
 {
 private:
-    int depth = 0;
-    std::string currentUuid;
-    std::string lastElementName;
-    std::string lastPropertyName;
-    std::map<std::string, Element> elementMap;
-    std::list<Attribute> attributes;
+    std::string::iterator currentCharacter;
+    std::map<std::string, std::unique_ptr<Element>> elementMap;
 
-    std::string nextWord(std::string::iterator iterator);
-    void parseComponents(std::string::iterator iterator, std::string::iterator last);
-    void processWord(std::string::iterator iterator);
-    void processProperty(std::string propertyName, std::string property);
+    std::string nextWord();
+    std::string nextDataInQuotes();
+    void parseComponents(std::string::iterator last);
+    void parseComponent(std::string parentUuid,  std::string::iterator last);
     void createNewElement(std::string name, std::string uuid);
+    void parseElement(std::string parentUuid, std::string::iterator last);
+    std::string createUuid();
     bool isWordComponent(char c);
     bool isLeftParanthesis(char c);
     bool isRightParanthesis(char c);

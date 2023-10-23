@@ -11,10 +11,13 @@ private:
     std::string type;
     std::string unit;
     std::string value;
+
+    void setChildProperty(const std::string &propertyName, const std::string &property);
+
 public:
     Attribute();
     ~Attribute();
-    void setChildProperty(const std::string &propertyName, const std::string &property);
+
 };
 
 #endif // ATTRIBUTE_H

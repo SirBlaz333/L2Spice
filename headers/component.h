@@ -27,7 +27,7 @@ public:
     bool getLockAssembly() const;
     std::list<Attribute> getAttributeList() const;
     std::list<Signal> getSignalList() const;
-    void setProperty(const std::string &propertyName, const Element &property);
+    void setProperty(const std::string &propertyName, const Element* property);
 };
 
 #endif // COMPONENT_H

@@ -41,7 +41,7 @@ void Component::setChildProperty(const std::string &propertyName, const std::str
         lockAssembly = (property == "true");
     }
 }
-void Component::setProperty(const std::string &propertyName, const Element &property)
+void Component::setProperty(const std::string &propertyName, const Element* property)
 {
     if (propertyName == "signal") {
         signalList.push_back(*((Signal *) &property));
