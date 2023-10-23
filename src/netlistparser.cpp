@@ -1,18 +1,14 @@
 #include "headers/netlistparser.h"
-
-#include <headers/circuit.h>
-#include <iostream>
-#include <list>
-#include <regex>
-#include <set>
+#include "headers/characterutils.h"
+#include "headers/uuidgenerator.h"
 
 std::string NetlistParser::nextWord()
 {
-    if (isQuotes(*currentCharacter)) {
+    if (character_utils::isQuotes(*currentCharacter)) {
         return nextDataInQuotes();
     }
     std::string result = "";
-    while (isWordComponent(*currentCharacter)) {
+    while (character_utils::isWordComponent(*currentCharacter)) {
         result += *currentCharacter;
         currentCharacter++;
     }
@@ -23,7 +19,7 @@ std::string NetlistParser::nextDataInQuotes()
 {
     std::string result = "";
     currentCharacter++;
-    while (!isQuotes(*currentCharacter)) {
+    while (!character_utils::isQuotes(*currentCharacter)) {
         result += *currentCharacter;
         currentCharacter++;
     }
@@ -43,10 +39,10 @@ void NetlistParser::parseComponent(std::string parentUuid,
                                    std::string::iterator last)
 {
     while (currentCharacter != last) {
-        if (isLeftParanthesis(*currentCharacter)) {
+        if (character_utils::isLeftParanthesis(*currentCharacter)) {
             parseElement(parentUuid, last);
         }
-        if (isRightParanthesis(*currentCharacter)) {
+        if (character_utils::isRightParanthesis(*currentCharacter)) {
             return;
         }
         currentCharacter++;
@@ -60,20 +56,23 @@ void NetlistParser::parseElement(std::string parentUuid,
     std::string name = nextWord();
     currentCharacter++;
     std::string value = nextWord();
-    if (isRightParanthesis(*currentCharacter)) {
-        Element* element = elementMap[parentUuid].get();
-        element->setProperty(name, value);
-        currentCharacter++;
-        return;
-    }
-    if (isWhitespaceCharacter(*currentCharacter)) {
-        createNewElement(name, value);
-        Element *newElement = elementMap[value].get();
-        parseComponent(value, last);
-        if (!parentUuid.empty()) {
-            Element* element = elementMap[parentUuid].get();
-            element->setProperty(name, newElement);
+    try {
+        if (character_utils::isRightParanthesis(*currentCharacter)) {
+            Element* element = elementMap.at(parentUuid).get();
+            element->setProperty(name, value);
+            currentCharacter++;
+            return;
         }
+        if (character_utils::isWhitespaceCharacter(*currentCharacter)) {
+            createNewElement(name, value);
+            Element *newElement = elementMap.at(parentUuid).get();
+            parseComponent(value, last);
+            if (!parentUuid.empty()) {
+                Element* element = elementMap.at(parentUuid).get();
+                element->setProperty(name, newElement);
+            }
+        }
+    } catch (std::out_of_range e) {
     }
 }
 
@@ -88,40 +87,14 @@ void NetlistParser::createNewElement(std::string name, std::string uuid)
     } else if (name == "component") {
         elementMap[uuid] = std::make_unique<Component>();
     } else if (name == "attribute") {
-        uuid = createUuid();
+        std::string name = uuid;
+        uuid = uuid_generator::generateUUID();
         elementMap[uuid] = std::make_unique<Attribute>();
+        elementMap[uuid].get()->setProperty("name", name);
+    } else if (name == "signal") {
+        elementMap[uuid] = std::make_unique<Signal>();
     }
     elementMap[uuid].get()->setProperty("uuid", uuid);
-}
-
-std::string NetlistParser::createUuid()
-{
-    return "";
-}
-
-bool NetlistParser::isWordComponent(char c)
-{
-    return std::isalnum(c) || c == '-' || c == '_';
-}
-
-bool NetlistParser::isLeftParanthesis(char c)
-{
-    return c == '(';
-}
-
-bool NetlistParser::isRightParanthesis(char c)
-{
-    return c == ')';
-}
-
-bool NetlistParser::isQuotes(char c)
-{
-    return c == '"';
-}
-
-bool NetlistParser::isWhitespaceCharacter(char c)
-{
-    return std::isspace(c);
 }
 
 NetlistParser::NetlistParser() {}
@@ -133,7 +106,7 @@ Circuit NetlistParser::parseLibreNotation(std::string input)
     currentCharacter = input.begin();
     char front = *currentCharacter;
     currentCharacter++;
-    if (isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
+    if (character_utils::isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
         currentCharacter++;
         parseComponents(input.end());
     }

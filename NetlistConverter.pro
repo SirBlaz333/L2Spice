@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     src/attribute.cpp \
+    src/characterutils.cpp \
     src/circuit.cpp \
     src/component.cpp \
     src/element.cpp \
@@ -19,10 +20,12 @@ SOURCES += \
     src/netclass.cpp \
     src/netlistparser.cpp \
     src/signal.cpp \
+    src/uuidgenerator.cpp \
     src/variant.cpp
 
 HEADERS += \
     headers/attribute.h \
+    headers/characterutils.h \
     headers/circuit.h \
     headers/component.h \
     headers/element.h \
@@ -31,6 +34,7 @@ HEADERS += \
     headers/netclass.h \
     headers/netlistparser.h \
     headers/signal.h \
+    headers/uuidgenerator.h \
     headers/variant.h
 
 FORMS += \

@@ -1,7 +1,11 @@
 #ifndef NETLISTPARSER_H
 #define NETLISTPARSER_H
 
-#include "circuit.h"
+#include <headers/circuit.h>
+#include <iostream>
+#include <list>
+#include <regex>
+#include <set>
 #include <list>
 #include <vector>
 #include <bits/unique_ptr.h>
@@ -20,11 +24,6 @@ private:
     void createNewElement(std::string name, std::string uuid);
     void parseElement(std::string parentUuid, std::string::iterator last);
     std::string createUuid();
-    bool isWordComponent(char c);
-    bool isLeftParanthesis(char c);
-    bool isRightParanthesis(char c);
-    bool isQuotes(char c);
-    bool isWhitespaceCharacter(char c);
 public:
     NetlistParser();
     ~NetlistParser();
