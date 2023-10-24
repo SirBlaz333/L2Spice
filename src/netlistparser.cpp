@@ -71,8 +71,8 @@ void NetlistParser::parseElement(std::string parentUuid,
         } else {
             parent->setProperty(name, value);
         }
-        currentCharacter++;
     }
+    currentCharacter++;
 }
 
 Element* NetlistParser::createNewElement(std::string name, std::string uuid)
@@ -112,9 +112,13 @@ Circuit NetlistParser::parseLibreNotation(std::string input)
         parseComponents(input.end());
     }
 
-    std::map<std::string, Net> netMap;
-    std::map<std::string, Component> componentMap;
-
     Circuit circuit;
+    auto iterator = elementMap.begin();
+    while (iterator != elementMap.end()) {
+        Element *element = iterator->second.get();
+        circuit.addElement(element);
+        iterator++;
+    }
+
     return circuit;
 }

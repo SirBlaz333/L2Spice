@@ -4,34 +4,36 @@ Circuit::Circuit(){}
 
 Circuit::~Circuit() {}
 
-void Circuit::setVariant(const Variant &newVariant)
+void Circuit::addElement(const Element *element)
 {
-    variant = newVariant;
+    if (element->getType() == "variant") {
+        variant = dynamic_cast<const Variant *>(element);
+        return;
+    }
+    if (element->getType() == "netclass") {
+        netclass = dynamic_cast<const NetClass *>(element);
+        return;
+    }
+    if (element->getType() == "net") {
+        const Net *net = dynamic_cast<const Net *>(element);
+        netMap[net->getUuid()] = *net;
+        return;
+    }
+    if (element->getType() == "component") {
+        const Component *component = dynamic_cast<const Component *>(element);
+        componentMap[component->getUuid()] = *component;
+        return;
+    }
 }
 
-void Circuit::setNetclass(const NetClass &newNetclass)
+const Variant Circuit::getVariant() const
 {
-    netclass = newNetclass;
+    return *variant;
 }
 
-void Circuit::setNetMap(const std::map<std::string, Net> &newNetMap)
+const NetClass Circuit::getNetclass() const
 {
-    netMap = newNetMap;
-}
-
-void Circuit::setComponentMap(const std::map<std::string, Component> &newComponentMap)
-{
-    componentMap = newComponentMap;
-}
-
-Variant Circuit::getVariant() const
-{
-    return variant;
-}
-
-NetClass Circuit::getNetclass() const
-{
-    return netclass;
+    return *netclass;
 }
 
 std::map<std::string, Net> Circuit::getNetMap() const
