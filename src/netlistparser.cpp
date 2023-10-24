@@ -31,7 +31,6 @@ void NetlistParser::parseComponents(std::string::iterator last)
 {
     while (currentCharacter != last) {
         parseComponent("", last);
-        currentCharacter++;
     }
 }
 
@@ -43,6 +42,7 @@ void NetlistParser::parseComponent(std::string parentUuid,
             parseElement(parentUuid, last);
         }
         if (character_utils::isRightParanthesis(*currentCharacter)) {
+            currentCharacter++;
             return;
         }
         currentCharacter++;
@@ -93,6 +93,8 @@ Element* NetlistParser::createNewElement(std::string name, std::string uuid)
         elementMap[uuid].get()->setProperty("name", name);
     } else if (name == "signal") {
         elementMap[uuid] = std::make_unique<Signal>();
+    } else if (name == "device") {
+        elementMap[uuid] = std::make_unique<Device>();
     }
     elementMap[uuid].get()->setProperty("uuid", uuid);
     return elementMap[uuid].get();

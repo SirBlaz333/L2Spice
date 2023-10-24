@@ -13,6 +13,7 @@ SOURCES += \
     src/characterutils.cpp \
     src/circuit.cpp \
     src/component.cpp \
+    src/device.cpp \
     src/element.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     headers/characterutils.h \
     headers/circuit.h \
     headers/component.h \
+    headers/device.h \
     headers/element.h \
     headers/mainwindow.h \
     headers/net.h \

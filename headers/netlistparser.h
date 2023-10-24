@@ -23,7 +23,6 @@ private:
     void parseComponent(std::string parentUuid,  std::string::iterator last);
     Element* createNewElement(std::string name, std::string uuid);
     void parseElement(std::string parentUuid, std::string::iterator last);
-    std::string createUuid();
 public:
     NetlistParser();
     ~NetlistParser();

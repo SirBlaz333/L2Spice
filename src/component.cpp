@@ -29,6 +29,11 @@ std::list<Signal> Component::getSignalList() const
     return signalList;
 }
 
+const Device Component::getDevice() const
+{
+    return *device;
+}
+
 void Component::setChildProperty(const std::string &propertyName, const std::string &property)
 {
     if (propertyName == "lib_component") {
@@ -43,13 +48,16 @@ void Component::setChildProperty(const std::string &propertyName, const std::str
 }
 void Component::setProperty(const std::string &propertyName, const Element* property)
 {
+    if (propertyName == "attribute") {
+        const Attribute* attribute = dynamic_cast<const Attribute*>(property);
+        attributeList.push_back(*attribute);
+    }
     if (propertyName == "signal") {
         const Signal* signal = dynamic_cast<const Signal*>(property);
         signalList.push_back(*signal);
     }
-    if (propertyName == "attribute") {
-        const Attribute* attribute = dynamic_cast<const Attribute*>(property);
-        attributeList.push_back(*attribute);
+    if (propertyName == "device") {
+        device = dynamic_cast<const Device*>(property);
     }
 }
 
