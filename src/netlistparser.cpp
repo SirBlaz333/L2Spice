@@ -7,7 +7,7 @@ std::string NetlistParser::nextWord()
     if (character_utils::isQuotes(*currentCharacter)) {
         return nextDataInQuotes();
     }
-    std::string result = "";
+    std::string result;
     while (character_utils::isWordComponent(*currentCharacter)) {
         result += *currentCharacter;
         currentCharacter++;
@@ -17,7 +17,7 @@ std::string NetlistParser::nextWord()
 
 std::string NetlistParser::nextDataInQuotes()
 {
-    std::string result = "";
+    std::string result;
     currentCharacter++;
     while (!character_utils::isQuotes(*currentCharacter)) {
         result += *currentCharacter;
@@ -38,14 +38,13 @@ void NetlistParser::parseComponent(std::string parentUuid,
                                    std::string::iterator last)
 {
     while (currentCharacter != last) {
+        currentCharacter++;
         if (character_utils::isLeftParanthesis(*currentCharacter)) {
             parseElement(parentUuid, last);
         }
         if (character_utils::isRightParanthesis(*currentCharacter)) {
-            currentCharacter++;
             return;
         }
-        currentCharacter++;
     }
 }
 
@@ -107,7 +106,6 @@ Circuit NetlistParser::parseLibreNotation(std::string input)
     char front = *currentCharacter;
     currentCharacter++;
     if (character_utils::isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
-        currentCharacter++;
         parseComponents(input.end());
     }
 
