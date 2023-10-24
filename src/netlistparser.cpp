@@ -77,30 +77,27 @@ void NetlistParser::parseElement(std::string parentUuid,
 
 Element* NetlistParser::createNewElement(std::string name, std::string uuid)
 {
-
-    if (name == "variant") {
-        elementMap[uuid] = std::make_unique<Variant>();
-    } else if (name == "netclass") {
-        elementMap[uuid] = std::make_unique<NetClass>();
-    } else if (name == "net") {
-        elementMap[uuid] = std::make_unique<Net>();
-    } else if (name == "component") {
-        elementMap[uuid] = std::make_unique<Component>();
-    } else if (name == "attribute") {
+    std::unique_ptr<Element> element = elementFactory[name]();
+    if (element->getType() == "attribute") {
         std::string name = uuid;
         uuid = uuid_generator::generateUUID();
-        elementMap[uuid] = std::make_unique<Attribute>();
-        elementMap[uuid].get()->setProperty("name", name);
-    } else if (name == "signal") {
-        elementMap[uuid] = std::make_unique<Signal>();
-    } else if (name == "device") {
-        elementMap[uuid] = std::make_unique<Device>();
+        element->setProperty("name", name);
     }
-    elementMap[uuid].get()->setProperty("uuid", uuid);
+    element->setProperty("uuid", uuid);
+    elementMap[uuid] = std::move(element);
     return elementMap[uuid].get();
 }
 
-NetlistParser::NetlistParser() {}
+NetlistParser::NetlistParser()
+{
+    elementFactory["variant"] = []() { return std::make_unique<Variant>(); };
+    elementFactory["netclass"] = []() { return std::make_unique<NetClass>(); };
+    elementFactory["net"] = []() { return std::make_unique<Net>(); };
+    elementFactory["component"] = []() { return std::make_unique<Component>(); };
+    elementFactory["attribute"] = []() { return std::make_unique<Attribute>(); };
+    elementFactory["signal"] = []() { return std::make_unique<Signal>(); };
+    elementFactory["device"] = []() { return std::make_unique<Device>(); };
+}
 
 NetlistParser::~NetlistParser() {}
 

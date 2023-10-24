@@ -14,6 +14,7 @@
 class NetlistParser
 {
 private:
+    std::map<std::string, std::function<std::unique_ptr<Element>()>> elementFactory;
     std::string::iterator currentCharacter;
     std::map<std::string, std::unique_ptr<Element>> elementMap;
 
