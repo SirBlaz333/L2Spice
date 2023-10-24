@@ -1,6 +1,28 @@
 #include "headers/circuit.h"
 
+Circuit::Circuit(){}
+
 Circuit::~Circuit() {}
+
+void Circuit::setVariant(const Variant &newVariant)
+{
+    variant = newVariant;
+}
+
+void Circuit::setNetclass(const NetClass &newNetclass)
+{
+    netclass = newNetclass;
+}
+
+void Circuit::setNetMap(const std::map<std::string, Net> &newNetMap)
+{
+    netMap = newNetMap;
+}
+
+void Circuit::setComponentMap(const std::map<std::string, Component> &newComponentMap)
+{
+    componentMap = newComponentMap;
+}
 
 Variant Circuit::getVariant() const
 {
@@ -21,13 +43,3 @@ std::map<std::string, Component> Circuit::getComponentMap() const
 {
     return componentMap;
 }
-
-Circuit::Circuit(const Variant &variant,
-                 const NetClass &netclass,
-                 const std::map<std::string, Net> &netMap,
-                 const std::map<std::string, Component> &componentMap)
-    : variant(variant)
-    , netclass(netclass)
-    , netMap(netMap)
-    , componentMap(componentMap)
-{}

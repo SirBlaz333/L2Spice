@@ -44,7 +44,12 @@ void Component::setChildProperty(const std::string &propertyName, const std::str
 void Component::setProperty(const std::string &propertyName, const Element* property)
 {
     if (propertyName == "signal") {
-        signalList.push_back(*((Signal *) &property));
+        const Signal* signal = dynamic_cast<const Signal*>(property);
+        signalList.push_back(*signal);
+    }
+    if (propertyName == "attribute") {
+        const Attribute* attribute = dynamic_cast<const Attribute*>(property);
+        attributeList.push_back(*attribute);
     }
 }
 

@@ -56,28 +56,28 @@ void NetlistParser::parseElement(std::string parentUuid,
     std::string name = nextWord();
     currentCharacter++;
     std::string value = nextWord();
-    try {
-        if (character_utils::isRightParanthesis(*currentCharacter)) {
-            Element* element = elementMap.at(parentUuid).get();
-            element->setProperty(name, value);
-            currentCharacter++;
-            return;
+    if (character_utils::isWhitespaceCharacter(*currentCharacter)) {
+        Element *element = createNewElement(name, value);
+        parseComponent(element->getUuid(), last);
+        if (!parentUuid.empty()) {
+            Element *parent = elementMap[parentUuid].get();
+            parent->setProperty(name, element);
         }
-        if (character_utils::isWhitespaceCharacter(*currentCharacter)) {
-            createNewElement(name, value);
-            Element *newElement = elementMap.at(parentUuid).get();
-            parseComponent(value, last);
-            if (!parentUuid.empty()) {
-                Element* element = elementMap.at(parentUuid).get();
-                element->setProperty(name, newElement);
-            }
+    } else if (character_utils::isRightParanthesis(*currentCharacter)) {
+        Element *parent = elementMap[parentUuid].get();
+        if (elementMap.count(value) != 0) {
+            Element *element = elementMap[value].get();
+            parent->setProperty(name, element);
+        } else {
+            parent->setProperty(name, value);
         }
-    } catch (std::out_of_range e) {
+        currentCharacter++;
     }
 }
 
-void NetlistParser::createNewElement(std::string name, std::string uuid)
+Element* NetlistParser::createNewElement(std::string name, std::string uuid)
 {
+
     if (name == "variant") {
         elementMap[uuid] = std::make_unique<Variant>();
     } else if (name == "netclass") {
@@ -95,6 +95,7 @@ void NetlistParser::createNewElement(std::string name, std::string uuid)
         elementMap[uuid] = std::make_unique<Signal>();
     }
     elementMap[uuid].get()->setProperty("uuid", uuid);
+    return elementMap[uuid].get();
 }
 
 NetlistParser::NetlistParser() {}
@@ -114,9 +115,6 @@ Circuit NetlistParser::parseLibreNotation(std::string input)
     std::map<std::string, Net> netMap;
     std::map<std::string, Component> componentMap;
 
-//    Element *element = elementMap.begin()->second.get();
-//    Variant *variant = dynamic_cast<Variant *>(element);
-
-    Circuit circuit = Circuit(Variant(), NetClass(), netMap, componentMap);
+    Circuit circuit;
     return circuit;
 }

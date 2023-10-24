@@ -16,15 +16,17 @@ private:
     std::map<std::string, Component> componentMap;
 
 public:
-    Circuit(const Variant &variant,
-            const NetClass &netclass,
-            const std::map<std::string, Net> &netMap,
-            const std::map<std::string, Component> &componentMap);
+    Circuit();
     ~Circuit();
     Variant getVariant() const;
     NetClass getNetclass() const;
     std::map<std::string, Net> getNetMap() const;
     std::map<std::string, Component> getComponentMap() const;
+
+    void setVariant(const Variant &newVariant);
+    void setNetclass(const NetClass &newNetclass);
+    void setNetMap(const std::map<std::string, Net> &newNetMap);
+    void setComponentMap(const std::map<std::string, Component> &newComponentMap);
 };
 
 #endif // CIRCUIT_H

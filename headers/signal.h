@@ -9,13 +9,13 @@
 class Signal : public Element
 {
 private:
-    Net net;
+    const Net* net;
     void setProperty(const std::string &propertyName, const Element* property);
 
 public:
     Signal();
     ~Signal();
-    Net getNet() const;
+    const Net getNet();
 
 };
 
