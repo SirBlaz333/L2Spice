@@ -1,4 +1,5 @@
 #include "../headers/netlistproducer.h"
+#include "headers/unitconverter.h"
 
 #include <regex>
 
@@ -24,7 +25,7 @@ std::string NetlistProducer::createSourceType(std::string name, std::list<Attrib
         if (name.find(pair.first) != std::string::npos) {
             std::string result = pair.second + "(";
             for (const Attribute &attribute : attributeList) {
-                result += getValueOrDefault(attribute.getValue()) + attribute.getUnit();
+                result += getValueOrDefault(attribute.getValue()) + units::getPrefix(attribute.getUnit());
                 if (attribute.getUuid() != attributeList.back().getUuid()) {
                     result += " ";
                 }
@@ -35,7 +36,7 @@ std::string NetlistProducer::createSourceType(std::string name, std::list<Attrib
     }
 
     Attribute attribute = (*attributeList.begin());
-    return getValueOrDefault(attribute.getValue()) + attribute.getUnit();
+    return getValueOrDefault(attribute.getValue()) + units::getPrefix(attribute.getUnit());
 }
 
 NetlistProducer::NetlistProducer() {}
@@ -60,12 +61,9 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
         result += component.getName() + " ";
         std::list<Signal> signalList = component.getSignalList();
         for (Signal signal : signalList) {
-            try {
-                int id = netOrderMap.at(signal.getNet().getUuid());
-                result += std::to_string(id) + " ";
-            } catch (...) {
-                result += "- ";
-            }
+            std::string uuid = signal.getNet().getUuid();
+            result += uuid.empty() ? "-" : std::to_string(netOrderMap[uuid]);
+            result += " ";
         }
         result += createSourceType(component.getName(), component.getAttributeList());
         result += "\n";

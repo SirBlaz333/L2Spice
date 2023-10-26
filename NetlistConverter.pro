@@ -22,6 +22,7 @@ SOURCES += \
     src/netlistparser.cpp \
     src/netlistproducer.cpp \
     src/signal.cpp \
+    src/unitconverter.cpp \
     src/uuidgenerator.cpp \
     src/variant.cpp
 
@@ -38,6 +39,7 @@ HEADERS += \
     headers/netlistparser.h \
     headers/netlistproducer.h \
     headers/signal.h \
+    headers/unitconverter.h \
     headers/uuidgenerator.h \
     headers/variant.h
 
