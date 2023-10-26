@@ -1,42 +1,11 @@
 #include "../headers/netlistproducer.h"
-#include "headers/unitconverter.h"
+#include "headers/attributeutils.h"
 
 #include <regex>
 
 std::string NetlistProducer::getValueOrDefault(std::string string)
 {
     return string.empty() ? "-" : string;
-}
-
-std::string NetlistProducer::createSourceType(std::string name, std::list<Attribute> attributeList)
-{
-    if (attributeList.empty()) {
-        return "";
-    }
-    std::map<std::string, std::string> map = {{"SIN", "sin"},
-                                              {"PWL", "pwl"},
-                                              {"PULSE", "pulse"},
-                                              {"CUSTOM", "cus"},
-                                              {"DC", "dc"},
-                                              {"NOISE", "noise"},
-                                              {"RELAX", "exp"}};
-
-    for (const auto &pair : map) {
-        if (name.find(pair.first) != std::string::npos) {
-            std::string result = pair.second + "(";
-            for (const Attribute &attribute : attributeList) {
-                result += getValueOrDefault(attribute.getValue()) + units::getPrefix(attribute.getUnit());
-                if (attribute.getUuid() != attributeList.back().getUuid()) {
-                    result += " ";
-                }
-            }
-            result += ")";
-            return result;
-        }
-    }
-
-    Attribute attribute = (*attributeList.begin());
-    return getValueOrDefault(attribute.getValue()) + units::getPrefix(attribute.getUnit());
 }
 
 NetlistProducer::NetlistProducer() {}
@@ -65,7 +34,7 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
             result += uuid.empty() ? "-" : std::to_string(netOrderMap[uuid]);
             result += " ";
         }
-        result += createSourceType(component.getName(), component.getAttributeList());
+        result += attribute_utils::createSourceType(component);
         result += "\n";
     }
     return result;
