@@ -7,14 +7,14 @@ const Variant *Device::getVariant() const
 
 void Device::setProperty(const std::string &propertyName, const Element *property)
 {
-    if (property->getType() == "variant") {
+    if (property->getElementType() == "variant") {
         variant = dynamic_cast<const Variant *>(property);
     }
 }
 
 Device::Device()
 {
-    type = "device";
+    elementType = "device";
 }
 
 Device::~Device() {}

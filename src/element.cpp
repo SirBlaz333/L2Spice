@@ -10,9 +10,9 @@ std::string Element::getName() const
     return name;
 }
 
-std::string Element::getType() const
+std::string Element::getElementType() const
 {
-    return type;
+    return elementType;
 }
 
 void Element::setProperty(const std::string &propertyName, const std::string &property)

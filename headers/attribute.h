@@ -18,6 +18,9 @@ public:
     Attribute();
     ~Attribute();
 
+    std::string getType() const;
+    std::string getUnit() const;
+    std::string getValue() const;
 };
 
 #endif // ATTRIBUTE_H

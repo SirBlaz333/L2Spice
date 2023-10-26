@@ -26,7 +26,7 @@ void Net::setProperty(const std::string &propertyName, const Element* property)
 
 Net::Net()
 {
-    type = "net";
+    elementType = "net";
 }
 
 Net::~Net() {}

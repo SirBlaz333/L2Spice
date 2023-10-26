@@ -6,20 +6,20 @@ Circuit::~Circuit() {}
 
 void Circuit::addElement(const Element *element)
 {
-    if (element->getType() == "variant") {
+    if (element->getElementType() == "variant") {
         variant = dynamic_cast<const Variant *>(element);
         return;
     }
-    if (element->getType() == "netclass") {
+    if (element->getElementType() == "netclass") {
         netclass = dynamic_cast<const NetClass *>(element);
         return;
     }
-    if (element->getType() == "net") {
+    if (element->getElementType() == "net") {
         const Net *net = dynamic_cast<const Net *>(element);
         netMap[net->getUuid()] = *net;
         return;
     }
-    if (element->getType() == "component") {
+    if (element->getElementType() == "component") {
         const Component *component = dynamic_cast<const Component *>(element);
         componentMap[component->getUuid()] = *component;
         return;

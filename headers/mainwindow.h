@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "netlistparser.h"
+#include "netlistproducer.h"
 
 #include <QMainWindow>
 
@@ -24,6 +25,7 @@ private slots:
 
 private:
     NetlistParser parser;
+    NetlistProducer producer;
     Ui::MainWindow *ui;
 };
 #endif // MAINWINDOW_H

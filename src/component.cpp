@@ -63,7 +63,7 @@ void Component::setProperty(const std::string &propertyName, const Element* prop
 
 Component::Component()
 {
-    type = "component";
+    elementType = "component";
 }
 
 Component::~Component() {}

@@ -14,7 +14,7 @@ void Signal::setProperty(const std::string &propertyName, const Element *propert
 
 Signal::Signal()
 {
-    type = "signal";
+    elementType = "signal";
 }
 
 Signal::~Signal() {}

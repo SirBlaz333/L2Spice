@@ -2,7 +2,7 @@
 
 NetClass::NetClass()
 {
-    type = "netclass";
+    elementType = "netclass";
 }
 
 NetClass::~NetClass() {}

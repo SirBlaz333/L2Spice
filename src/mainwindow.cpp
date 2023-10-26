@@ -17,5 +17,7 @@ void MainWindow::on_pushButton_clicked()
 {
     Circuit circuit = parser.parseLibreNotation(
         ui->textEdit->toPlainText().toStdString());
+    std::string spiceNotation = producer.produceSpiceNotationNetlist(circuit);
+    ui->textEdit_2->setPlainText(QString::fromStdString(spiceNotation));
 }
 

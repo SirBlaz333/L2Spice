@@ -87,7 +87,7 @@ Element* NetlistParser::createNewElement(std::string name, std::string uuid)
     // create pointer to Element's child from the factory.
     std::unique_ptr<Element> element = elementFactory[name]();
     // if it is an attribute, we need to create uuid ourselves and set the name to the attribute
-    if (element->getType() == "attribute") {
+    if (element->getElementType() == "attribute") {
         std::string name = uuid;
         uuid = uuid_generator::generateUUID();
         element->setProperty("name", name);
@@ -115,6 +115,7 @@ Circuit NetlistParser::parseLibreNotation(std::string input)
     currentCharacter = input.begin();
     char front = *currentCharacter;
     currentCharacter++;
+    elementMap["none"] = std::make_unique<Net>();
     // check if the first character is '(' and the format is "librepcb_circuit".
     // TODO: if it is not right now or something will went wrong later, we need to show some message to the user.
     if (character_utils::isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
