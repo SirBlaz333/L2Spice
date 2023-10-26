@@ -7,6 +7,37 @@ std::string NetlistProducer::getValueOrDefault(std::string string)
     return string.empty() ? "-" : string;
 }
 
+std::string NetlistProducer::createSourceType(std::string name, std::list<Attribute> attributeList)
+{
+    if (attributeList.empty()) {
+        return "";
+    }
+    std::map<std::string, std::string> map = {{"SIN", "sin"},
+                                              {"PWL", "pwl"},
+                                              {"PULSE", "pulse"},
+                                              {"CUSTOM", "cus"},
+                                              {"DC", "dc"},
+                                              {"NOISE", "noise"},
+                                              {"RELAX", "exp"}};
+
+    for (const auto &pair : map) {
+        if (name.find(pair.first) != std::string::npos) {
+            std::string result = pair.second + "(";
+            for (const Attribute &attribute : attributeList) {
+                result += getValueOrDefault(attribute.getValue()) + attribute.getUnit();
+                if (attribute.getUuid() != attributeList.back().getUuid()) {
+                    result += " ";
+                }
+            }
+            result += ")";
+            return result;
+        }
+    }
+
+    Attribute attribute = (*attributeList.begin());
+    return getValueOrDefault(attribute.getValue()) + attribute.getUnit();
+}
+
 NetlistProducer::NetlistProducer() {}
 
 NetlistProducer::~NetlistProducer() {}
@@ -36,12 +67,8 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
                 result += "- ";
             }
         }
-        std::list<Attribute> attributeList = component.getAttributeList();
-        if (attributeList.empty()) {
-            result += "-\n";
-        } else {
-            result += getValueOrDefault((*attributeList.begin()).getValue()) + "\n";
-        }
+        result += createSourceType(component.getName(), component.getAttributeList());
+        result += "\n";
     }
     return result;
 }
