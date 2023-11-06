@@ -22,20 +22,28 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     std::map<std::string, Component> updatedComponentsMap;
     int i = 0;
     for (const auto &pair : netMap) {
-        netOrderMap[pair.second.getUuid()] = i++;
+        const auto net = pair.second;
+        std::string name = net.getName();
+        if (name == "GND" || name == "") {
+            netOrderMap[net.getUuid()] = 0;
+        } else {
+            netOrderMap[net.getUuid()] = std::stoi(name.substr(1, name.size() - 1));
+        }
     }
     std::string result;
     for (const auto &pair : componentMap) {
         Component component = pair.second;
-        result += component.getName() + " ";
-        std::list<Signal> signalList = component.getSignalList();
-        for (Signal signal : signalList) {
-            std::string uuid = signal.getNet().getUuid();
-            result += uuid.empty() ? "-" : std::to_string(netOrderMap[uuid]);
-            result += " ";
+        if (component.getValue() != "GND") {
+            result += component.getName() + " ";
+            std::list<Signal> signalList = component.getSignalList();
+            for (Signal signal : signalList) {
+                std::string uuid = signal.getNet().getUuid();
+                result += uuid.empty() ? "-" : std::to_string(netOrderMap[uuid]);
+                result += " ";
+            }
+            result += attribute_utils::createSourceType(component);
+            result += "\n";
         }
-        result += attribute_utils::createSourceType(component);
-        result += "\n";
     }
     return result;
 }
