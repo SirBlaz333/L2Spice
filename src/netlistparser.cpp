@@ -112,6 +112,7 @@ NetlistParser::~NetlistParser() {}
 
 Circuit NetlistParser::parseLibreNotation(std::string input)
 {
+    elementMap = std::map<std::string, std::unique_ptr<Element>>();
     currentCharacter = input.begin();
     char front = *currentCharacter;
     currentCharacter++;

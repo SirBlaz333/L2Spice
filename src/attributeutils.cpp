@@ -10,25 +10,34 @@ std::string attribute_utils::getUnitPrefix(std::string unit)
     return "";
 }
 
-std::string parseAttributes(Attribute sourceType, std::list<Attribute> attributeList)
+std::string getValueFromAttribute(Attribute attribute)
 {
-    std::string result = sourceType.getValue();
-    result += "(";
-    for (const auto &attribute : attributeList) {
-        if (attribute.getName() != "SOURCETYPE" && !attribute.getValue().empty()) {
-            result += attribute.getValue() + " ";
-        }
-    }
-    result.pop_back();
-    return result + ")";
+    return attribute.getValue() + attribute_utils::getUnitPrefix(attribute.getUnit()) + " ";
 }
 
-std::string attribute_utils::createSourceType(Component component)
+std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attribute>::iterator end)
 {
-    for (const auto &attribute : component.getAttributeList()) {
-        if (attribute.getName() == "SOURCETYPE") {
-            return parseAttributes(attribute, component.getAttributeList());
+    std::string result;
+    while (begin != end) {
+        if (!begin->getValue().empty()) {
+            result += getValueFromAttribute(*begin);
         }
+        begin++;
     }
-    return "";
+    if (!result.empty()) {
+        result.pop_back();
+    }
+    return result;
+}
+
+std::string attribute_utils::parseAttributes(Component component)
+{
+    std::list<Attribute> attributes = component.getAttributeList();
+    std::list<Attribute>::iterator begin = attributes.begin();
+    std::list<Attribute>::iterator end = attributes.end();
+    if (begin->getName() == "SOURCETYPE") {
+        std::string result = begin->getValue() + "(";
+        return result + parseAttributes(++begin, end) + ")";
+    }
+    return parseAttributes(begin, end);
 }

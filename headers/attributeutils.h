@@ -17,7 +17,7 @@ static std::map<std::string, std::string> prefixes = {{"pico", "p"},
                                                       {"mega", "meg"}};
 
 std::string getUnitPrefix(std::string unit);
-std::string createSourceType(Component component);
+std::string parseAttributes(Component component);
 }
 
 #endif // ATTRIBUTEUTILS_H
