@@ -22,12 +22,12 @@ std::string writeComponent(std::string parentSignalUuid,
                            Component component,
                            std::map<std::string, std::list<Component>> netComponentsMap,
                            std::map<std::string, int> netOrderMap,
-                           std::set<std::string> *componentSet)
+                           std::set<std::string> *repeats)
 {
-    if (componentSet->count(component.getUuid()) != 0 || component.getValue() == "GND") {
+    if (repeats->count(component.getUuid()) != 0 || component.getValue() == "GND") {
         return "";
     }
-    componentSet->insert({component.getUuid()});
+    repeats->insert({component.getUuid()});
     std::string result = component.getName() + " ";
     std::list<Signal> signalList = component.getSignalList();
     if(!parentSignalUuid.empty()) {
@@ -49,7 +49,7 @@ std::string writeComponent(std::string parentSignalUuid,
                                          component,
                                          netComponentsMap,
                                          netOrderMap,
-                                         componentSet);
+                                         repeats);
             }
         }
     }
@@ -85,6 +85,24 @@ Component findComponent(std::string uuid, std::map<std::string, Component> compo
     return Component();
 }
 
+std::string createSubcircuit(std::map<std::string, int> netOrderMap,
+                             std::map<std::string, std::list<Component>> netComponentsMap)
+{
+    std::vector<int> inOutList;
+    for (auto const &pair : netComponentsMap) {
+        if (pair.second.size() == 1) {
+            inOutList.push_back(netOrderMap[pair.first]);
+        }
+    }
+    std::sort(inOutList.begin(), inOutList.end());
+    std::string result;
+    for (int signalNumber : inOutList) {
+        result += std::to_string(signalNumber) + " ";
+    }
+    result.pop_back();
+    return result;
+}
+
 std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
 {
     Variant variant = circuit.getVariant();
@@ -92,7 +110,7 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     std::map<std::string, Net> netMap = circuit.getNetMap();
     std::map<std::string, Component> componentMap = circuit.getComponentMap();
     std::map<std::string, int> netOrderMap;
-    std::map<std::string, std::list<Component>> map = createNetComponentsMap(componentMap);
+    std::map<std::string, std::list<Component>> netComponentsMap = createNetComponentsMap(componentMap);
     std::string uuidWithLowestOrder;
     int lastOrder = INT_MAX;
     for (const auto &pair : netMap) {
@@ -109,9 +127,13 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
             }
         }
     }
-    std::string result;
     Component component = findComponent(uuidWithLowestOrder, componentMap);
-    std::set<std::string> set;
-
-    return writeComponent("", component, map, netOrderMap, &set);
+    std::set<std::string> repeats;
+    std::string result = writeComponent("", component, netComponentsMap, netOrderMap, &repeats);
+    if (circuit.getSubcircuitStatus()) {
+        result = ".SUBCKT " + circuit.getName() + " 0 "
+                 + createSubcircuit(netOrderMap, netComponentsMap)
+                 + "\n\n*circuit\n" + result;
+    }
+    return result;
 }

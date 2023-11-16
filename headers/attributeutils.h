@@ -16,8 +16,10 @@ static std::map<std::string, std::string> prefixes = {{"pico", "p"},
                                                       {"kilo", "k"},
                                                       {"mega", "meg"}};
 
-std::string getUnitPrefix(std::string unit);
+std::string getUnitShortPrefix(std::string unit);
+std::string getFullUnitPrefix(std::string shortPrefix);
 std::string parseAttributes(Component component);
+std::string getUnitWithoutPrefix(std::string unit);
 }
 
 #endif // ATTRIBUTEUTILS_H

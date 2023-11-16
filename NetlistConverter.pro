@@ -22,6 +22,7 @@ SOURCES += \
     src/netclass.cpp \
     src/netlistparser.cpp \
     src/netlistproducer.cpp \
+    src/netlistupdater.cpp \
     src/signal.cpp \
     src/uuidgenerator.cpp \
     src/variant.cpp
@@ -39,6 +40,7 @@ HEADERS += \
     headers/netclass.h \
     headers/netlistparser.h \
     headers/netlistproducer.h \
+    headers/netlistupdater.h \
     headers/signal.h \
     headers/uuidgenerator.h \
     headers/variant.h

@@ -60,8 +60,37 @@
         </property>
        </spacer>
       </item>
-      <item row="4" column="3">
-       <widget class="QPushButton" name="pushButton">
+      <item row="4" column="7">
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="0" rowspan="3" colspan="2">
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="9">
+       <widget class="QPushButton" name="pushButton_2">
         <property name="minimumSize">
          <size>
           <width>200</width>
@@ -75,22 +104,76 @@
          </size>
         </property>
         <property name="text">
-         <string>Convert to SPICE</string>
+         <string>Convert to LibrePCB</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="7" rowspan="2" colspan="6">
-       <spacer name="verticalSpacer_4">
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>32</width>
+          <height>32</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../resources/resources.qrc">:/img/right-arrow.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" colspan="6">
+       <widget class="QTextEdit" name="textEdit">
+        <property name="minimumSize">
+         <size>
+          <width>335</width>
+          <height>326</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="5" rowspan="3">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="0" column="6" rowspan="7">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
          <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>30</height>
+          <width>50</width>
+          <height>0</height>
          </size>
         </property>
        </spacer>
@@ -123,29 +206,10 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="7">
-       <spacer name="horizontalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="9">
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>30</height>
-         </size>
+      <item row="6" column="3">
+       <widget class="QPlainTextEdit" name="subciruitNameTextEdit">
+        <property name="enabled">
+         <bool>true</bool>
         </property>
         <property name="maximumSize">
          <size>
@@ -153,36 +217,20 @@
           <height>30</height>
          </size>
         </property>
-        <property name="text">
-         <string>Convert to LibrePCB</string>
+        <property name="placeholderText">
+         <string>Subcircuit name</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="6" rowspan="6">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>50</width>
-          <height>0</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0" colspan="6" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-       <widget class="QLabel" name="label">
+      <item row="5" column="3">
+       <widget class="QCheckBox" name="checkBox">
         <property name="text">
-         <string>LibrePCB</string>
+         <string>is a subcircuit</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="7" colspan="6">
-       <spacer name="verticalSpacer_3">
+      <item row="2" column="7" rowspan="2" colspan="6">
+       <spacer name="verticalSpacer_4">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -196,31 +244,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="4" column="4">
-       <widget class="QLabel" name="label_3">
-        <property name="minimumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>32</width>
-          <height>32</height>
-         </size>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="pixmap">
-         <pixmap resource="../resources/resources.qrc">:/img/right-arrow.png</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-       </widget>
       </item>
       <item row="2" column="0" rowspan="2" colspan="6">
        <spacer name="verticalSpacer">
@@ -238,18 +261,18 @@
         </property>
        </spacer>
       </item>
-      <item row="1" column="0" colspan="6">
-       <widget class="QTextEdit" name="textEdit">
-        <property name="minimumSize">
+      <item row="4" column="10">
+       <spacer name="horizontalSpacer_6">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
          <size>
-          <width>335</width>
-          <height>326</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
-        <property name="styleSheet">
-         <string notr="true"/>
-        </property>
-       </widget>
+       </spacer>
       </item>
       <item row="1" column="7" colspan="6">
        <widget class="QTextEdit" name="textEdit_2">
@@ -264,8 +287,67 @@
         </property>
        </widget>
       </item>
-      <item row="5" column="0" colspan="6">
-       <spacer name="verticalSpacer_2">
+      <item row="4" column="3">
+       <widget class="QPushButton" name="pushButton">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>200</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Convert to SPICE</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="7" colspan="6" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>SPICE</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="6" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>LibrePCB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="4" rowspan="2">
+       <spacer name="horizontalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="4" column="2" rowspan="3">
+       <spacer name="horizontalSpacer_7">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="5" column="7" rowspan="3" colspan="6">
+       <spacer name="verticalSpacer_3">
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
@@ -276,68 +358,6 @@
          <size>
           <width>20</width>
           <height>30</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="7" colspan="6" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>SPICE</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="5">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="10">
-       <spacer name="horizontalSpacer_6">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <spacer name="horizontalSpacer_4">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="2">
-       <spacer name="horizontalSpacer_7">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
          </size>
         </property>
        </spacer>

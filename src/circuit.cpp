@@ -26,6 +26,23 @@ void Circuit::addElement(const Element *element)
     }
 }
 
+void Circuit::setSubcircuitStatus(bool isSubcircuit, std::string name)
+{
+    this->isSubcircuit = isSubcircuit;
+    this->name = name;
+}
+
+
+bool Circuit::getSubcircuitStatus() const
+{
+    return isSubcircuit;
+}
+
+std::string Circuit::getName() const
+{
+    return name;
+}
+
 const Variant Circuit::getVariant() const
 {
     return *variant;

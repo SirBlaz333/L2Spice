@@ -1,6 +1,6 @@
 #include "../headers/attributeutils.h"
 
-std::string attribute_utils::getUnitPrefix(std::string unit)
+std::string attribute_utils::getUnitShortPrefix(std::string unit)
 {
     for (const auto &pair : prefixes) {
         if (unit.find(pair.first) != std::string::npos) {
@@ -10,9 +10,19 @@ std::string attribute_utils::getUnitPrefix(std::string unit)
     return "";
 }
 
+std::string attribute_utils::getFullUnitPrefix(std::string shortPrefix)
+{
+    for (const auto &pair : prefixes) {
+        if (shortPrefix == pair.second) {
+            return pair.first;
+        }
+    }
+    return "";
+}
+
 std::string getValueFromAttribute(Attribute attribute)
 {
-    return attribute.getValue() + attribute_utils::getUnitPrefix(attribute.getUnit()) + " ";
+    return attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
 std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attribute>::iterator end)
@@ -40,4 +50,14 @@ std::string attribute_utils::parseAttributes(Component component)
         return result + parseAttributes(++begin, end) + ")";
     }
     return parseAttributes(begin, end);
+}
+
+std::string attribute_utils::getUnitWithoutPrefix(std::string unit)
+{
+    for (const auto &pair : prefixes) {
+        if (unit.find(pair.first) != std::string::npos) {
+            return unit.erase(0, pair.first.length());
+        }
+    }
+    return unit;
 }
