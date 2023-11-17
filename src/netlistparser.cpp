@@ -103,6 +103,7 @@ NetlistParser::NetlistParser()
     elementFactory["netclass"] = []() { return std::make_unique<NetClass>(); };
     elementFactory["net"] = []() { return std::make_unique<Net>(); };
     elementFactory["component"] = []() { return std::make_unique<Component>(); };
+    elementFactory["model"] = []() { return std::make_unique<Component>(); };
     elementFactory["attribute"] = []() { return std::make_unique<Attribute>(); };
     elementFactory["signal"] = []() { return std::make_unique<Signal>(); };
     elementFactory["device"] = []() { return std::make_unique<Device>(); };

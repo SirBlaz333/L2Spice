@@ -24,6 +24,11 @@ void Circuit::addElement(const Element *element)
         componentMap[component->getUuid()] = *component;
         return;
     }
+    if (element->getElementType() == "model") {
+        const Component *component = dynamic_cast<const Component *>(element);
+        modelMap[component->getUuid()] = *component;
+        return;
+    }
 }
 
 void Circuit::setSubcircuitStatus(bool isSubcircuit, std::string name)
@@ -61,4 +66,9 @@ std::map<std::string, Net> Circuit::getNetMap() const
 std::map<std::string, Component> Circuit::getComponentMap() const
 {
     return componentMap;
+}
+
+std::map<std::string, Component> Circuit::getModelMap() const
+{
+    return modelMap;
 }

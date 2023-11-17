@@ -18,7 +18,7 @@ static std::map<std::string, std::string> prefixes = {{"pico", "p"},
 
 std::string getUnitShortPrefix(std::string unit);
 std::string getFullUnitPrefix(std::string shortPrefix);
-std::string parseAttributes(Component component);
+std::string parseAttributes(Component component, bool includeName);
 std::string getUnitWithoutPrefix(std::string unit);
 }
 

@@ -20,17 +20,18 @@ std::string attribute_utils::getFullUnitPrefix(std::string shortPrefix)
     return "";
 }
 
-std::string getValueFromAttribute(Attribute attribute)
+std::string writeAttribute(Attribute attribute, bool includeName)
 {
-    return attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
+    std::string result = includeName ? attribute.getName() + "=" : "";
+    return result + attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
-std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attribute>::iterator end)
+std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attribute>::iterator end, bool includeName)
 {
     std::string result;
     while (begin != end) {
         if (!begin->getValue().empty()) {
-            result += getValueFromAttribute(*begin);
+            result += writeAttribute(*begin, includeName);
         }
         begin++;
     }
@@ -40,16 +41,16 @@ std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attr
     return result;
 }
 
-std::string attribute_utils::parseAttributes(Component component)
+std::string attribute_utils::parseAttributes(Component component, bool includeName)
 {
     std::list<Attribute> attributes = component.getAttributeList();
     std::list<Attribute>::iterator begin = attributes.begin();
     std::list<Attribute>::iterator end = attributes.end();
     if (begin->getName() == "SOURCETYPE") {
         std::string result = begin->getValue() + "(";
-        return result + parseAttributes(++begin, end) + ")";
+        return result + parseAttributes(++begin, end, includeName) + ")";
     }
-    return parseAttributes(begin, end);
+    return parseAttributes(begin, end, includeName);
 }
 
 std::string attribute_utils::getUnitWithoutPrefix(std::string unit)

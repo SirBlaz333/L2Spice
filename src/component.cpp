@@ -50,6 +50,9 @@ void Component::setProperty(const std::string &propertyName, const Element* prop
 {
     if (propertyName == "attribute") {
         const Attribute* attribute = dynamic_cast<const Attribute*>(property);
+        if (attribute->getName() == "SOURCETYPE" && attribute->getValue() == "JJ") {
+            elementType = "model";
+        }
         attributeList.push_back(*attribute);
     }
     if (propertyName == "signal") {

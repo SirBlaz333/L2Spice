@@ -22,7 +22,8 @@ std::string writeComponent(std::string parentSignalUuid,
                            Component component,
                            std::map<std::string, std::list<Component>> netComponentsMap,
                            std::map<std::string, int> netOrderMap,
-                           std::set<std::string> *repeats)
+                           std::set<std::string> *repeats,
+                           bool includeAttributeName)
 {
     if (repeats->count(component.getUuid()) != 0 || component.getValue() == "GND") {
         return "";
@@ -38,7 +39,7 @@ std::string writeComponent(std::string parentSignalUuid,
             result += writeSignal(signal.getNet().getUuid(), netOrderMap);
         }
     }
-    result += attribute_utils::parseAttributes(component);
+    result += attribute_utils::parseAttributes(component, includeAttributeName);
     result += "\n";
     for (Signal signal : signalList) {
         if (signal.getNet().getUuid() != parentSignalUuid
@@ -49,7 +50,8 @@ std::string writeComponent(std::string parentSignalUuid,
                                          component,
                                          netComponentsMap,
                                          netOrderMap,
-                                         repeats);
+                                         repeats,
+                                         includeAttributeName);
             }
         }
     }
@@ -129,7 +131,13 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     }
     Component component = findComponent(uuidWithLowestOrder, componentMap);
     std::set<std::string> repeats;
-    std::string result = writeComponent("", component, netComponentsMap, netOrderMap, &repeats);
+    std::string result = writeComponent("", component, netComponentsMap, netOrderMap, &repeats, false);
+    if (!circuit.getModelMap().empty()) {
+        result += "\n";
+    }
+    for (const auto &pair : circuit.getModelMap()) {
+        result += ".MODEL " + writeComponent("", pair.second, netComponentsMap, netOrderMap, &repeats, true);
+    }
     if (circuit.getSubcircuitStatus()) {
         result = ".SUBCKT " + circuit.getName() + " 0 "
                  + createSubcircuit(netOrderMap, netComponentsMap)
