@@ -14,6 +14,7 @@ private:
     std::string name;
     const Variant* variant;
     const NetClass* netclass;
+    const Component* tran = nullptr;
     std::map<std::string, Net> netMap;
     std::map<std::string, Component> componentMap;
     std::map<std::string, Component> modelMap;
@@ -23,6 +24,7 @@ public:
     ~Circuit();
     const Variant getVariant() const;
     const NetClass getNetclass() const;
+    const Component getTran() const;
     std::map<std::string, Net> getNetMap() const;
     std::map<std::string, Component> getComponentMap() const;
     std::map<std::string, Component> getModelMap() const;

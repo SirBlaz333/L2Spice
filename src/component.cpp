@@ -53,6 +53,9 @@ void Component::setProperty(const std::string &propertyName, const Element* prop
         if (attribute->getName() == "SOURCETYPE" && attribute->getValue() == "JJ") {
             elementType = "model";
         }
+        if (attribute->getName() == "ANALYSIS" && attribute->getValue() == "TRANSIENT") {
+            elementType = "tran";
+        }
         attributeList.push_back(*attribute);
     }
     if (propertyName == "signal") {

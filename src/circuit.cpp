@@ -29,6 +29,10 @@ void Circuit::addElement(const Element *element)
         modelMap[component->getUuid()] = *component;
         return;
     }
+    if (element->getElementType() == "tran") {
+        tran = dynamic_cast<const Component *>(element);
+        return;
+    }
 }
 
 void Circuit::setSubcircuitStatus(bool isSubcircuit, std::string name)
@@ -56,6 +60,14 @@ const Variant Circuit::getVariant() const
 const NetClass Circuit::getNetclass() const
 {
     return *netclass;
+}
+
+const Component Circuit::getTran() const
+{
+    if (tran == nullptr) {
+        return Component();
+    }
+    return *tran;
 }
 
 std::map<std::string, Net> Circuit::getNetMap() const

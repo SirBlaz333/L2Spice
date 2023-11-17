@@ -46,6 +46,9 @@ std::string attribute_utils::parseAttributes(Component component, bool includeNa
     std::list<Attribute> attributes = component.getAttributeList();
     std::list<Attribute>::iterator begin = attributes.begin();
     std::list<Attribute>::iterator end = attributes.end();
+    if (begin->getName() == "ANALYSIS") {
+        begin++;
+    }
     if (begin->getName() == "SOURCETYPE") {
         std::string result = begin->getValue() + "(";
         return result + parseAttributes(++begin, end, includeName) + ")";

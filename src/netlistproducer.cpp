@@ -136,7 +136,12 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
         result += "\n";
     }
     for (const auto &pair : circuit.getModelMap()) {
-        result += ".MODEL " + writeComponent("", pair.second, netComponentsMap, netOrderMap, &repeats, true);
+        result += ".MODEL " + attribute_utils::parseAttributes(pair.second, true) + "\n";
+    }
+    if (!circuit.getTran().getName().empty()) {
+        result += "\n.tran ";
+        Component tran = circuit.getTran();\
+        result += attribute_utils::parseAttributes(tran, false);
     }
     if (circuit.getSubcircuitStatus()) {
         result = ".SUBCKT " + circuit.getName() + " 0 "
