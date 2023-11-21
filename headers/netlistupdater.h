@@ -1,14 +1,15 @@
 #ifndef NETLISTUPDATER_H
 #define NETLISTUPDATER_H
 
-#include <string>
+#include <QString>
+
 
 class NetlistUpdater
 {
 public:
     NetlistUpdater();
     ~NetlistUpdater();
-    std::string updateNetlist(std::string textToUpdate, std::string oldVersion, std::string newVersion);
+    QString updateNetlist(QString textToUpdate, QString oldVersion, QString newVersion);
 };
 
 #endif // NETLISTUPDATER_H

@@ -5,7 +5,7 @@ const Net Signal::getNet()
     return *net;
 }
 
-void Signal::setProperty(const std::string &propertyName, const Element *property)
+void Signal::setProperty(const QString &propertyName, const Element *property)
 {
     if (propertyName == "net") {
         net = dynamic_cast<const Net *>(property);

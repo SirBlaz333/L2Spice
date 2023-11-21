@@ -16,21 +16,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    Circuit circuit = parser.parseLibreNotation(
-        ui->textEdit->toPlainText().toStdString());
-    std::string name = ui->subciruitNameTextEdit->toPlainText().toStdString();
+    Circuit circuit = parser.parseLibreNotation(ui->textEdit->toPlainText());
+    QString name = ui->subciruitNameTextEdit->toPlainText();
     circuit.setSubcircuitStatus(ui->checkBox->isChecked(), name == "" ? "DEFAULT_NAME" : name);
     spiceNotation = producer.produceSpiceNotationNetlist(circuit);
-    ui->textEdit_2->setPlainText(QString::fromStdString(spiceNotation));
+    ui->textEdit_2->setPlainText(spiceNotation);
 }
 
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    std::string textToUpdate = ui->textEdit->toPlainText().toStdString();
-    std::string text = ui->textEdit_2->toPlainText().toStdString();
-    std::string result = updater.updateNetlist(textToUpdate, spiceNotation, text);
-    ui->textEdit->setPlainText(QString::fromStdString(result));
+    QString textToUpdate = ui->textEdit->toPlainText();
+    QString text = ui->textEdit_2->toPlainText();
+    QString result = updater.updateNetlist(textToUpdate, spiceNotation, text);
+    ui->textEdit->setPlainText(result);
     spiceNotation = text;
 }
 

@@ -3,31 +3,28 @@
 
 #include <headers/circuit.h>
 #include <iostream>
-#include <list>
-#include <regex>
-#include <set>
-#include <list>
-#include <vector>
+#include <QMap>
+#include <QSharedPointer>
 #include <bits/unique_ptr.h>
 
 
 class NetlistParser
 {
 private:
-    std::map<std::string, std::function<std::unique_ptr<Element>()>> elementFactory;
-    std::string::iterator currentCharacter;
-    std::map<std::string, std::unique_ptr<Element>> elementMap;
+    QMap<QString, std::function<QSharedPointer<Element>()>> elementFactory;
+    QString::iterator currentCharacter;
+    QMap<QString, QSharedPointer<Element>> elementMap;
 
-    std::string nextWord();
-    std::string nextDataInQuotes();
-    void parseComponents(std::string::iterator last);
-    void parseComponent(std::string parentUuid,  std::string::iterator last);
-    Element* createNewElement(std::string name, std::string uuid);
-    void parseElement(std::string parentUuid, std::string::iterator last);
+    QString nextWord();
+    QString nextDataInQuotes();
+    void parseComponents(QString::iterator last);
+    void parseComponent(QString parentUuid,  QString::iterator last);
+    Element* createNewElement(QString name, QString uuid);
+    void parseElement(QString parentUuid, QString::iterator last);
 public:
     NetlistParser();
     ~NetlistParser();
-    Circuit parseLibreNotation(std::string input);
+    Circuit parseLibreNotation(QString input);
 };
 
 #endif // NETLISTPARSER_H

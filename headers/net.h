@@ -8,14 +8,14 @@ class Net : public NetClass
 private:
     bool autoMode;
     const NetClass* netclass;
-    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setChildProperty(const QString &propertyName, const QString &property);
 public:
     Net();
     ~Net();
 
     bool getAutoMode() const;
     const NetClass getNetclass() const;
-    void setProperty(const std::string &propertyName, const Element* property);
+    void setProperty(const QString &propertyName, const Element* property);
 };
 
 #endif // NET_H

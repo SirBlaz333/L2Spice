@@ -10,14 +10,14 @@ const NetClass Net::getNetclass() const
     return *netclass;
 }
 
-void Net::setChildProperty(const std::string &propertyName, const std::string &property)
+void Net::setChildProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "auto") {
         autoMode = (property == "true");
     }
 }
 
-void Net::setProperty(const std::string &propertyName, const Element* property)
+void Net::setProperty(const QString &propertyName, const Element* property)
 {
     if (propertyName == "netclass") {
         netclass = dynamic_cast<const NetClass *>(property);

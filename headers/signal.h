@@ -10,7 +10,7 @@ class Signal : public Element
 {
 private:
     const Net* net;
-    void setProperty(const std::string &propertyName, const Element* property);
+    void setProperty(const QString &propertyName, const Element* property);
 
 public:
     Signal();

@@ -1,37 +1,39 @@
 #include "../headers/netlistproducer.h"
 #include "headers/attributeutils.h"
 
+#include <QMap>
+#include <QSet>
 #include <regex>
 #include <set>
 
-std::string NetlistProducer::getValueOrDefault(std::string string)
+QString NetlistProducer::getValueOrDefault(QString string)
 {
-    return string.empty() ? "-" : string;
+    return string.isEmpty() ? "-" : string;
 }
 
 NetlistProducer::NetlistProducer() {}
 
 NetlistProducer::~NetlistProducer() {}
 
-std::string writeSignal(std::string uuid, std::map<std::string, int> netOrderMap)
+QString writeSignal(QString uuid, QMap<QString, int> netOrderMap)
 {
-    return uuid.empty() ? "-" : std::to_string(netOrderMap[uuid]) + " ";
+    return uuid.isEmpty() ? "-" : QString::number(netOrderMap[uuid]) + " ";
 }
 
-std::string writeComponent(std::string parentSignalUuid,
+QString writeComponent(QString parentSignalUuid,
                            Component component,
-                           std::map<std::string, std::list<Component>> netComponentsMap,
-                           std::map<std::string, int> netOrderMap,
-                           std::set<std::string> *repeats,
+                           QMap<QString, QList<Component>> netComponentsMap,
+                           QMap<QString, int> netOrderMap,
+                           QSet<QString> *repeats,
                            bool includeAttributeName)
 {
-    if (repeats->count(component.getUuid()) != 0 || component.getValue() == "GND") {
+    if (repeats->contains(component.getUuid()) || component.getValue() == "GND") {
         return "";
     }
     repeats->insert({component.getUuid()});
-    std::string result = component.getName() + " ";
-    std::list<Signal> signalList = component.getSignalList();
-    if(!parentSignalUuid.empty()) {
+    QString result = component.getName() + " ";
+    QList<Signal> signalList = component.getSignalList();
+    if(!parentSignalUuid.isEmpty()) {
         result += writeSignal(parentSignalUuid, netOrderMap);
     }
     for (Signal signal : signalList) {
@@ -44,7 +46,7 @@ std::string writeComponent(std::string parentSignalUuid,
     for (Signal signal : signalList) {
         if (signal.getNet().getUuid() != parentSignalUuid
             && netOrderMap[signal.getNet().getUuid()] != 0) {
-            std::list<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
+            QList<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
             for (Component &component : componentList) {
                 result += writeComponent(signal.getNet().getUuid(),
                                          component,
@@ -58,15 +60,13 @@ std::string writeComponent(std::string parentSignalUuid,
     return result;
 }
 
-std::map<std::string, std::list<Component>> createNetComponentsMap(
-    std::map<std::string, Component> componentMap)
+QMap<QString, QList<Component>> createNetComponentsMap(QMap<QString, Component> componentMap)
 {
-    std::map<std::string, std::list<Component>> map;
-    for (const auto &pair : componentMap) {
-        Component component = pair.second;
-        std::list<Signal> signalList = component.getSignalList();
+    QMap<QString, QList<Component>> map;
+    for (const auto &component : componentMap) {
+        QList<Signal> signalList = component.getSignalList();
         for (Signal signal : signalList) {
-            std::list<Component> componentList = map[signal.getNet().getUuid()];
+            QList<Component> componentList = map[signal.getNet().getUuid()];
             componentList.push_back(component);
             map[signal.getNet().getUuid()] = componentList;
         }
@@ -74,54 +74,53 @@ std::map<std::string, std::list<Component>> createNetComponentsMap(
     return map;
 }
 
-Component findComponent(std::string uuid, std::map<std::string, Component> componentMap)
+Component findComponent(QString uuid, QMap<QString, Component> componentMap)
 {
-    for (const auto &pair : componentMap) {
-        Component currentComponent = pair.second;
-        for (Signal &signal : currentComponent.getSignalList()) {
+    for (const auto &component: componentMap) {
+        for (Signal &signal : component.getSignalList()) {
             if (signal.getNet().getUuid() == uuid) {
-                return currentComponent;
+                return component;
             }
         }
     }
     return Component();
 }
 
-std::string createSubcircuit(std::map<std::string, int> netOrderMap,
-                             std::map<std::string, std::list<Component>> netComponentsMap)
+QString createSubcircuit(QMap<QString, int> netOrderMap,
+                         QMap<QString, QList<Component>> netComponentsMap)
 {
-    std::vector<int> inOutList;
-    for (auto const &pair : netComponentsMap) {
-        if (pair.second.size() == 1) {
-            inOutList.push_back(netOrderMap[pair.first]);
+    QList<int> inOutList;
+    for (auto const &key : netComponentsMap.keys()) {
+        QList<Component> components = netComponentsMap[key];
+        if (components.size() == 1) {
+            inOutList.push_back(netOrderMap[key]);
         }
     }
     std::sort(inOutList.begin(), inOutList.end());
-    std::string result;
+    QString result;
     for (int signalNumber : inOutList) {
         result += std::to_string(signalNumber) + " ";
     }
-    result.pop_back();
+    result.chop(1);
     return result;
 }
 
-std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
+QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
 {
     Variant variant = circuit.getVariant();
     NetClass netclass = circuit.getNetclass();
-    std::map<std::string, Net> netMap = circuit.getNetMap();
-    std::map<std::string, Component> componentMap = circuit.getComponentMap();
-    std::map<std::string, int> netOrderMap;
-    std::map<std::string, std::list<Component>> netComponentsMap = createNetComponentsMap(componentMap);
-    std::string uuidWithLowestOrder;
+    QMap<QString, Net> netMap = circuit.getNetMap();
+    QMap<QString, Component> componentMap = circuit.getComponentMap();
+    QMap<QString, int> netOrderMap;
+    QMap<QString, QList<Component>> netComponentsMap = createNetComponentsMap(componentMap);
+    QString uuidWithLowestOrder;
     int lastOrder = INT_MAX;
-    for (const auto &pair : netMap) {
-        const auto net = pair.second;
-        std::string name = net.getName();
+    for (const auto &net : netMap) {
+        QString name = net.getName();
         if (name == "GND" || name == "") {
-            netOrderMap[net.getUuid()] = 0;
+            netOrderMap.insert(net.getUuid(), 0);
         } else {
-            int currentOrder = std::stoi(name.substr(1, name.size() - 1)) * 10;
+            int currentOrder = name.mid(1, name.size() - 1).toInt() * 10;
             netOrderMap[net.getUuid()] = currentOrder;
             if (currentOrder < lastOrder) {
                 lastOrder = currentOrder;
@@ -130,13 +129,13 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
         }
     }
     Component component = findComponent(uuidWithLowestOrder, componentMap);
-    std::set<std::string> repeats;
-    std::string result = writeComponent("", component, netComponentsMap, netOrderMap, &repeats, false);
+    QSet<QString> repeats;
+    QString result = writeComponent("", component, netComponentsMap, netOrderMap, &repeats, false);
     if (!circuit.getModelMap().empty()) {
         result += "\n";
     }
-    for (const auto &pair : circuit.getModelMap()) {
-        result += ".MODEL " + pair.second.getName() + " " + attribute_utils::parseAttributes(pair.second, true) + "\n";
+    for (const auto &model : circuit.getModelMap()) {
+        result += ".MODEL " + model.getName() + " " + attribute_utils::parseAttributes(model, true) + "\n";
     }
     if (circuit.getSubcircuitStatus()) {
         result = ".SUBCKT " + circuit.getName() + " 0 "
@@ -144,7 +143,7 @@ std::string NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
                  + "\n\n*circuit\n" + result + "\n.ENDS\n";
     }
 
-    if (!circuit.getTran().getName().empty()) {
+    if (!circuit.getTran().getName().isEmpty()) {
         result += "\n.tran ";
         Component tran = circuit.getTran();\
             result += attribute_utils::parseAttributes(tran, false);

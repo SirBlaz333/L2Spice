@@ -1,21 +1,21 @@
 #include "headers/element.h"
 
-std::string Element::getUuid() const
+QString Element::getUuid() const
 {
     return uuid;
 }
 
-std::string Element::getName() const
+QString Element::getName() const
 {
     return name;
 }
 
-std::string Element::getElementType() const
+QString Element::getElementType() const
 {
     return elementType;
 }
 
-void Element::setProperty(const std::string &propertyName, const std::string &property)
+void Element::setProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "name") {
         name = property;
@@ -26,6 +26,6 @@ void Element::setProperty(const std::string &propertyName, const std::string &pr
     }
 }
 
-void Element::setProperty(const std::string &propertyName, const Element *property) {}
+void Element::setProperty(const QString &propertyName, const Element *property) {}
 
-void Element::setChildProperty(const std::string &propertyName, const std::string &property) {}
+void Element::setChildProperty(const QString &propertyName, const QString &property) {}

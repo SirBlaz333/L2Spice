@@ -8,19 +8,19 @@
 class Attribute : public Element
 {
 private:
-    std::string type;
-    std::string unit;
-    std::string value;
+    QString type;
+    QString unit;
+    QString value;
 
-    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setChildProperty(const QString &propertyName, const QString &property);
 
 public:
     Attribute();
     ~Attribute();
 
-    std::string getType() const;
-    std::string getUnit() const;
-    std::string getValue() const;
+    QString getType() const;
+    QString getUnit() const;
+    QString getValue() const;
 };
 
 #endif // ATTRIBUTE_H

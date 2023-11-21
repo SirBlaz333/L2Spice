@@ -1,24 +1,25 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
-#include <string>
+#include <QString>
+
 
 class Element
 {
 private:
-    std::string uuid;
-    std::string name;
+    QString uuid;
+    QString name;
 
 protected:
-    std::string elementType;
-    virtual void setChildProperty(const std::string &propertyName, const std::string &property);
+    QString elementType;
+    virtual void setChildProperty(const QString &propertyName, const QString &property);
 
 public:
-    std::string getUuid() const;
-    std::string getName() const;
-    std::string getElementType() const;
-    void setProperty(const std::string &propertyName, const std::string &property);
-    virtual void setProperty(const std::string &propertyName, const Element *property);
+    QString getUuid() const;
+    QString getName() const;
+    QString getElementType() const;
+    void setProperty(const QString &propertyName, const QString &property);
+    virtual void setProperty(const QString &propertyName, const Element *property);
 };
 
 #endif // ELEMENT_H

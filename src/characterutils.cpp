@@ -2,28 +2,28 @@
 
 namespace character_utils {
 
-    bool isWordComponent(char c)
+    bool isWordComponent(QChar c)
     {
-        return std::isalnum(c) || c == '-' || c == '_';
+        return c.isLetterOrNumber() || c == '-' || c == '_';
     }
 
-    bool isLeftParanthesis(char c)
+    bool isLeftParanthesis(QChar c)
     {
         return c == '(';
     }
 
-    bool isRightParanthesis(char c)
+    bool isRightParanthesis(QChar c)
     {
         return c == ')';
     }
 
-    bool isQuotes(char c)
+    bool isQuotes(QChar c)
     {
         return c == '"';
     }
 
-    bool isWhitespaceCharacter(char c)
+    bool isWhitespaceCharacter(QChar c)
     {
-        return std::isspace(c);
+        return c.isSpace();
     }
 } // namespace character_utils

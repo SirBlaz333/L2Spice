@@ -1,66 +1,66 @@
 #include "../headers/attributeutils.h"
 
-std::string attribute_utils::getUnitShortPrefix(std::string unit)
+QString attribute_utils::getUnitShortPrefix(QString unit)
 {
-    for (const auto &pair : prefixes) {
-        if (unit.find(pair.first) != std::string::npos) {
-            return pair.second;
+    for (const auto &key : prefixes.keys()) {
+        if (unit.contains(key)) {
+            return prefixes[key];
         }
     }
     return "";
 }
 
-std::string attribute_utils::getFullUnitPrefix(std::string shortPrefix)
+QString attribute_utils::getFullUnitPrefix(QString shortPrefix)
 {
-    for (const auto &pair : prefixes) {
-        if (shortPrefix == pair.second) {
-            return pair.first;
+    for (const auto &key : prefixes.keys()) {
+        if (shortPrefix == prefixes[key]) {
+            return key;
         }
     }
     return "";
 }
 
-std::string writeAttribute(Attribute attribute, bool includeName)
+QString writeAttribute(Attribute attribute, bool includeName)
 {
-    std::string result = includeName ? attribute.getName() + "=" : "";
+    QString result = includeName ? attribute.getName() + "=" : "";
     return result + attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
-std::string parseAttributes(std::list<Attribute>::iterator begin, std::list<Attribute>::iterator end, bool includeName)
+QString parseAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iterator end, bool includeName)
 {
-    std::string result;
+    QString result;
     while (begin != end) {
-        if (!begin->getValue().empty()) {
+        if (!begin->getValue().isEmpty()) {
             result += writeAttribute(*begin, includeName);
         }
         begin++;
     }
-    if (!result.empty()) {
-        result.pop_back();
+    if (!result.isEmpty()) {
+        result.chop(1);
     }
     return result;
 }
 
-std::string attribute_utils::parseAttributes(Component component, bool includeName)
+QString attribute_utils::parseAttributes(Component component, bool includeName)
 {
-    std::list<Attribute> attributes = component.getAttributeList();
-    std::list<Attribute>::iterator begin = attributes.begin();
-    std::list<Attribute>::iterator end = attributes.end();
+    QList<Attribute> attributes = component.getAttributeList();
+    QList<Attribute>::iterator begin = attributes.begin();
+    QList<Attribute>::iterator end = attributes.end();
     if (begin->getName() == "ANALYSIS") {
         begin++;
     }
     if (begin->getName() == "SOURCETYPE") {
-        std::string result = begin->getValue() + "(";
+        QString result = begin->getValue() + "(";
         return result + parseAttributes(++begin, end, includeName) + ")";
     }
     return parseAttributes(begin, end, includeName);
 }
 
-std::string attribute_utils::getUnitWithoutPrefix(std::string unit)
+QString attribute_utils::getUnitWithoutPrefix(QString unit)
 {
-    for (const auto &pair : prefixes) {
-        if (unit.find(pair.first) != std::string::npos) {
-            return unit.erase(0, pair.first.length());
+    for (const auto &key : prefixes.keys()) {
+        if (unit.contains(key)) {
+            return unit.mid(0, key.length());
         }
     }
     return unit;

@@ -3,23 +3,21 @@
 
 #include "component.h"
 
-#include <list>
-#include <map>
-#include <string>
-
+#include <QMap>
+#include <QString>
 
 namespace attribute_utils {
-static std::map<std::string, std::string> prefixes = {{"pico", "p"},
+static QMap<QString, QString> prefixes = {{"pico", "p"},
                                                       {"nano", "n"},
                                                       {"micro", "u"},
                                                       {"milli", "m"},
                                                       {"kilo", "k"},
                                                       {"mega", "meg"}};
 
-std::string getUnitShortPrefix(std::string unit);
-std::string getFullUnitPrefix(std::string shortPrefix);
-std::string parseAttributes(Component component, bool includeName);
-std::string getUnitWithoutPrefix(std::string unit);
+QString getUnitShortPrefix(QString unit);
+QString getFullUnitPrefix(QString shortPrefix);
+QString parseAttributes(Component component, bool includeName);
+QString getUnitWithoutPrefix(QString unit);
 }
 
 #endif // ATTRIBUTEUTILS_H

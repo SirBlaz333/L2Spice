@@ -4,20 +4,20 @@
 #include "component.h"
 #include "net.h"
 #include "variant.h"
-#include <map>
-#include <string>
+#include <QMap>
+#include <QString>
 
 class Circuit
 {
 private:
     bool isSubcircuit;
-    std::string name;
+    QString name;
     const Variant* variant;
     const NetClass* netclass;
     const Component* tran = nullptr;
-    std::map<std::string, Net> netMap;
-    std::map<std::string, Component> componentMap;
-    std::map<std::string, Component> modelMap;
+    QMap<QString, Net> netMap;
+    QMap<QString, Component> componentMap;
+    QMap<QString, Component> modelMap;
 
 public:
     Circuit();
@@ -25,13 +25,13 @@ public:
     const Variant getVariant() const;
     const NetClass getNetclass() const;
     const Component getTran() const;
-    std::map<std::string, Net> getNetMap() const;
-    std::map<std::string, Component> getComponentMap() const;
-    std::map<std::string, Component> getModelMap() const;
+    QMap<QString, Net> getNetMap() const;
+    QMap<QString, Component> getComponentMap() const;
+    QMap<QString, Component> getModelMap() const;
     void addElement(const Element *element);
-    void setSubcircuitStatus(bool isSubcircuit, std::string name);
+    void setSubcircuitStatus(bool isSubcircuit, QString name);
     bool getSubcircuitStatus() const;
-    std::string getName() const;
+    QString getName() const;
 };
 
 #endif // CIRCUIT_H

@@ -35,7 +35,7 @@ void Circuit::addElement(const Element *element)
     }
 }
 
-void Circuit::setSubcircuitStatus(bool isSubcircuit, std::string name)
+void Circuit::setSubcircuitStatus(bool isSubcircuit, QString name)
 {
     this->isSubcircuit = isSubcircuit;
     this->name = name;
@@ -47,7 +47,7 @@ bool Circuit::getSubcircuitStatus() const
     return isSubcircuit;
 }
 
-std::string Circuit::getName() const
+QString Circuit::getName() const
 {
     return name;
 }
@@ -70,17 +70,17 @@ const Component Circuit::getTran() const
     return *tran;
 }
 
-std::map<std::string, Net> Circuit::getNetMap() const
+QMap<QString, Net> Circuit::getNetMap() const
 {
     return netMap;
 }
 
-std::map<std::string, Component> Circuit::getComponentMap() const
+QMap<QString, Component> Circuit::getComponentMap() const
 {
     return componentMap;
 }
 
-std::map<std::string, Component> Circuit::getModelMap() const
+QMap<QString, Component> Circuit::getModelMap() const
 {
     return modelMap;
 }

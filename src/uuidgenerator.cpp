@@ -7,7 +7,7 @@ static std::uniform_int_distribution<> distribution2(8, 11);
 
 namespace uuid_generator {
 
-    std::string generateUUID()
+    QString generateUUID()
     {
         std::stringstream uuid;
         int i;
@@ -32,7 +32,7 @@ namespace uuid_generator {
         for (i = 0; i < 12; i++) {
             uuid << distribution(generator);
         }
-        return uuid.str();
+        return QString::fromStdString(uuid.str());
     }
 
 } // namespace uuid

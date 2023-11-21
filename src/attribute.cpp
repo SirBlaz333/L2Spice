@@ -7,22 +7,22 @@ Attribute::Attribute()
 
 Attribute::~Attribute() {}
 
-std::string Attribute::getType() const
+QString Attribute::getType() const
 {
     return type;
 }
 
-std::string Attribute::getUnit() const
+QString Attribute::getUnit() const
 {
     return unit;
 }
 
-std::string Attribute::getValue() const
+QString Attribute::getValue() const
 {
     return value;
 }
 
-void Attribute::setChildProperty(const std::string &propertyName, const std::string &property)
+void Attribute::setChildProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "type") {
         type = property;

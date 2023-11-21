@@ -5,32 +5,34 @@
 #include "element.h"
 #include "headers/attribute.h"
 #include "headers/signal.h"
-#include <list>
+
+#include <QList>
 
 class Component : public Element
 {
 private:
-    std::string libComponent;
-    std::string libVariant;
-    std::string value;
+    QString libComponent;
+    QString libVariant;
+    QString value;
     bool lockAssembly;
-    std::list<Attribute> attributeList;
-    std::list<Signal> signalList;
+    QList<QString> list;
+    QList<Attribute> attributeList;
+    QList<Signal> signalList;
     const Device* device;
-    void setChildProperty(const std::string &propertyName, const std::string &property);
+    void setChildProperty(const QString &propertyName, const QString &property);
 
 public:
     Component();
     ~Component();
 
-    std::string getLibComponent() const;
-    std::string getLibVariant() const;
-    std::string getValue() const;
+    QString getLibComponent() const;
+    QString getLibVariant() const;
+    QString getValue() const;
     bool getLockAssembly() const;
-    std::list<Attribute> getAttributeList() const;
-    std::list<Signal> getSignalList() const;
+    QList<Attribute> getAttributeList() const;
+    QList<Signal> getSignalList() const;
     const Device getDevice() const;
-    void setProperty(const std::string &propertyName, const Element* property);
+    void setProperty(const QString &propertyName, const Element* property);
 };
 
 #endif // COMPONENT_H

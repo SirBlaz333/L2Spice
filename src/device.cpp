@@ -5,7 +5,7 @@ const Variant *Device::getVariant() const
     return variant;
 }
 
-void Device::setProperty(const std::string &propertyName, const Element *property)
+void Device::setProperty(const QString &propertyName, const Element *property)
 {
     if (property->getElementType() == "variant") {
         variant = dynamic_cast<const Variant *>(property);

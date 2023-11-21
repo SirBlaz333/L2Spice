@@ -6,13 +6,13 @@
 class Variant : public Element
 {
 private:
-    std::string description;
-    void setChildProperty(const std::string &propertyName, const std::string &property);
+    QString description;
+    void setChildProperty(const QString &propertyName, const QString &property);
 
 public:
     Variant();
     ~Variant();
-    std::string getDescription() const;
+    QString getDescription() const;
 
 };
 

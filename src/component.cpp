@@ -1,16 +1,16 @@
 #include "../headers/component.h"
 
-std::string Component::getLibComponent() const
+QString Component::getLibComponent() const
 {
     return libComponent;
 }
 
-std::string Component::getLibVariant() const
+QString Component::getLibVariant() const
 {
     return libVariant;
 }
 
-std::string Component::getValue() const
+QString Component::getValue() const
 {
     return value;
 }
@@ -20,11 +20,11 @@ bool Component::getLockAssembly() const
     return lockAssembly;
 }
 
-std::list<Attribute> Component::getAttributeList() const
+QList<Attribute> Component::getAttributeList() const
 {
     return attributeList;
 }
-std::list<Signal> Component::getSignalList() const
+QList<Signal> Component::getSignalList() const
 {
     return signalList;
 }
@@ -34,7 +34,7 @@ const Device Component::getDevice() const
     return *device;
 }
 
-void Component::setChildProperty(const std::string &propertyName, const std::string &property)
+void Component::setChildProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "lib_component") {
         libComponent = property;
@@ -46,7 +46,7 @@ void Component::setChildProperty(const std::string &propertyName, const std::str
         lockAssembly = (property == "true");
     }
 }
-void Component::setProperty(const std::string &propertyName, const Element* property)
+void Component::setProperty(const QString &propertyName, const Element* property)
 {
     if (propertyName == "attribute") {
         const Attribute* attribute = dynamic_cast<const Attribute*>(property);

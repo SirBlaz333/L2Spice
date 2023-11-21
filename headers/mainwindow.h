@@ -29,7 +29,7 @@ private slots:
     void on_checkBox_stateChanged(int arg1);
 
 private:
-    std::string spiceNotation;
+    QString spiceNotation;
     NetlistParser parser;
     NetlistProducer producer;
     NetlistUpdater updater;

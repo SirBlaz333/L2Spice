@@ -1,6 +1,7 @@
 #include "../headers/netlistupdater.h"
 #include "headers/attributeutils.h"
 #include <QList>
+#include <QMap>
 #include <QRegularExpression>
 #include <functional>
 #include <iostream>
@@ -11,14 +12,14 @@ NetlistUpdater::NetlistUpdater() {}
 
 NetlistUpdater::~NetlistUpdater() {}
 
-std::vector<std::string> split(std::string::iterator iterator,
-                                 std::string::iterator end,
-                                 std::function<bool(char)> test)
+QList<QString> split(QString::iterator iterator,
+                     QString::iterator end,
+                     std::function<bool(QChar)> test)
 {
-    std::vector<std::string> vector;
-    std::string result;
+    QList<QString> vector;
+    QString result;
     while (iterator != end) {
-        if (test(*iterator) && !result.empty()) {
+        if (test(*iterator) && !result.isEmpty()) {
             vector.push_back(result);
             result = "";
         } else {
@@ -26,19 +27,19 @@ std::vector<std::string> split(std::string::iterator iterator,
         }
         iterator++;
     }
-    if (!result.empty()) {
+    if (!result.isEmpty()) {
         vector.push_back(result);
     }
     return vector;
 }
 
-std::vector<std::string> splitRows(std::string::iterator iterator, std::string::iterator end)
+QList<QString> splitRows(QString::iterator iterator, QString::iterator end)
 {
-    return split(iterator, end, [](char c) { return c == '\n'; });
+    return split(iterator, end, [](QChar c) { return c == '\n'; });
 }
 
-std::vector<std::string> splitParams(std::string::iterator iterator, std::string::iterator end){
-    return split(iterator, end, [](char c) { return c == ' ' || c == '(' || c == ')'; });
+QList<QString> splitParams(QString::iterator iterator, QString::iterator end){
+    return split(iterator, end, [](QChar c) { return c == ' ' || c == '(' || c == ')'; });
 }
 
 std::string findTextByPattern(const std::string &text, const std::string &pattern)
@@ -61,37 +62,35 @@ QString getSubString(QString pattern, QString input, int captureGroup) {
     return nameMatch.captured(captureGroup);
 }
 
-std::map<std::string, QString> getComponents(std::string textToUpdate)
+QMap<QString, QString> getComponents(QString textToUpdate)
 {
-    std::map<std::string, QString> map;
+    QMap<QString, QString> map;
     QRegularExpression pattern(R"(\(component.+?\n\s\))",
                                QRegularExpression::DotMatchesEverythingOption);
-    QRegularExpressionMatchIterator it = pattern.globalMatch(QString::fromStdString(textToUpdate));
+    QRegularExpressionMatchIterator it = pattern.globalMatch(textToUpdate);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         QString result = match.captured(0);
-        std::string namePattern = R"(\(name \"(.+?)\"\))";
-        std::string name = getSubString(QString::fromStdString(namePattern), result, 1).toStdString();
+        QString namePattern = R"(\(name \"(.+?)\"\))";
+        QString name = getSubString(namePattern, result, 1);
         map[name] = result;
     }
 
     return map;
 }
 
-std::string update(std::string textToUpdate, std::string params, std::map<std::string, QString> componentsMap)
+QString update(QString textToUpdate, QString params, QMap<QString, QString> componentsMap)
 {
-    std::vector<std::string> paramVector = splitParams(params.begin(), params.end());
-    std::string name = paramVector[0];
-    for (int i = 0; i < 3; i++) {
-        paramVector.erase(paramVector.begin());
-    }
+    QList<QString> paramList = splitParams(params.begin(), params.end());
+    QString name = paramList[0];
+    paramList.erase(paramList.begin(), paramList.begin() + 3);
     //check if the first character in first attribute is a number or not
     //if it is not, that it is a text parameter and we don't need to modify it for now
-    if (paramVector.empty()) {
+    if (paramList.empty()) {
         return textToUpdate;
     }
-    if (!std::isdigit(paramVector[0][0])) {
-        paramVector.erase(paramVector.begin());
+    if (!paramList.first()[0].isDigit()) {
+        paramList.removeFirst();
     }
     QString attributePattern
         = R"(\(attribute \"\w+\" \(type \w+\) \(unit (\w+)\) \(value \"(\d+)\"\)\))";
@@ -103,16 +102,16 @@ std::string update(std::string textToUpdate, std::string params, std::map<std::s
         list.append(match.captured(0));
     }
     QString paramPattern = R"((\d+)(\w*))";
-    for (int i = 0; i < paramVector.size(); i++) {
-        QString param = QString::fromStdString(paramVector[i]);
+    for (int i = 0; i < paramList.size(); i++) {
+        QString param = paramList[i];
         QString attribute = list[i];
         QString oldAttribute = attribute;
         QString number = getSubString(paramPattern, param, 1);
-        std::string unitPrefix = attribute_utils::getFullUnitPrefix(
-            getSubString(paramPattern, param, 2).toStdString());
+        QString unitPrefix = attribute_utils::getFullUnitPrefix(
+            getSubString(paramPattern, param, 2));
         QString unit = getSubString(attributePattern, attribute, 1);
-        std::string unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit.toStdString());
-        unit = QString::fromStdString(unitPrefix + unitWithoutPrefix);
+        QString unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit);
+        unit = unitPrefix + unitWithoutPrefix;
         QRegularExpressionMatch match = attributeRegex.match(attribute);
         QStringList capturedText = match.capturedTexts();
         attribute.replace(capturedText.at(1), unit);
@@ -120,28 +119,28 @@ std::string update(std::string textToUpdate, std::string params, std::map<std::s
         QString oldComponent = componentsMap[name];
         QString updatedComponent = componentsMap[name];
         updatedComponent.replace(oldAttribute, attribute);
-        QString newText = QString::fromStdString(textToUpdate);
+        QString newText = textToUpdate;
         newText.replace(oldComponent, updatedComponent);
-        textToUpdate = newText.toStdString();
+        textToUpdate = newText;
     }
 
     return textToUpdate;
 }
 
-std::string NetlistUpdater::updateNetlist(std::string textToUpdate,
-                                          std::string oldParams,
-                                          std::string newParams)
+QString NetlistUpdater::updateNetlist(QString textToUpdate,
+                                          QString oldParams,
+                                          QString newParams)
 {
-    std::vector<std::string> oldRows = splitRows(oldParams.begin(), oldParams.end());
-    std::vector<std::string> newRows = splitRows(newParams.begin(), newParams.end());
-    std::map<std::string, QString> componentsMap = getComponents(textToUpdate);
+    QList<QString> oldRows = splitRows(oldParams.begin(), oldParams.end());
+    QList<QString> newRows = splitRows(newParams.begin(), newParams.end());
+    QMap<QString, QString> componentsMap = getComponents(textToUpdate);
     if (oldRows.size() != newRows.size()) {
         return "";
     }
     unsigned int i = 0;
     while (i < oldRows.size()) {
-        std::string oldRow = oldRows[i];
-        std::string newRow = newRows[i];
+        QString oldRow = oldRows[i];
+        QString newRow = newRows[i];
         if (oldRow != newRow) {
             textToUpdate = update(textToUpdate, newRow, componentsMap);
         }

@@ -3,12 +3,14 @@
 
 #include <cctype>
 
+#include <QChar>
+
 namespace character_utils {
-bool isWordComponent(char c);
-bool isLeftParanthesis(char c);
-bool isRightParanthesis(char c);
-bool isQuotes(char c);
-bool isWhitespaceCharacter(char c);
+bool isWordComponent(QChar c);
+bool isLeftParanthesis(QChar c);
+bool isRightParanthesis(QChar c);
+bool isQuotes(QChar c);
+bool isWhitespaceCharacter(QChar c);
 }
 
 #endif // CHARACTERUTILS_H
