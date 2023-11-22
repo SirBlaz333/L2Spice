@@ -6,7 +6,6 @@
 #include <functional>
 #include <iostream>
 #include <regex>
-#include <vector>
 
 NetlistUpdater::NetlistUpdater() {}
 
@@ -16,11 +15,11 @@ QList<QString> split(QString::iterator iterator,
                      QString::iterator end,
                      std::function<bool(QChar)> test)
 {
-    QList<QString> vector;
+    QList<QString> list;
     QString result;
     while (iterator != end) {
         if (test(*iterator) && !result.isEmpty()) {
-            vector.push_back(result);
+            list.push_back(result);
             result = "";
         } else {
             result += *iterator;
@@ -28,9 +27,9 @@ QList<QString> split(QString::iterator iterator,
         iterator++;
     }
     if (!result.isEmpty()) {
-        vector.push_back(result);
+        list.push_back(result);
     }
-    return vector;
+    return list;
 }
 
 QList<QString> splitRows(QString::iterator iterator, QString::iterator end)
