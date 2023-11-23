@@ -1,0 +1,22 @@
+#ifndef NETLISTTEMPORARYSTORAGE_H
+#define NETLISTTEMPORARYSTORAGE_H
+
+#include "netlisttemporarystoragenode.h"
+#include <QList>
+
+class NetlistTemporaryStorage
+{
+    int currentElement;
+    QList<NetlistTemporaryStorageNode> storage;
+public:
+    void addElement(QString LibrePCBNetlist, QString SpiceNotation);
+    NetlistTemporaryStorageNode lastElement();
+    NetlistTemporaryStorageNode nextElement();
+    NetlistTemporaryStorageNode previousElement();
+    bool hasNextElement();
+    bool hasPreviousElement();
+    NetlistTemporaryStorage();
+    ~NetlistTemporaryStorage();
+};
+
+#endif // NETLISTTEMPORARYSTORAGE_H

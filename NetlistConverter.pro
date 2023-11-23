@@ -22,6 +22,8 @@ SOURCES += \
     src/netclass.cpp \
     src/netlistparser.cpp \
     src/netlistproducer.cpp \
+    src/netlisttemporarystorage.cpp \
+    src/netlisttemporarystoragenode.cpp \
     src/netlistupdater.cpp \
     src/signal.cpp \
     src/uuidgenerator.cpp \
@@ -40,6 +42,8 @@ HEADERS += \
     headers/netclass.h \
     headers/netlistparser.h \
     headers/netlistproducer.h \
+    headers/netlisttemporarystorage.h \
+    headers/netlisttemporarystoragenode.h \
     headers/netlistupdater.h \
     headers/signal.h \
     headers/uuidgenerator.h \
