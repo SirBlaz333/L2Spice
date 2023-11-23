@@ -7,6 +7,12 @@
 #include <iostream>
 #include <regex>
 
+const QRegularExpression NetlistUpdater::componentRegex = QRegularExpression(R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
+const QRegularExpression NetlistUpdater::nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");
+const QRegularExpression NetlistUpdater::paramRegex = QRegularExpression(R"((\d+)(\w*))");
+const QRegularExpression NetlistUpdater::attributeRegex = QRegularExpression(
+    R"(\(attribute \"\w+\" \(type \w+\) \(unit (\w+)\) \(value \"(\d+)\"\)\))");
+
 NetlistUpdater::NetlistUpdater() {}
 
 NetlistUpdater::~NetlistUpdater() {}
@@ -41,94 +47,103 @@ QList<QString> splitParams(QString::iterator iterator, QString::iterator end){
     return split(iterator, end, [](QChar c) { return c == ' ' || c == '(' || c == ')'; });
 }
 
+QList<QString> findAllMatches(QRegularExpression regex, QString text)
+{
+    QRegularExpressionMatchIterator it = regex.globalMatch(text);
+    QList<QString> list;
+    while (it.hasNext()) {
+        QRegularExpressionMatch match = it.next();
+        list.append(match.captured(0));
+    }
+    return list;
+}
+
 std::string findTextByPattern(const std::string &text, const std::string &pattern)
 {
     std::regex regexPattern(pattern);
     std::smatch match;
-
-    // Try to match the pattern in the text
     if (std::regex_search(text, match, regexPattern)) {
-        // match[0] contains the entire matched text
         return match.str();
-    } else {
-        return ""; // Return an empty string if no match is found
     }
+    return "";
 }
 
-QString getSubString(QString pattern, QString input, int captureGroup) {
-    QRegularExpression nameRegex(pattern);
-    QRegularExpressionMatch nameMatch = nameRegex.match(input);
-    return nameMatch.captured(captureGroup);
+QString getSubString(QRegularExpression regex, QString input, int captureGroup) {
+    return regex.match(input).captured(captureGroup);
 }
 
-QMap<QString, QString> getComponents(QString textToUpdate)
+QString NetlistUpdater::getNewUnit(QString param, QString attribute)
+{
+    QString unitPrefixSymbol = getSubString(paramRegex, param, 2);
+    QString unitFullPrefix = attribute_utils::getFullUnitPrefix(unitPrefixSymbol);
+    QString unit = getSubString(attributeRegex, attribute, 1);
+    QString unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit);
+    return unitFullPrefix + unitWithoutPrefix;
+}
+
+QString NetlistUpdater::getNewAttribute(QString attribute, QString number, QString unit)
+{
+    QRegularExpressionMatch match = attributeRegex.match(attribute);
+    QStringList capturedText = match.capturedTexts();
+    attribute.replace(capturedText.at(1), unit);
+    attribute.replace(capturedText.at(2), number);
+    return attribute;
+}
+
+QMap<QString, QString> NetlistUpdater::getComponents(QString textToUpdate)
 {
     QMap<QString, QString> map;
-    QRegularExpression pattern(R"(\(component.+?\n\s\))",
-                               QRegularExpression::DotMatchesEverythingOption);
-    QRegularExpressionMatchIterator it = pattern.globalMatch(textToUpdate);
+    QRegularExpressionMatchIterator it = componentRegex.globalMatch(textToUpdate);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         QString result = match.captured(0);
-        QString namePattern = R"(\(name \"(.+?)\"\))";
-        QString name = getSubString(namePattern, result, 1);
+        QString name = getSubString(nameRegex, result, 1);
         map[name] = result;
     }
 
     return map;
 }
 
-QString update(QString textToUpdate, QString params, QMap<QString, QString> componentsMap)
+QString NetlistUpdater::updateParameter(QString textToUpdate,
+                                        QString component,
+                                        QString param,
+                                        QString attribute)
+{
+    QString number = getSubString(NetlistUpdater::paramRegex, param, 1);
+    QString unit = getNewUnit(param, attribute);
+    QString newAttribute = getNewAttribute(attribute, number, unit);
+    QString newComponent = component;
+    newComponent.replace(attribute, newAttribute);
+    return textToUpdate.replace(component, newComponent);
+}
+
+QString NetlistUpdater::update(QString textToUpdate,
+                               QString params,
+                               QMap<QString, QString> componentsMap)
 {
     QList<QString> paramList = splitParams(params.begin(), params.end());
     QString name = paramList[0];
+    //remove the name and 2 signals;
     paramList.erase(paramList.begin(), paramList.begin() + 3);
-    //check if the first character in first attribute is a number or not
-    //if it is not, that it is a text parameter and we don't need to modify it for now
+    //check if there is parameters;
     if (paramList.empty()) {
         return textToUpdate;
     }
+    //check if the first character in first attribute is a number or not
+    //if it is not, that it is a source type and we don't need to modify it for now
     if (!paramList.first()[0].isDigit()) {
         paramList.removeFirst();
     }
-    QString attributePattern
-        = R"(\(attribute \"\w+\" \(type \w+\) \(unit (\w+)\) \(value \"(\d+)\"\)\))";
-    QRegularExpression attributeRegex(attributePattern);
-    QRegularExpressionMatchIterator it = attributeRegex.globalMatch(componentsMap[name]);
-    QList<QString> list;
-    while (it.hasNext()) {
-        QRegularExpressionMatch match = it.next();
-        list.append(match.captured(0));
-    }
-    QString paramPattern = R"((\d+)(\w*))";
+    QString component = componentsMap[name];
+    QList<QString> attributeList = findAllMatches(attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
-        QString param = paramList[i];
-        QString attribute = list[i];
-        QString oldAttribute = attribute;
-        QString number = getSubString(paramPattern, param, 1);
-        QString unitPrefix = attribute_utils::getFullUnitPrefix(
-            getSubString(paramPattern, param, 2));
-        QString unit = getSubString(attributePattern, attribute, 1);
-        QString unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit);
-        unit = unitPrefix + unitWithoutPrefix;
-        QRegularExpressionMatch match = attributeRegex.match(attribute);
-        QStringList capturedText = match.capturedTexts();
-        attribute.replace(capturedText.at(1), unit);
-        attribute.replace(capturedText.at(2), number);
-        QString oldComponent = componentsMap[name];
-        QString updatedComponent = componentsMap[name];
-        updatedComponent.replace(oldAttribute, attribute);
-        QString newText = textToUpdate;
-        newText.replace(oldComponent, updatedComponent);
-        textToUpdate = newText;
+        textToUpdate = updateParameter(textToUpdate, component, paramList[i], attributeList[i]);
     }
 
     return textToUpdate;
 }
 
-QString NetlistUpdater::updateNetlist(QString textToUpdate,
-                                          QString oldParams,
-                                          QString newParams)
+QString NetlistUpdater::updateNetlist(QString textToUpdate, QString oldParams, QString newParams)
 {
     QList<QString> oldRows = splitRows(oldParams.begin(), oldParams.end());
     QList<QString> newRows = splitRows(newParams.begin(), newParams.end());
