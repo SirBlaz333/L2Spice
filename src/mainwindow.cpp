@@ -26,7 +26,6 @@ void MainWindow::on_convertToSpiceButton_clicked()
     ui->nodeNameLabel->setText(storage.lastElement().getName());
 }
 
-
 void MainWindow::on_convertToLibreButton_clicked()
 {
     QString oldLibreNotation = ui->notationLibreTextEdit->toPlainText();
@@ -38,30 +37,56 @@ void MainWindow::on_convertToLibreButton_clicked()
     ui->nodeNameLabel->setText(storage.lastElement().getName());
 }
 
-
 void MainWindow::on_subcircuitCheckBox_stateChanged(int arg1)
 {
     ui->subcircuitNameTextEdit->setVisible(arg1);
 }
 
-void MainWindow::on_previousNodeButton_clicked()
-{
-    if(storage.hasPreviousElement()) {
-        NetlistTemporaryStorageNode node = storage.previousElement();
-        ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
-        ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
-        ui->nodeNameLabel->setText(node.getName());
-    }
-}
-
-
-void MainWindow::on_nextNodeButton_clicked()
+void MainWindow::on_actionNext_save_triggered()
 {
     if(storage.hasNextElement()) {
         NetlistTemporaryStorageNode node = storage.nextElement();
-        ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
-        ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
-        ui->nodeNameLabel->setText(node.getName());
+        updateState(node);
     }
+}
+
+void MainWindow::on_actionPrevious_save_triggered()
+{
+    if(storage.hasPreviousElement()) {
+        NetlistTemporaryStorageNode node = storage.previousElement();
+        updateState(node);
+    }
+}
+
+void MainWindow::updateState(NetlistTemporaryStorageNode node)
+{
+    ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
+    ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
+    ui->nodeNameLabel->setText(node.getName());
+}
+
+void MainWindow::on_actionLast_save_triggered()
+{
+    NetlistTemporaryStorageNode node = storage.lastElement();
+    updateState(node);
+}
+
+void MainWindow::save(bool forcedFileDialog)
+{
+    fileManager.save(this,
+                     ui->notationSpiceTextEdit->toPlainText(),
+                     "",
+                     "Circuit File (*.cir)",
+                     forcedFileDialog);
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    save(false);
+}
+
+void MainWindow::on_actionSave_As_triggered()
+{
+    save(true);
 }
 

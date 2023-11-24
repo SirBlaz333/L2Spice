@@ -14,6 +14,7 @@ void NetlistTemporaryStorage::addElement(QString LibrePCBNetlist, QString SpiceN
 
 NetlistTemporaryStorageNode NetlistTemporaryStorage::lastElement()
 {
+    currentElement = storage.size() - 1;
     return storage.last();
 }
 

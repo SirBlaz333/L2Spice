@@ -16,6 +16,7 @@ SOURCES += \
     src/component.cpp \
     src/device.cpp \
     src/element.cpp \
+    src/filemanager.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
     src/net.cpp \
@@ -37,6 +38,7 @@ HEADERS += \
     headers/component.h \
     headers/device.h \
     headers/element.h \
+    headers/filemanager.h \
     headers/mainwindow.h \
     headers/net.h \
     headers/netclass.h \

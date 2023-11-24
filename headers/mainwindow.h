@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "filemanager.h"
 #include "netlistparser.h"
 #include "netlistproducer.h"
 #include "netlisttemporarystorage.h"
@@ -30,15 +31,24 @@ private slots:
 
     void on_subcircuitCheckBox_stateChanged(int arg1);
 
-    void on_previousNodeButton_clicked();
+    void on_actionNext_save_triggered();
 
-    void on_nextNodeButton_clicked();
+    void on_actionPrevious_save_triggered();
+
+    void on_actionLast_save_triggered();
+
+    void on_actionSave_triggered();
+
+    void on_actionSave_As_triggered();
 
 private:
+    FileManager fileManager;
     NetlistParser parser;
     NetlistProducer producer;
     NetlistUpdater updater;
     NetlistTemporaryStorage storage;
     Ui::MainWindow *ui;
+    void updateState(NetlistTemporaryStorageNode node);
+    void save(bool forcedFileDialog);
 };
 #endif // MAINWINDOW_H
