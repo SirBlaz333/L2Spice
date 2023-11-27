@@ -16,7 +16,7 @@ private:
     QString getNewAttribute(QString attribute, QString number, QString unit);
     QMap<QString, QString> getComponents(QString textToUpdate);
     QString updateParameter(QString textToUpdate,
-                            QString component,
+                            QString *component,
                             QString param,
                             QString attribute);
     QString update(QString textToUpdate,

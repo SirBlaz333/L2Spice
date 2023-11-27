@@ -9,9 +9,9 @@
 
 const QRegularExpression NetlistUpdater::componentRegex = QRegularExpression(R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
 const QRegularExpression NetlistUpdater::nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");
-const QRegularExpression NetlistUpdater::paramRegex = QRegularExpression(R"((\d+)(\w*))");
+const QRegularExpression NetlistUpdater::paramRegex = QRegularExpression(R"((\d*)(\w*))");
 const QRegularExpression NetlistUpdater::attributeRegex = QRegularExpression(
-    R"(\(attribute \"\w+\" \(type \w+\) \(unit (\w+)\) \(value \"(\d+)\"\)\))");
+    R"(\(attribute \"\w+\" \(type \w+\) (\(unit (\w+)\)) \(value \"([\d\w]+)\"\)\))");
 
 NetlistUpdater::NetlistUpdater() {}
 
@@ -74,9 +74,12 @@ QString getSubString(QRegularExpression regex, QString input, int captureGroup) 
 
 QString NetlistUpdater::getNewUnit(QString param, QString attribute)
 {
+    QString unit = getSubString(attributeRegex, attribute, 2);
+    if (unit == "none") {
+        return unit;
+    }
     QString unitPrefixSymbol = getSubString(paramRegex, param, 2);
     QString unitFullPrefix = attribute_utils::getFullUnitPrefix(unitPrefixSymbol);
-    QString unit = getSubString(attributeRegex, attribute, 1);
     QString unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit);
     return unitFullPrefix + unitWithoutPrefix;
 }
@@ -85,8 +88,8 @@ QString NetlistUpdater::getNewAttribute(QString attribute, QString number, QStri
 {
     QRegularExpressionMatch match = attributeRegex.match(attribute);
     QStringList capturedText = match.capturedTexts();
-    attribute.replace(capturedText.at(1), unit);
-    attribute.replace(capturedText.at(2), number);
+    attribute.replace(capturedText.at(1), QString("(unit %1)").arg(unit));
+    attribute.replace(capturedText.at(3), number);
     return attribute;
 }
 
@@ -105,16 +108,17 @@ QMap<QString, QString> NetlistUpdater::getComponents(QString textToUpdate)
 }
 
 QString NetlistUpdater::updateParameter(QString textToUpdate,
-                                        QString component,
+                                        QString *component,
                                         QString param,
                                         QString attribute)
 {
-    QString number = getSubString(NetlistUpdater::paramRegex, param, 1);
     QString unit = getNewUnit(param, attribute);
-    QString newAttribute = getNewAttribute(attribute, number, unit);
-    QString newComponent = component;
-    newComponent.replace(attribute, newAttribute);
-    return textToUpdate.replace(component, newComponent);
+    int group = unit == "none" ? 0 : 1;
+    QString value = getSubString(paramRegex, param, group);
+    QString newAttribute = getNewAttribute(attribute, value, unit);
+    QString oldComponent = *component;
+    component->replace(attribute, newAttribute);
+    return textToUpdate.replace(oldComponent, *component);
 }
 
 QString NetlistUpdater::update(QString textToUpdate,
@@ -136,8 +140,9 @@ QString NetlistUpdater::update(QString textToUpdate,
     }
     QString component = componentsMap[name];
     QList<QString> attributeList = findAllMatches(attributeRegex, component);
+    attributeList.pop_front();
     for (int i = 0; i < paramList.size(); i++) {
-        textToUpdate = updateParameter(textToUpdate, component, paramList[i], attributeList[i]);
+        textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
     }
 
     return textToUpdate;
