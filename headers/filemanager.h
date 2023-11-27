@@ -11,6 +11,7 @@ private:
     QString fileName;
 public:
     void save(QWidget* parent, QString data, QString path, QString fileExtension, bool forcedFileDialog);
+    void saveSubcircuit(QString fileName, QString data);
     FileManager();
     ~FileManager();
 };

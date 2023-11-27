@@ -60,7 +60,7 @@ QString attribute_utils::getUnitWithoutPrefix(QString unit)
 {
     for (const auto &key : prefixes.keys()) {
         if (unit.contains(key)) {
-            return unit.mid(0, key.length());
+            return unit.mid(key.length(), unit.length());
         }
     }
     return unit;

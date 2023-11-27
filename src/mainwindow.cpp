@@ -20,6 +20,9 @@ void MainWindow::on_convertToSpiceButton_clicked()
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     QString name = ui->subcircuitNameTextEdit->toPlainText();
     circuit.setSubcircuitStatus(ui->subcircuitCheckBox->isChecked(), name == "" ? "DEFAULT_NAME" : name);
+    if (circuit.getSubcircuitStatus()) {
+        subcircuitName = circuit.getName();
+    }
     QString spiceNotation = producer.produceSpiceNotationNetlist(circuit);
     ui->notationSpiceTextEdit->setPlainText(spiceNotation);
     storage.addElement(libreNotation, spiceNotation);
@@ -88,5 +91,11 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionSave_As_triggered()
 {
     save(true);
+}
+
+
+void MainWindow::on_actionSave_subcircuit_triggered()
+{
+    fileManager.saveSubcircuit(subcircuitName, ui->notationSpiceTextEdit->toPlainText());
 }
 

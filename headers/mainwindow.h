@@ -41,8 +41,11 @@ private slots:
 
     void on_actionSave_As_triggered();
 
+    void on_actionSave_subcircuit_triggered();
+
 private:
     FileManager fileManager;
+    QString subcircuitName;
     NetlistParser parser;
     NetlistProducer producer;
     NetlistUpdater updater;

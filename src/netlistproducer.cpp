@@ -12,12 +12,12 @@ NetlistProducer::~NetlistProducer() {}
 
 QString NetlistProducer::getValueOrDefault(QString string)
 {
-    return string.isEmpty() ? "-" : string;
+    return string.isEmpty() ? "_ " : string;
 }
 
 QString writeSignal(QString uuid, QMap<QString, int> netOrderMap)
 {
-    return uuid.isEmpty() ? "-" : QString::number(netOrderMap[uuid]) + " ";
+    return uuid.isEmpty() ? "_ " : QString::number(netOrderMap[uuid]) + " ";
 }
 
 QString writeComponent(QString parentSignalUuid,
