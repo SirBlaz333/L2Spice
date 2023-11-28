@@ -3,7 +3,7 @@
 #include <QFileDialog>
 #include <QSettings>
 
-#include <src/settings/appsettings.h>
+#include <src/app/appsettings.h>
 
 void writeToFile(QString fileName, QString data) {
     if (!fileName.isEmpty()) {

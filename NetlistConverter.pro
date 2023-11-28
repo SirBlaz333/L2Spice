@@ -10,7 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     src/main.cpp \
-    src/settings/appsettings.cpp \
+    src/app/appsettings.cpp \
     src/ui/mainwindow.cpp \
     src/ui/homedirectorydialog.cpp \
     src/file/filemanager.cpp \
@@ -34,7 +34,7 @@ SOURCES += \
 
 HEADERS += \
     src/main.h \
-    src/settings/appsettings.h \
+    src/app/appsettings.h \
     src/ui/mainwindow.h \
     src/ui/homedirectorydialog.h \
     src/file/filemanager.h \

@@ -4,7 +4,7 @@
 #include <QFileDialog>
 #include <QSettings>
 
-#include <src/settings/appsettings.h>
+#include <src/app/appsettings.h>
 
 HomeDirectoryDialog::HomeDirectoryDialog(QWidget *parent)
     : QDialog(parent)
