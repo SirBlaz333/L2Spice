@@ -9,50 +9,54 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/attribute.cpp \
-    src/attributeutils.cpp \
-    src/characterutils.cpp \
-    src/circuit.cpp \
-    src/component.cpp \
-    src/device.cpp \
-    src/element.cpp \
-    src/filemanager.cpp \
     src/main.cpp \
-    src/mainwindow.cpp \
-    src/net.cpp \
-    src/netclass.cpp \
-    src/netlistparser.cpp \
-    src/netlistproducer.cpp \
-    src/netlisttemporarystorage.cpp \
-    src/netlisttemporarystoragenode.cpp \
-    src/netlistupdater.cpp \
-    src/signal.cpp \
-    src/uuidgenerator.cpp \
-    src/variant.cpp
+    src/ui/mainwindow.cpp \
+    src/ui/homedirectorydialog.cpp \
+    src/file/filemanager.cpp \
+    src/circuit/circuit.cpp \
+    src/circuit/element/attribute.cpp \
+    src/circuit/element/component.cpp \
+    src/circuit/element/device.cpp \
+    src/circuit/element/element.cpp \
+    src/circuit/element/net.cpp \
+    src/circuit/element/netclass.cpp \
+    src/circuit/element/signal.cpp \
+    src/circuit/element/variant.cpp \
+    src/netlist/netlistparser.cpp \
+    src/netlist/netlistproducer.cpp \
+    src/netlist/netlisttemporarystorage.cpp \
+    src/netlist/netlisttemporarystoragenode.cpp \
+    src/netlist/netlistupdater.cpp \
+    src/utils/uuidgenerator.cpp \
+    src/utils/attributeutils.cpp \
+    src/utils/characterutils.cpp
 
 HEADERS += \
-    headers/attribute.h \
-    headers/attributeutils.h \
-    headers/characterutils.h \
-    headers/circuit.h \
-    headers/component.h \
-    headers/device.h \
-    headers/element.h \
-    headers/filemanager.h \
-    headers/mainwindow.h \
-    headers/net.h \
-    headers/netclass.h \
-    headers/netlistparser.h \
-    headers/netlistproducer.h \
-    headers/netlisttemporarystorage.h \
-    headers/netlisttemporarystoragenode.h \
-    headers/netlistupdater.h \
-    headers/signal.h \
-    headers/uuidgenerator.h \
-    headers/variant.h
+    src/main.h \
+    src/ui/mainwindow.h \
+    src/ui/homedirectorydialog.h \
+    src/file/filemanager.h \
+    src/circuit/circuit.h \
+    src/circuit/element/attribute.h \
+    src/circuit/element/component.h \
+    src/circuit/element/device.h \
+    src/circuit/element/element.h \
+    src/circuit/element/net.h \
+    src/circuit/element/netclass.h \
+    src/circuit/element/signal.h \
+    src/circuit/element/variant.h \
+    src/netlist/netlistparser.h \
+    src/netlist/netlistproducer.h \
+    src/netlist/netlisttemporarystorage.h \
+    src/netlist/netlisttemporarystoragenode.h \
+    src/netlist/netlistupdater.h \
+    src/utils/uuidgenerator.h \
+    src/utils/attributeutils.h \
+    src/utils/characterutils.h
 
 FORMS += \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/homedirectorydialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

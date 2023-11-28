@@ -91,6 +91,12 @@
        <bool>false</bool>
       </property>
       <widget class="QFrame" name="libreFrame">
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Plain</enum>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QLabel" name="libreLabel">
@@ -460,8 +466,15 @@
     <addaction name="actionPrevious_save"/>
     <addaction name="actionNext_save"/>
    </widget>
+   <widget class="QMenu" name="menuPreferences">
+    <property name="title">
+     <string>Preferences</string>
+    </property>
+    <addaction name="actionHome_directory"/>
+   </widget>
    <addaction name="menuEdit"/>
    <addaction name="menuEdit_2"/>
+   <addaction name="menuPreferences"/>
   </widget>
   <action name="actionPrevious_save">
    <property name="text">
@@ -509,6 +522,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="actionHome_directory">
+   <property name="text">
+    <string>Home directory</string>
    </property>
   </action>
  </widget>
