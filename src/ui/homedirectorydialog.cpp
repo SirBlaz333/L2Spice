@@ -9,7 +9,9 @@ HomeDirectoryDialog::HomeDirectoryDialog(QWidget *parent)
     , ui(new Ui::HomeDirectoryDialog)
 {
     ui->setupUi(this);
-    ui->lineEdit->setText(QSettings("USMB", "NetlistConverter").value("HomeDirectory").toString());
+    QString path = QSettings("USMB", "NetlistConverter").value("HomeDirectory").toString();
+    QString currentPath = path == "" ? QDir::currentPath() : path;
+    ui->lineEdit->setText(currentPath);
     setWindowTitle("Home Directory");
 }
 
