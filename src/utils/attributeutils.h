@@ -16,7 +16,7 @@ static QMap<QString, QString> prefixes = {{"pico", "p"},
 
 QString getUnitShortPrefix(QString unit);
 QString getFullUnitPrefix(QString shortPrefix);
-QString parseAttributes(Component component, bool includeName);
+QString writeAttributes(Component component, bool includeName);
 QString getUnitWithoutPrefix(QString unit);
 }
 

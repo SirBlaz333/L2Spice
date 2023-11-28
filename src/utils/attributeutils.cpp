@@ -26,7 +26,7 @@ QString writeAttribute(Attribute attribute, bool includeName)
     return result + attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
-QString parseAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iterator end, bool includeName)
+QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iterator end, bool includeName)
 {
     QString result;
     while (begin != end) {
@@ -41,7 +41,7 @@ QString parseAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iter
     return result;
 }
 
-QString attribute_utils::parseAttributes(Component component, bool includeName)
+QString attribute_utils::writeAttributes(Component component, bool includeName)
 {
     QList<Attribute> attributes = component.getAttributeList();
     QList<Attribute>::iterator begin = attributes.begin();
@@ -51,9 +51,9 @@ QString attribute_utils::parseAttributes(Component component, bool includeName)
     }
     if (begin->getName() == "SOURCETYPE") {
         QString result = begin->getValue() + "(";
-        return result + parseAttributes(++begin, end, includeName) + ")";
+        return result + writeAttributes(++begin, end, includeName) + ")";
     }
-    return parseAttributes(begin, end, includeName);
+    return writeAttributes(begin, end, includeName);
 }
 
 QString attribute_utils::getUnitWithoutPrefix(QString unit)
