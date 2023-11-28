@@ -4,7 +4,7 @@
 
 AppController::AppController() {}
 
-NetlistTemporaryStorageNode AppController::convertToSpice(QString libreNotation,
+AppState AppController::convertToSpice(QString libreNotation,
                                                           bool isSubcircuit,
                                                           QString subcircuitName)
 {
@@ -15,7 +15,7 @@ NetlistTemporaryStorageNode AppController::convertToSpice(QString libreNotation,
     return storage.lastElement();
 }
 
-NetlistTemporaryStorageNode AppController::updateLibre(QString oldLibreNotation,
+AppState AppController::updateLibre(QString oldLibreNotation,
                                                        QString newSpiceNotation)
 {
     QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
@@ -26,17 +26,17 @@ NetlistTemporaryStorageNode AppController::updateLibre(QString oldLibreNotation,
     return storage.lastElement();
 }
 
-NetlistTemporaryStorageNode AppController::previousSave()
+AppState AppController::previousSave()
 {
     return storage.previousElement();
 }
 
-NetlistTemporaryStorageNode AppController::nextSave()
+AppState AppController::nextSave()
 {
     return storage.nextElement();
 }
 
-NetlistTemporaryStorageNode AppController::lastSave()
+AppState AppController::lastSave()
 {
     return storage.lastElement();
 }

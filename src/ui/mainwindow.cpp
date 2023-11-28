@@ -20,7 +20,7 @@ void MainWindow::on_convertToSpiceButton_clicked()
     QString libreNotation = ui->notationLibreTextEdit->toPlainText();
     bool isSubcircuit = ui->subcircuitCheckBox->isChecked();
     QString subcircuitName = ui->subcircuitNameLineEdit->text();
-    NetlistTemporaryStorageNode node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
+    AppState node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
     ui->notationSpiceTextEdit->setPlainText(node.getSpiceNetlist());
     ui->nodeNameLabel->setText("Save name: " + node.getName());
 }
@@ -29,7 +29,7 @@ void MainWindow::on_convertToLibreButton_clicked()
 {
     QString libreNotation = ui->notationLibreTextEdit->toPlainText();
     QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-    NetlistTemporaryStorageNode node = appController.updateLibre(libreNotation, spiceNotation);
+    AppState node = appController.updateLibre(libreNotation, spiceNotation);
     ui->notationLibreTextEdit->setPlainText(node.getLibrePCBNetlist());
     ui->nodeNameLabel->setText("Save name: " + node.getName());
 }
@@ -54,7 +54,7 @@ void MainWindow::on_actionLast_save_triggered()
     updateState(appController.lastSave());
 }
 
-void MainWindow::updateState(NetlistTemporaryStorageNode node)
+void MainWindow::updateState(AppState node)
 {
     if (node.isEmpty()) {
         return;

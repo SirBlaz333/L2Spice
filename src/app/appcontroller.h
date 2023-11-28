@@ -1,9 +1,11 @@
 #ifndef APPCONTROLLER_H
 #define APPCONTROLLER_H
 
+#include "appstate.h"
+#include "appinternalstorage.h"
+
 #include <src/netlist/netlistparser.h>
 #include <src/netlist/netlistproducer.h>
-#include <src/netlist/netlisttemporarystorage.h>
 #include <src/netlist/netlistupdater.h>
 
 class AppController
@@ -12,18 +14,18 @@ private:
     NetlistParser parser;
     NetlistProducer producer;
     NetlistUpdater updater;
-    NetlistTemporaryStorage storage;
+    AppInternalStorage storage;
 
 public:
     AppController();
-    NetlistTemporaryStorageNode convertToSpice(QString libreNotation,
+    AppState convertToSpice(QString libreNotation,
                                                bool isSubcircuit,
                                                QString subcircuitName);
-    NetlistTemporaryStorageNode updateLibre(QString oldLibreNotation,
+    AppState updateLibre(QString oldLibreNotation,
                                             QString newSpiceNotation);
-    NetlistTemporaryStorageNode previousSave();
-    NetlistTemporaryStorageNode nextSave();
-    NetlistTemporaryStorageNode lastSave();
+    AppState previousSave();
+    AppState nextSave();
+    AppState lastSave();
 };
 
 #endif // APPCONTROLLER_H

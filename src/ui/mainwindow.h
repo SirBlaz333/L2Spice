@@ -2,10 +2,6 @@
 #define MAINWINDOW_H
 
 #include "src/file/filemanager.h"
-#include "src/netlist/netlistparser.h"
-#include "src/netlist/netlistproducer.h"
-#include "src/netlist/netlisttemporarystorage.h"
-#include "src/netlist/netlistupdater.h"
 
 #include <QMainWindow>
 #include <QSettings>
@@ -54,7 +50,7 @@ private:
     QString subcircuitName;
     bool canSaveSubcircuit;
     Ui::MainWindow *ui;
-    void updateState(NetlistTemporaryStorageNode node);
+    void updateState(AppState node);
     void save(bool forcedFileDialog);
 };
 #endif // MAINWINDOW_H

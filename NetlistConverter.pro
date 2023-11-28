@@ -12,6 +12,8 @@ SOURCES += \
     src/app/appcontroller.cpp \
     src/main.cpp \
     src/app/appsettings.cpp \
+    src/app/appstate.cpp \
+    src/app/appinternalstorage.cpp \
     src/ui/mainwindow.cpp \
     src/ui/homedirectorydialog.cpp \
     src/file/filemanager.cpp \
@@ -26,8 +28,6 @@ SOURCES += \
     src/circuit/element/variant.cpp \
     src/netlist/netlistparser.cpp \
     src/netlist/netlistproducer.cpp \
-    src/netlist/netlisttemporarystorage.cpp \
-    src/netlist/netlisttemporarystoragenode.cpp \
     src/netlist/netlistupdater.cpp \
     src/utils/uuidgenerator.cpp \
     src/utils/attributeutils.cpp \
@@ -37,6 +37,8 @@ HEADERS += \
     src/app/appcontroller.h \
     src/main.h \
     src/app/appsettings.h \
+    src/app/appstate.h \
+    src/app/appinternalstorage.h \
     src/ui/mainwindow.h \
     src/ui/homedirectorydialog.h \
     src/file/filemanager.h \
@@ -51,8 +53,6 @@ HEADERS += \
     src/circuit/element/variant.h \
     src/netlist/netlistparser.h \
     src/netlist/netlistproducer.h \
-    src/netlist/netlisttemporarystorage.h \
-    src/netlist/netlisttemporarystoragenode.h \
     src/netlist/netlistupdater.h \
     src/utils/uuidgenerator.h \
     src/utils/attributeutils.h \
