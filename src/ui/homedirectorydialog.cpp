@@ -4,12 +4,14 @@
 #include <QFileDialog>
 #include <QSettings>
 
+#include <src/settings/appsettings.h>
+
 HomeDirectoryDialog::HomeDirectoryDialog(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::HomeDirectoryDialog)
 {
     ui->setupUi(this);
-    QString path = QSettings("USMB", "NetlistConverter").value("HomeDirectory").toString();
+    QString path = AppSettings::getSettings().value("HomeDirectory").toString();
     QString currentPath = path == "" ? QDir::currentPath() : path;
     ui->lineEdit->setText(currentPath);
     setWindowTitle("Home Directory");
@@ -33,8 +35,7 @@ void HomeDirectoryDialog::on_toolButton_clicked()
 
 void HomeDirectoryDialog::on_buttonBox_accepted()
 {
-    QSettings settings("USMB", "NetlistConverter");
-    settings.setValue("HomeDirectory", ui->lineEdit->text());
+    AppSettings::getSettings().setValue("HomeDirectory", ui->lineEdit->text());
     this->close();
 }
 

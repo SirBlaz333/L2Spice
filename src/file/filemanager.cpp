@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QSettings>
 
+#include <src/settings/appsettings.h>
+
 void writeToFile(QString fileName, QString data) {
     if (!fileName.isEmpty()) {
         QFile file(fileName);
@@ -16,7 +18,7 @@ void writeToFile(QString fileName, QString data) {
 
 void FileManager::save(QWidget *parent, QString data, QString fileExtension, bool forcedFileDialog)
 {
-    QString path = QSettings("USMB", "NetlistConverter").value("HomeDirectory").toString();
+    QString path = AppSettings::getSettings().value("HomeDirectory").toString();
     if(forcedFileDialog || fileName.isEmpty()) {
         fileName = QFileDialog::getSaveFileName(parent, "Save File", path, fileExtension);
     }
@@ -25,7 +27,7 @@ void FileManager::save(QWidget *parent, QString data, QString fileExtension, boo
 
 void FileManager::saveSubcircuit(QString fileName, QString data)
 {
-    QString path = QSettings("USMB", "NetlistConverter").value("HomeDirectory").toString();
+    QString path = AppSettings::getSettings().value("HomeDirectory").toString();
     QDir dir(path + "/subcircuit");
     if (!dir.exists()) {
         dir.mkpath(".");
