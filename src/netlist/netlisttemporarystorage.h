@@ -13,8 +13,6 @@ public:
     NetlistTemporaryStorageNode lastElement();
     NetlistTemporaryStorageNode nextElement();
     NetlistTemporaryStorageNode previousElement();
-    bool hasNextElement();
-    bool hasPreviousElement();
     NetlistTemporaryStorage();
     ~NetlistTemporaryStorage();
 };

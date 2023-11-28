@@ -17,10 +17,22 @@ QString NetlistTemporaryStorageNode::getSpiceNetlist() const
 
 NetlistTemporaryStorageNode::~NetlistTemporaryStorageNode() {}
 
+NetlistTemporaryStorageNode::NetlistTemporaryStorageNode()
+{
+    empty = true;
+}
+
 NetlistTemporaryStorageNode::NetlistTemporaryStorageNode(const QString &name,
                                                          const QString &LibrePCBNetlist,
                                                          const QString &SpiceNetlist)
     : name(name)
     , LibrePCBNetlist(LibrePCBNetlist)
     , SpiceNetlist(SpiceNetlist)
-{}
+{
+    empty = false;
+}
+
+bool NetlistTemporaryStorageNode::isEmpty()
+{
+    return empty;
+}

@@ -20,23 +20,12 @@ NetlistTemporaryStorageNode NetlistTemporaryStorage::lastElement()
 
 NetlistTemporaryStorageNode NetlistTemporaryStorage::nextElement()
 {
-    return storage[++currentElement];
+    return currentElement < storage.size() - 1 ? storage[++currentElement] : NetlistTemporaryStorageNode();
 }
 
 NetlistTemporaryStorageNode NetlistTemporaryStorage::previousElement()
 {
-
-    return storage[--currentElement];
-}
-
-bool NetlistTemporaryStorage::hasNextElement()
-{
-    return currentElement < storage.size() - 1;
-}
-
-bool NetlistTemporaryStorage::hasPreviousElement()
-{
-    return currentElement > 0;
+    return currentElement > 0 ? storage[--currentElement] : NetlistTemporaryStorageNode();
 }
 
 NetlistTemporaryStorage::NetlistTemporaryStorage() {}

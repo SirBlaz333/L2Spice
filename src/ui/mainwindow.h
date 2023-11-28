@@ -10,6 +10,8 @@
 #include <QMainWindow>
 #include <QSettings>
 
+#include <src/app/appcontroller.h>
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -47,12 +49,9 @@ private slots:
     void on_actionHome_directory_triggered();
 
 private:
+    AppController appController;
     FileManager fileManager;
     QString subcircuitName;
-    NetlistParser parser;
-    NetlistProducer producer;
-    NetlistUpdater updater;
-    NetlistTemporaryStorage storage;
     bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(NetlistTemporaryStorageNode node);

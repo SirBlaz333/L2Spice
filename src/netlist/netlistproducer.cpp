@@ -34,7 +34,7 @@ QString writeComponent(QString parentSignalUuid,
             result += writeSignal(signal.getNet().getUuid(), netOrderMap);
         }
     }
-    result += attribute_utils::parseAttributes(component, includeAttributeName);
+    result += attribute_utils::writeAttributes(component, includeAttributeName);
     result += "\n";
     for (Signal signal : signalList) {
         if (signal.getNet().getUuid() != parentSignalUuid
@@ -128,7 +128,7 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
         netlist += "\n";
     }
     for (const auto &model : circuit.getModelMap()) {
-        netlist += ".MODEL " + model.getName() + " " + attribute_utils::parseAttributes(model, true) + "\n";
+        netlist += ".MODEL " + model.getName() + " " + attribute_utils::writeAttributes(model, true) + "\n";
     }
     if (circuit.getSubcircuitStatus()) {
         netlist = ".SUBCKT " + circuit.getName() + " 0 "
@@ -139,7 +139,7 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     if (!circuit.getTran().getName().isEmpty()) {
         netlist += "\n.tran ";
         Component tran = circuit.getTran();\
-            netlist += attribute_utils::parseAttributes(tran, false);
+            netlist += attribute_utils::writeAttributes(tran, false);
     }
     return netlist;
 }

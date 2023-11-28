@@ -18,27 +18,20 @@ MainWindow::~MainWindow()
 void MainWindow::on_convertToSpiceButton_clicked()
 {
     QString libreNotation = ui->notationLibreTextEdit->toPlainText();
-    Circuit circuit = parser.parseLibreNotation(libreNotation);
-    QString name = ui->subcircuitNameLineEdit->text();
-    circuit.setSubcircuitStatus(ui->subcircuitCheckBox->isChecked(), name == "" ? "DEFAULT_NAME" : name);
-    if (circuit.getSubcircuitStatus()) {
-        subcircuitName = circuit.getName();
-    }
-    QString spiceNotation = producer.produceSpiceNotationNetlist(circuit);
-    ui->notationSpiceTextEdit->setPlainText(spiceNotation);
-    storage.addElement(libreNotation, spiceNotation);
-    ui->nodeNameLabel->setText("Save name: " + storage.lastElement().getName());
+    bool isSubcircuit = ui->subcircuitCheckBox->isChecked();
+    QString subcircuitName = ui->subcircuitNameLineEdit->text();
+    NetlistTemporaryStorageNode node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
+    ui->notationSpiceTextEdit->setPlainText(node.getSpiceNetlist());
+    ui->nodeNameLabel->setText("Save name: " + node.getName());
 }
 
 void MainWindow::on_convertToLibreButton_clicked()
 {
-    QString oldLibreNotation = ui->notationLibreTextEdit->toPlainText();
-    QString newSpiceNotation = ui->notationSpiceTextEdit->toPlainText();
-    QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
-    QString newLibreNotation = updater.updateNetlist(oldLibreNotation, oldSpiceNotation, newSpiceNotation);
-    ui->notationLibreTextEdit->setPlainText(newLibreNotation);
-    storage.addElement(newLibreNotation, newSpiceNotation);
-    ui->nodeNameLabel->setText("Save name: " + storage.lastElement().getName());
+    QString libreNotation = ui->notationLibreTextEdit->toPlainText();
+    QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
+    NetlistTemporaryStorageNode node = appController.updateLibre(libreNotation, spiceNotation);
+    ui->notationLibreTextEdit->setPlainText(node.getLibrePCBNetlist());
+    ui->nodeNameLabel->setText("Save name: " + node.getName());
 }
 
 void MainWindow::on_subcircuitCheckBox_stateChanged(int arg1)
@@ -48,31 +41,27 @@ void MainWindow::on_subcircuitCheckBox_stateChanged(int arg1)
 
 void MainWindow::on_actionNext_save_triggered()
 {
-    if(storage.hasNextElement()) {
-        NetlistTemporaryStorageNode node = storage.nextElement();
-        updateState(node);
-    }
+    updateState(appController.nextSave());
 }
 
 void MainWindow::on_actionPrevious_save_triggered()
 {
-    if(storage.hasPreviousElement()) {
-        NetlistTemporaryStorageNode node = storage.previousElement();
-        updateState(node);
-    }
-}
-
-void MainWindow::updateState(NetlistTemporaryStorageNode node)
-{
-    ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
-    ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
-    ui->nodeNameLabel->setText("Save name: " + node.getName());
+    updateState(appController.previousSave());
 }
 
 void MainWindow::on_actionLast_save_triggered()
 {
-    NetlistTemporaryStorageNode node = storage.lastElement();
-    updateState(node);
+    updateState(appController.lastSave());
+}
+
+void MainWindow::updateState(NetlistTemporaryStorageNode node)
+{
+    if (node.isEmpty()) {
+        return;
+    }
+    ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
+    ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
+    ui->nodeNameLabel->setText("Save name: " + node.getName());
 }
 
 void MainWindow::save(bool forcedFileDialog)

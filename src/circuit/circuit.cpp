@@ -38,7 +38,7 @@ void Circuit::addElement(const Element *element)
 void Circuit::setSubcircuitStatus(bool isSubcircuit, QString name)
 {
     this->isSubcircuit = isSubcircuit;
-    this->name = name;
+    this->name = name == "" ? "DEFAULT_NAME" : name;
 }
 
 
