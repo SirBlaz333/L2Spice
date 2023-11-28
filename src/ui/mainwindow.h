@@ -53,6 +53,7 @@ private:
     NetlistProducer producer;
     NetlistUpdater updater;
     NetlistTemporaryStorage storage;
+    bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(NetlistTemporaryStorageNode node);
     void save(bool forcedFileDialog);

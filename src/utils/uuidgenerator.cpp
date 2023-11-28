@@ -1,4 +1,8 @@
-#include "../headers/uuidgenerator.h"
+#include "uuidgenerator.h"
+
+#include <bits/random.h>
+#include <random>
+#include <sstream>
 
 static std::random_device randomDevice;
 static std::mt19937 generator(randomDevice());

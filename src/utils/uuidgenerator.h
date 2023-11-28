@@ -2,9 +2,6 @@
 #define UUIDGENERATOR_H
 
 #include <QString>
-#include <random>
-#include <sstream>
-#include <string>
 
 namespace uuid_generator {
 QString generateUUID();
