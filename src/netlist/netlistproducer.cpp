@@ -8,11 +8,6 @@ NetlistProducer::NetlistProducer() {}
 
 NetlistProducer::~NetlistProducer() {}
 
-QString NetlistProducer::getValueOrDefault(QString string)
-{
-    return string.isEmpty() ? "_ " : string;
-}
-
 QString writeSignal(QString uuid, QMap<QString, int> netOrderMap)
 {
     return uuid.isEmpty() ? "_ " : QString::number(netOrderMap[uuid]) + " ";
