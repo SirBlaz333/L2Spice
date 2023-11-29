@@ -10,6 +10,7 @@ private:
 public:
     void save(QWidget* parent, QString data, QString fileExtension, bool forcedFileDialog);
     void saveSubcircuit(QString fileName, QString data);
+    QString loadSubcircuit(QString fileName);
     FileManager();
     ~FileManager();
 };

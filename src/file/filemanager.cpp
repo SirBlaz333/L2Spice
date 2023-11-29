@@ -36,6 +36,27 @@ void FileManager::saveSubcircuit(QString fileName, QString data)
     writeToFile(filePath, data);
 }
 
+QString FileManager::loadSubcircuit(QString fileName)
+{
+    QString path = AppSettings::getSettings().value("HomeDirectory").toString();
+    QDir dir(path + "/subcircuit");
+    if (!dir.exists()) {
+        return "";
+    }
+    QString filePath = dir.filePath(fileName + ".cir");
+    QFile file(filePath);
+    if (!file.exists()) {
+        return "";
+    }
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return "";
+    }
+    QTextStream in(&file);
+    QString fileContents = in.readAll();
+    file.close();
+    return fileContents;
+}
+
 FileManager::FileManager() {}
 
 FileManager::~FileManager() {}

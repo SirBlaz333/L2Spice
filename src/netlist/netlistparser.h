@@ -3,7 +3,6 @@
 
 #include <QMap>
 #include <QSharedPointer>
-#include <bits/unique_ptr.h>
 #include <src/circuit/circuit.h>
 #include <src/circuit/element/element.h>
 

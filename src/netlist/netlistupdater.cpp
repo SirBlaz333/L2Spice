@@ -139,7 +139,6 @@ QString NetlistUpdater::update(QString textToUpdate,
     }
     QString component = componentsMap[name];
     QList<QString> attributeList = findAllMatches(attributeRegex, component);
-    attributeList.pop_front();
     for (int i = 0; i < paramList.size(); i++) {
         textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
     }

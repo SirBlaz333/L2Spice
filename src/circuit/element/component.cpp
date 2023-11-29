@@ -41,6 +41,12 @@ void Component::setChildProperty(const QString &propertyName, const QString &pro
     } else if (propertyName == "lib_variant") {
         libVariant = property;
     } else if (propertyName == "value") {
+        if (property == "{{MODEL/JJ}}") {
+            elementType = "model";
+        }
+        if (property == "{{TRAN}}") {
+            elementType = "tran";
+        }
         value = property;
     } else if (propertyName == "lock_assembly") {
         lockAssembly = (property == "true");
@@ -50,12 +56,6 @@ void Component::setProperty(const QString &propertyName, const Element* property
 {
     if (propertyName == "attribute") {
         const Attribute* attribute = dynamic_cast<const Attribute*>(property);
-        if (attribute->getName() == "SOURCETYPE" && attribute->getValue() == "JJ") {
-            elementType = "model";
-        }
-        if (attribute->getName() == "ANALYSIS" && attribute->getValue() == "TRANSIENT") {
-            elementType = "tran";
-        }
         attributeList.push_back(*attribute);
     }
     if (propertyName == "signal") {
