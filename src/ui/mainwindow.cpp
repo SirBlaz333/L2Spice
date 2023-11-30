@@ -82,7 +82,7 @@ void MainWindow::on_actionSave_As_triggered()
 
 void MainWindow::on_actionSave_subcircuit_triggered()
 {
-    fileManager.saveSubcircuit(subcircuitName, ui->notationSpiceTextEdit->toPlainText());
+    FileManager::saveSubcircuit(ui->subcircuitNameLineEdit->text(), ui->notationSpiceTextEdit->toPlainText());
 }
 
 
