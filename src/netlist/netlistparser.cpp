@@ -117,10 +117,10 @@ Circuit NetlistParser::parseLibreNotation(QString input)
     currentCharacter = input.begin();
     QChar front = *currentCharacter;
     currentCharacter++;
-    elementMap["none"] = QSharedPointer<Net>::create();
     // check if the first character is '(' and the format is "librepcb_circuit".
     // TODO: if it is not right now or something will went wrong later, we need to show some message to the user.
     if (character_utils::isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
+        elementMap["none"] = QSharedPointer<Net>::create();
         parseComponents(input.end());
     }
 

@@ -10,6 +10,7 @@
 class Circuit
 {
 private:
+    bool empty = true;
     bool isSubcircuit;
     QString name;
     const Variant* variant;
@@ -22,6 +23,7 @@ private:
 public:
     Circuit();
     ~Circuit();
+    bool isEmpty() const;
     const Variant getVariant() const;
     const NetClass getNetclass() const;
     const Component getTran() const;

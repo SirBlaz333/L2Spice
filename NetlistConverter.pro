@@ -14,8 +14,8 @@ SOURCES += \
     src/app/appsettings.cpp \
     src/app/appstate.cpp \
     src/app/appinternalstorage.cpp \
+    src/ui/defaultdirectorydialog.cpp \
     src/ui/mainwindow.cpp \
-    src/ui/homedirectorydialog.cpp \
     src/file/filemanager.cpp \
     src/circuit/circuit.cpp \
     src/circuit/element/attribute.cpp \
@@ -39,8 +39,8 @@ HEADERS += \
     src/app/appsettings.h \
     src/app/appstate.h \
     src/app/appinternalstorage.h \
+    src/ui/defaultdirectorydialog.h \
     src/ui/mainwindow.h \
-    src/ui/homedirectorydialog.h \
     src/file/filemanager.h \
     src/circuit/circuit.h \
     src/circuit/element/attribute.h \
@@ -59,8 +59,8 @@ HEADERS += \
     src/utils/characterutils.h
 
 FORMS += \
-    ui/mainwindow.ui \
-    ui/homedirectorydialog.ui
+    ui/defaultdirectorydialog.ui \
+    ui/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -1,8 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "src/file/filemanager.h"
-
 #include <QMainWindow>
 #include <QSettings>
 
@@ -30,11 +28,11 @@ private slots:
 
     void on_subcircuitCheckBox_stateChanged(int arg1);
 
-    void on_actionNext_save_triggered();
+    void on_actionNextNetlist_triggered();
 
-    void on_actionPrevious_save_triggered();
+    void on_actionPreviousNetlist_triggered();
 
-    void on_actionLast_save_triggered();
+    void on_actionLastNetlist_triggered();
 
     void on_actionSave_triggered();
 
@@ -42,12 +40,16 @@ private slots:
 
     void on_actionSave_subcircuit_triggered();
 
-    void on_actionHome_directory_triggered();
+    void on_actionDefault_directory_triggered();
+
+    void on_actionOpen_LibrePCB_netlist_triggered();
+
+    void on_pushButton_clicked();
 
 private:
+    QString libreFileName;
     AppController appController;
     FileManager fileManager;
-    QString subcircuitName;
     bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(AppState node);

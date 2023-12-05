@@ -6,6 +6,7 @@
 
 class AppInternalStorage
 {
+    int counter = 0;
     int currentElement;
     QList<AppState> storage;
 public:

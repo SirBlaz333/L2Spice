@@ -1,28 +1,28 @@
-#include "homedirectorydialog.h"
-#include "ui_homedirectorydialog.h"
+#include "defaultdirectorydialog.h"
+#include "ui_defaultdirectorydialog.h"
 
 #include <QFileDialog>
 #include <QSettings>
 
 #include <src/app/appsettings.h>
 
-HomeDirectoryDialog::HomeDirectoryDialog(QWidget *parent)
+DefaultDirectoryDialog::DefaultDirectoryDialog(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::HomeDirectoryDialog)
+    , ui(new Ui::DefaultDirectoryDialog)
 {
     ui->setupUi(this);
-    QString path = AppSettings::getSettings().value("HomeDirectory").toString();
+    QString path = AppSettings::getSettings().value("DefaultDirectory").toString();
     QString currentPath = path == "" ? QDir::currentPath() : path;
     ui->lineEdit->setText(currentPath);
-    setWindowTitle("Home Directory");
+    setWindowTitle("Default Directory");
 }
 
-HomeDirectoryDialog::~HomeDirectoryDialog()
+DefaultDirectoryDialog::~DefaultDirectoryDialog()
 {
     delete ui;
 }
 
-void HomeDirectoryDialog::on_toolButton_clicked()
+void DefaultDirectoryDialog::on_toolButton_clicked()
 {
     QString path = ui->lineEdit->text();
     path = QDir(path).exists() ? path : QDir::currentPath();
@@ -33,14 +33,14 @@ void HomeDirectoryDialog::on_toolButton_clicked()
 }
 
 
-void HomeDirectoryDialog::on_buttonBox_accepted()
+void DefaultDirectoryDialog::on_buttonBox_accepted()
 {
-    AppSettings::getSettings().setValue("HomeDirectory", ui->lineEdit->text());
+    AppSettings::getSettings().setValue("DefaultDirectory", ui->lineEdit->text());
     this->close();
 }
 
 
-void HomeDirectoryDialog::on_buttonBox_rejected()
+void DefaultDirectoryDialog::on_buttonBox_rejected()
 {
     this->close();
 }

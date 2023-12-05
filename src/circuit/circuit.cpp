@@ -4,8 +4,14 @@ Circuit::Circuit(){}
 
 Circuit::~Circuit() {}
 
+bool Circuit::isEmpty() const
+{
+    return empty;
+}
+
 void Circuit::addElement(const Element *element)
 {
+    empty = false;
     if (element->getElementType() == "variant") {
         variant = dynamic_cast<const Variant *>(element);
         return;

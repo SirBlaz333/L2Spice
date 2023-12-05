@@ -7,6 +7,9 @@
 
 #include <src/file/filemanager.h>
 
+#include <src/app/appcontroller.h>
+#include <src/app/appsettings.h>
+
 const QRegularExpression NetlistProducer::subcircuitIdentifierRegex = QRegularExpression(R"(^X(\w+))", QRegularExpression::MultilineOption);
 
 NetlistProducer::NetlistProducer() {}
@@ -18,6 +21,7 @@ QString writeSignal(QString uuid, QMap<QString, int> netOrderMap)
     return uuid.isEmpty() ? "_ " : QString::number(netOrderMap[uuid]) + " ";
 }
 
+//TODO make the creation of lines independent
 QString writeComponent(Component component,
                        QString parentSignalUuid,
                        QMap<QString, int> netOrderMap,
@@ -119,7 +123,9 @@ void NetlistProducer::writeSubcircuit(QMap<QString, QString> *subcircuits, QStri
     if ((*subcircuits).contains(subcircuitName)) {
         return;
     }
-    QString subcircuit = FileManager::loadSubcircuit(subcircuitName);
+    QString path = AppSettings::getSettings().value("DefaultDirectory").toString();
+    subcircuitName = AppController::getSubcircuitName(subcircuitName);
+    QString subcircuit = FileManager::loadFile(path + subcircuitName);
     (*subcircuits)[subcircuitName] = subcircuit;
     QRegularExpressionMatchIterator it = subcircuitIdentifierRegex.globalMatch(subcircuit);
     while (it.hasNext()) {
@@ -156,8 +162,6 @@ QString NetlistProducer::getAllSubcircuits(QSet<QString> usedComponents, QMap<QS
 
 QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
 {
-    Variant variant = circuit.getVariant();
-    NetClass netclass = circuit.getNetclass();
     QMap<QString, Net> netMap = circuit.getNetMap();
     QMap<QString, Component> componentMap = circuit.getComponentMap();
     QMap<QString, int> netNumberMap;
