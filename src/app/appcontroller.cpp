@@ -85,5 +85,6 @@ AppState AppController::lastSave()
 
 QString AppController::getSubcircuitName(QString fileName)
 {
+    fileName = fileName.isEmpty() ? "DEFAULT" : fileName;
     return "/subcircuit/" + fileName + ".cir";
 }

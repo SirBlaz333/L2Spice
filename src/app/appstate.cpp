@@ -19,6 +19,7 @@ AppState::~AppState() {}
 
 AppState::AppState()
 {
+    name = "none";
     empty = true;
 }
 

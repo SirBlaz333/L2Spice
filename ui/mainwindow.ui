@@ -110,20 +110,26 @@
         <enum>QFrame::Plain</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="libreLabel">
             <property name="minimumSize">
              <size>
               <width>100</width>
-              <height>20</height>
+              <height>40</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>20</height>
+              <width>100</width>
+              <height>50</height>
              </size>
             </property>
             <property name="text">
@@ -131,22 +137,58 @@
             </property>
            </widget>
           </item>
-          <item>
-           <widget class="QPushButton" name="pushButton">
+          <item alignment="Qt::AlignBottom">
+           <widget class="QLabel" name="fileLabel">
             <property name="minimumSize">
              <size>
-              <width>100</width>
+              <width>0</width>
               <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>100</width>
+              <width>16777215</width>
               <height>30</height>
              </size>
             </property>
             <property name="text">
-             <string>Refresh file</string>
+             <string>current file</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="refreshButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/refresh.png</normaloff>:/img/refresh.png</iconset>
             </property>
            </widget>
           </item>
@@ -159,6 +201,11 @@
             <width>400</width>
             <height>250</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+           </font>
           </property>
           <property name="styleSheet">
            <string notr="true"/>
@@ -370,24 +417,44 @@
         </size>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QLabel" name="spiceLabel">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>SPICE</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="spiceLabel">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>SPICE</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QTextEdit" name="notationSpiceTextEdit">
@@ -396,6 +463,11 @@
             <width>400</width>
             <height>250</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+           </font>
           </property>
           <property name="styleSheet">
            <string notr="true"/>

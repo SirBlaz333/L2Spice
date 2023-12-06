@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->subcircuitNameLineEdit->setEnabled(false);
     ui->subcircuitSaveCheckbox->setEnabled(false);
     ui->actionSave_subcircuit->setEnabled(false);
+    ui->fileLabel->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -143,7 +144,8 @@ void MainWindow::on_actionOpen_LibrePCB_netlist_triggered()
     libreFileName = appController.getOpenFileName(this);
     QString data = appController.loadFile(libreFileName);
     ui->notationLibreTextEdit->setText(data);
-    ui->libreLabel->setText(QString("LibrePCB (%1)").arg(libreFileName));
+    ui->fileLabel->setText(libreFileName);
+    ui->fileLabel->setVisible(true);
 }
 
 void MainWindow::on_pushButton_clicked()

@@ -3,5 +3,6 @@
         <file>img/left-arrow.png</file>
         <file>img/right-arrow.png</file>
         <file>styles/stylesheet.qss</file>
+        <file>img/refresh.png</file>
     </qresource>
 </RCC>
