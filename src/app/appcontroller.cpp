@@ -59,9 +59,22 @@ QString AppController::saveSpice(QWidget *parent,
                     forcedFileDialog);
 }
 
+QString AppController::saveLibre(QWidget *parent,
+                                 QString fileName,
+                                 QString data,
+                                 bool forcedFileDialog)
+{
+    return saveFile(parent,
+                    fileName,
+                    data,
+                    "Libre PCB Circuit File (*.lp)",
+                    AppSettings::getLibreDir(),
+                    forcedFileDialog);
+}
+
 QString AppController::getOpenFileName(QWidget *parent)
 {
-    QString fileExtenstionFilter = "Circuit File (*.lp)";
+    QString fileExtenstionFilter = "Libre PCB Circuit File (*.lp)";
     QString path = AppSettings::getLibreDir();
     return FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
 }

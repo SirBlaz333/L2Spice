@@ -21,7 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->convertToLibreButton->setProperty("class", "conversionButton");
     connect(ui->convertToSpiceButton, &QPushButton::clicked, this, &MainWindow::convertToSpice);
     connect(ui->convertToLibreButton, &QPushButton::clicked, this, &MainWindow::updateLibrePCB);
-    connect(ui->subcircuitCheckBox, &QCheckBox::stateChanged, this, &MainWindow::subcircuitCheckBoxStateChanged);
+    connect(ui->subcircuitCheckBox,
+            &QCheckBox::stateChanged,
+            this,
+            &MainWindow::subcircuitCheckBoxStateChanged);
     connect(ui->actionNextNetlist, &QAction::triggered, this, &MainWindow::nextNetlist);
     connect(ui->actionPreviousNetlist, &QAction::triggered, this, &MainWindow::previousNetlist);
     connect(ui->actionLastNetlist, &QAction::triggered, this, &MainWindow::lastNetlist);
@@ -33,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearSpiceButton, &QPushButton::clicked, this, &MainWindow::closeSpice);
     connect(ui->actionOpenLibreNetlist, &QAction::triggered, this, &MainWindow::openLibre);
     connect(ui->actionSaveLibreNetlist, &QAction::triggered, this, &MainWindow::saveLibre);
+    connect(ui->actionSave_LibrePCB_Netlist_AS, &QAction::triggered, this, &MainWindow::saveLibreAs);
     connect(ui->saveLibreButton, &QPushButton::clicked, this, &MainWindow::saveLibre);
     connect(ui->refreshLibreButton, &QPushButton::clicked, this, &MainWindow::refreshLibre);
     connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
@@ -69,9 +73,9 @@ void MainWindow::convertToSpice()
         ui->actionSaveSubcircuit->setEnabled(subcircuitState);
         if (subcircuitState) {
             appController.saveSpice(this,
-                                   appController.getSubcircuitName(subcircuitName),
-                                   node.getSpiceNetlist(),
-                                   false);
+                                    appController.getSubcircuitName(subcircuitName),
+                                    node.getSpiceNetlist(),
+                                    false);
         }
     } catch (const std::exception &e) {
         QString message = e.what();
@@ -126,16 +130,12 @@ void MainWindow::updateState(AppState node)
     ui->netlistNameLabel->setText("Save name: " + node.getName());
 }
 
-QString MainWindow::save(QString file, QString data, bool forcedFileDialog)
-{
-    return appController.saveSpice(this, file, data, forcedFileDialog);
-}
-
 void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
 {
-    QString fileName = save(ui->spiceFileLabel->text(),
-                            ui->notationSpiceTextEdit->toPlainText(),
-                            forcedFileDialog);
+    QString fileName = appController.saveSpice(this,
+                                               ui->spiceFileLabel->text(),
+                                               ui->notationSpiceTextEdit->toPlainText(),
+                                               forcedFileDialog);
     ui->spiceFileLabel->setText(fileName);
 }
 
@@ -165,9 +165,10 @@ void MainWindow::closeSpice()
 
 void MainWindow::saveLibreNetlist(bool forcedFileDialog)
 {
-    QString fileName = save(ui->libreFileLabel->text(),
-                            ui->notationLibreTextEdit->toPlainText(),
-                            forcedFileDialog);
+    QString fileName = appController.saveLibre(this,
+                                               ui->libreFileLabel->text(),
+                                               ui->notationLibreTextEdit->toPlainText(),
+                                               forcedFileDialog);
     ui->libreFileLabel->setText(fileName);
 }
 
@@ -176,7 +177,8 @@ void MainWindow::saveLibre()
     saveLibreNetlist(false);
 }
 
-void MainWindow::saveLibreAs() {
+void MainWindow::saveLibreAs()
+{
     saveLibreNetlist(true);
 }
 

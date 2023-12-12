@@ -44,7 +44,6 @@ private:
     bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(AppState node);
-    QString save(QString type, QString data, bool forcedFileDialog);
     void saveSpiceNetlist(bool forcedFileDialog);
     void saveLibreNetlist(bool forcedFileDialog);
 };
