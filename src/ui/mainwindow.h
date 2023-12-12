@@ -22,37 +22,30 @@ public:
 
 private slots:
 
-    void on_convertToSpiceButton_clicked();
-
-    void on_convertToLibreButton_clicked();
-
-    void on_subcircuitCheckBox_stateChanged(int arg1);
-
-    void on_actionNextNetlist_triggered();
-
-    void on_actionPreviousNetlist_triggered();
-
-    void on_actionLastNetlist_triggered();
-
-    void on_actionSave_triggered();
-
-    void on_actionSave_As_triggered();
-
-    void on_actionSave_subcircuit_triggered();
-
-    void on_actionDefault_directory_triggered();
-
-    void on_actionOpen_LibrePCB_netlist_triggered();
-
-    void on_pushButton_clicked();
+    void convertToSpice();
+    void updateLibrePCB();
+    void subcircuitCheckBoxStateChanged(int state);
+    void nextNetlist();
+    void previousNetlist();
+    void lastNetlist();
+    void openDirectoryDialog();
+    void saveSpice();
+    void saveSpiceAs();
+    void saveSubcircuit();
+    void closeSpice();
+    void openLibre();
+    void refreshLibre();
+    void saveLibre();
+    void saveLibreAs();
+    void closeLibre();
 
 private:
-    QString libreFileName;
     AppController appController;
-    FileManager fileManager;
     bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(AppState node);
-    void save(bool forcedFileDialog);
+    QString save(QString type, QString data, bool forcedFileDialog);
+    void saveSpiceNetlist(bool forcedFileDialog);
+    void saveLibreNetlist(bool forcedFileDialog);
 };
 #endif // MAINWINDOW_H

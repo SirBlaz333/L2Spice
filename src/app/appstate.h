@@ -7,15 +7,15 @@ class AppState
 {
     bool empty;
     QString name;
-    QString LibrePCBNetlist;
-    QString SpiceNetlist;
+    QString libreNetlist;
+    QString spiceNetlist;
 public:
     ~AppState();
     AppState();
-    AppState(const QString &name, const QString &LibrePCBNetlist, const QString &SpiceNetlist);
+    AppState(const QString &name, const QString &libreNetlist, const QString &spiceNetlist);
     bool isEmpty();
     QString getName() const;
-    QString getLibrePCBNetlist() const;
+    QString getLibreNetlist() const;
     QString getSpiceNetlist() const;
 };
 

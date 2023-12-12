@@ -6,11 +6,19 @@
 #include <functional>
 #include <regex>
 
-const QRegularExpression NetlistUpdater::componentRegex = QRegularExpression(R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
+const QRegularExpression NetlistUpdater::componentRegex = QRegularExpression(
+    R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
 const QRegularExpression NetlistUpdater::nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");
 const QRegularExpression NetlistUpdater::paramRegex = QRegularExpression(R"((\d*)(\w*))");
 const QRegularExpression NetlistUpdater::attributeRegex = QRegularExpression(
-    R"(\(attribute \"\w+\" \(type \w+\) (\(unit (\w+)\)) \(value \"([\d\w]+)\"\)\))");
+    R"(\(attribute \"\w+\" \(type \w+\) (\(unit (\w+)\)) (\(value \"([\d\w]*)\"\))\))");
+const QRegularExpression NetlistUpdater::signalRegex = QRegularExpression(
+    R"(\(signal .+? \(net .+?\)\))");
+const QRegularExpression NetlistUpdater::sourceTypesRegex
+    = QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP)",
+                         QRegularExpression::CaseInsensitiveOption);
+const QRegularExpression NetlistUpdater::subcircuitRegex
+    = QRegularExpression(R"(\.SUBCKT.+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption);
 
 NetlistUpdater::NetlistUpdater() {}
 
@@ -83,12 +91,12 @@ QString NetlistUpdater::getNewUnit(QString param, QString attribute)
     return unitFullPrefix + unitWithoutPrefix;
 }
 
-QString NetlistUpdater::getNewAttribute(QString attribute, QString number, QString unit)
+QString NetlistUpdater::getNewAttribute(QString attribute, QString value, QString unit)
 {
     QRegularExpressionMatch match = attributeRegex.match(attribute);
     QStringList capturedText = match.capturedTexts();
     attribute.replace(capturedText.at(1), QString("(unit %1)").arg(unit));
-    attribute.replace(capturedText.at(3), number);
+    attribute.replace(capturedText.at(3), QString("(value \"%1\")").arg(value));
     return attribute;
 }
 
@@ -126,18 +134,21 @@ QString NetlistUpdater::update(QString textToUpdate,
 {
     QList<QString> paramList = splitParams(params.begin(), params.end());
     QString name = paramList[0];
-    //remove the name and 2 signals;
-    paramList.erase(paramList.begin(), paramList.begin() + 3);
-    //check if there is parameters;
+    //remove the name;
+    paramList.pop_front();
+    QString component = componentsMap[name];
+    //erase signals;
+    QList<QString> signalList = findAllMatches(signalRegex, component);
+    paramList.erase(paramList.begin(), paramList.begin() + signalList.size());
+    //check if there are parameters left;
     if (paramList.empty()) {
         return textToUpdate;
     }
     //check if the first character in first attribute is a number or not
     //if it is not, that it is a source type and we don't need to modify it for now
-    if (!paramList.first()[0].isDigit()) {
-        paramList.removeFirst();
+    if (sourceTypesRegex.match(paramList.first()).hasMatch()) {
+        paramList.pop_front();
     }
-    QString component = componentsMap[name];
     QList<QString> attributeList = findAllMatches(attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
         textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
@@ -146,8 +157,19 @@ QString NetlistUpdater::update(QString textToUpdate,
     return textToUpdate;
 }
 
+QString NetlistUpdater::removeSubcircuitImports(QString param)
+{
+    QRegularExpressionMatchIterator it = subcircuitRegex.globalMatch(param);
+    while (it.hasNext()) {
+        param.replace(it.next().captured(0), "");
+    }
+    return param;
+}
+
 QString NetlistUpdater::updateNetlist(QString textToUpdate, QString oldParams, QString newParams)
 {
+    newParams = removeSubcircuitImports(newParams);
+    oldParams = removeSubcircuitImports(oldParams);
     QList<QString> oldRows = splitRows(oldParams.begin(), oldParams.end());
     QList<QString> newRows = splitRows(newParams.begin(), newParams.end());
     QMap<QString, QString> componentsMap = getComponents(textToUpdate);

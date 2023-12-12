@@ -5,8 +5,15 @@
 
 class AppSettings
 {
+private:
+    const static QString libreDir;
+    const static QString spiceDir;
+    static QSettings settings;
 public:
-    static QSettings getSettings() { return QSettings("USMB", "NetlistConverter"); }
+    static QString getSpiceDir();
+    static QString getLibreDir();
+    static void setSpiceDir(QString dir);
+    static void setLibreDir(QString dir);
     AppSettings();
     ~AppSettings();
 };

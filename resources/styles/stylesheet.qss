@@ -1,5 +1,5 @@
 QWidget {
-    background-color: #E0E0E0;
+    background-color: #EEEEEE;
     color: black;
 }
 
@@ -8,23 +8,35 @@ QWidget:disabled {
 }
 
 QLabel {
-    qproperty-alignment: 'AlignCenter';
     font-weight: bold;
+}
+
+QLabel#netlistNameLabel {
+    qproperty-alignment: 'AlignCenter';
     margin: 0;
     padding: 10px;
-    background-color: #C0C0C0;
+    text-align: center;
+    font-size: 20px;
+}
+
+QLabel#libreLabel,
+QLabel#spiceLabel {
+    qproperty-alignment: 'AlignCenter';
+    margin: 0;
+    padding: 10px;
+    background-color: #B0B0B0;
     text-align: center;
     font-size: 18px;
 }
 
-QLabel#fileLabel {
+QLabel#libreFileLabel,
+QLabel#spiceFileLabel {
     font-weight: 400;
-    qproperty-alignment: 'AlignCenter';
+    qproperty-alignment: 'AlignBottom';
     margin: 0;
-    padding: 5px;
+    padding: 8px 1px;
     background-color: #D0D0D0;
-    text-align: center;
-    font-size: 10px;
+    font-size: 11px;
 }
 
 QTextEdit {
@@ -56,39 +68,44 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
     border-radius: 1px;
 }
 
-QLineEdit {
-    background-color: white;
-    color: black;
-    border: none;
-}
-
 QDialogButtonBox QPushButton {
     width: 50px;
 }
 
-QPushButton#refreshButton {
+QPushButton[class="netlistStateButton"] {
+    border: none;
+    background-color: #FFFFFF;
     border-radius: 0px;
 }
 
-QPushButton {
+QPushButton[class="netlistStateButton"]:hover {
+    border: 0px;
+    background-color: #B0B0B0;
+}
+
+QPushButton[class="netlistStateButton"]:pressed {
+    background-color: #B0B0B0;
+    border: 2px solid #555555;
+}
+
+QPushButton, QToolButton {
     padding: 5px 15px;
     font-size: 12px;
-    font-weight: regular;
+    font-weight: bold;
     line-height: 20px;
     vertical-align: middle;
     border: none;
-    background-color: #ECECEC;
-    border-radius: 6px;
-    color: #24292e;
+    background-color: #444444;
+    color: white;
 }
 
-QPushButton:hover {
-    border: 1px solid #C0C0C0;
-    background-color: #ECECEC;
+QPushButton:hover, QToolButton:hover {
+    background-color: #777777;
 }
 
-QPushButton:pressed {
+QPushButton:pressed, QToolButton:pressed {
     background-color: #D3D3D3;
+    color: black;
 }
 
 QMenuBar {
@@ -97,15 +114,15 @@ QMenuBar {
 }
 
 QMenuBar::item {
-    margin: 0;
-    padding: 6px 12px;
+    padding: 8px 14px;
 }
 
 QMenuBar::item:selected {
-    background-color: #C3C3C3;
+    background-color: #FFFFFF;
 }
 
 QMenu {
+    background-color: #FFFFFF;
     margin: 0;
 }
 
@@ -115,5 +132,70 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    background-color: #B3B3B3;
+    background-color: #E0E0E0;
+}
+
+QCheckBox {
+    spacing: 3px;
+}
+
+QCheckBox::indicator {
+    background-color: #FFFFFF;
+    margin: 2px;
+    font: inherit;
+    color: black;
+    width: 12px;
+    height: 12px;
+    padding: 4px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+QCheckBox::indicator:disabled {
+    border: 2px solid #999999;
+}
+
+QCheckBox::indicator:disabled:checked {
+    border: 2px solid #999999;
+    image: url(:/img/grey_square.png);
+}
+
+QCheckBox::indicator:checked {
+    image: url(:/img/square.png);
+}
+
+QCheckBox::indicator:unchecked {
+    background-color: #FFFFFF;
+}
+
+QCheckBox::indicator:checked:hover, QCheckBox::indicator:unchecked:hover {
+    border: 2px outset #777777;
+}
+
+QCheckBox::indicator:checked:hover {
+    image: url(:/img/grey_square.png);
+}
+
+QLineEdit {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 12px;
+    padding: 3px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+QLineEdit:disabled {
+    border: 2px solid #999999;
+}
+
+QPushButton[class="dialogButton"] {
+    border-radius: 6px;
+    margin: 0px 5px;
+}
+
+QToolButton {
+    padding: 0px;
+    border-radius: 6px;
 }

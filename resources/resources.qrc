@@ -4,5 +4,9 @@
         <file>img/right-arrow.png</file>
         <file>styles/stylesheet.qss</file>
         <file>img/refresh.png</file>
+        <file>img/floppy-disk.png</file>
+        <file>img/delete-symbol.png</file>
+        <file>img/square.png</file>
+        <file>img/grey_square.png</file>
     </qresource>
 </RCC>

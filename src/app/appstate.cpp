@@ -5,14 +5,14 @@ QString AppState::getName() const
     return name;
 }
 
-QString AppState::getLibrePCBNetlist() const
+QString AppState::getLibreNetlist() const
 {
-    return LibrePCBNetlist;
+    return libreNetlist;
 }
 
 QString AppState::getSpiceNetlist() const
 {
-    return SpiceNetlist;
+    return spiceNetlist;
 }
 
 AppState::~AppState() {}
@@ -23,10 +23,10 @@ AppState::AppState()
     empty = true;
 }
 
-AppState::AppState(const QString &name, const QString &LibrePCBNetlist, const QString &SpiceNetlist)
+AppState::AppState(const QString &name, const QString &libreNetlist, const QString &spiceNetlist)
     : name(name)
-    , LibrePCBNetlist(LibrePCBNetlist)
-    , SpiceNetlist(SpiceNetlist)
+    , libreNetlist(libreNetlist)
+    , spiceNetlist(spiceNetlist)
 {
     empty = false;
 }

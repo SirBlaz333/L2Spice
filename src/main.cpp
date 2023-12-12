@@ -9,8 +9,8 @@ QString initStyles();
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setStyleSheet(initStyles());
     MainWindow w;
+    a.setStyleSheet(initStyles());
     w.show();
     return a.exec();
 }

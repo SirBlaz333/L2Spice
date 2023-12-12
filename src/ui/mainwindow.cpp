@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "defaultdirectorydialog.h"
+#include "directorydialog.h"
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
@@ -11,8 +11,31 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->subcircuitNameLineEdit->setEnabled(false);
     ui->subcircuitSaveCheckbox->setEnabled(false);
-    ui->actionSave_subcircuit->setEnabled(false);
-    ui->fileLabel->setVisible(false);
+    ui->actionSaveSubcircuit->setEnabled(false);
+    ui->saveLibreButton->setProperty("class", "netlistStateButton");
+    ui->refreshLibreButton->setProperty("class", "netlistStateButton");
+    ui->clearLibreButton->setProperty("class", "netlistStateButton");
+    ui->saveSpiceButton->setProperty("class", "netlistStateButton");
+    ui->clearSpiceButton->setProperty("class", "netlistStateButton");
+    ui->convertToSpiceButton->setProperty("class", "conversionButton");
+    ui->convertToLibreButton->setProperty("class", "conversionButton");
+    connect(ui->convertToSpiceButton, &QPushButton::clicked, this, &MainWindow::convertToSpice);
+    connect(ui->convertToLibreButton, &QPushButton::clicked, this, &MainWindow::updateLibrePCB);
+    connect(ui->subcircuitCheckBox, &QCheckBox::stateChanged, this, &MainWindow::subcircuitCheckBoxStateChanged);
+    connect(ui->actionNextNetlist, &QAction::triggered, this, &MainWindow::nextNetlist);
+    connect(ui->actionPreviousNetlist, &QAction::triggered, this, &MainWindow::previousNetlist);
+    connect(ui->actionLastNetlist, &QAction::triggered, this, &MainWindow::lastNetlist);
+    connect(ui->actionOpenDirDialog, &QAction::triggered, this, &MainWindow::openDirectoryDialog);
+    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveSpice);
+    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveSpiceAs);
+    connect(ui->actionSaveSubcircuit, &QAction::triggered, this, &MainWindow::saveSubcircuit);
+    connect(ui->saveSpiceButton, &QPushButton::clicked, this, &MainWindow::saveSpice);
+    connect(ui->clearSpiceButton, &QPushButton::clicked, this, &MainWindow::closeSpice);
+    connect(ui->actionOpenLibreNetlist, &QAction::triggered, this, &MainWindow::openLibre);
+    connect(ui->actionSaveLibreNetlist, &QAction::triggered, this, &MainWindow::saveLibre);
+    connect(ui->saveLibreButton, &QPushButton::clicked, this, &MainWindow::saveLibre);
+    connect(ui->refreshLibreButton, &QPushButton::clicked, this, &MainWindow::refreshLibre);
+    connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
 }
 
 MainWindow::~MainWindow()
@@ -31,7 +54,7 @@ void showError(const std::exception &e, QString message)
     errorMessage.exec();
 }
 
-void MainWindow::on_convertToSpiceButton_clicked()
+void MainWindow::convertToSpice()
 {
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
@@ -39,13 +62,13 @@ void MainWindow::on_convertToSpiceButton_clicked()
         QString subcircuitName = ui->subcircuitNameLineEdit->text();
         AppState node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
         ui->notationSpiceTextEdit->setPlainText(node.getSpiceNetlist());
-        ui->nodeNameLabel->setText("Save name: " + node.getName());
+        ui->netlistNameLabel->setText("Save name: " + node.getName());
         canSaveSubcircuit = ui->subcircuitCheckBox->isChecked();
         bool subcircuitState = ui->subcircuitCheckBox->isChecked()
                                && ui->subcircuitSaveCheckbox->isChecked();
-        ui->actionSave_subcircuit->setEnabled(subcircuitState);
+        ui->actionSaveSubcircuit->setEnabled(subcircuitState);
         if (subcircuitState) {
-            appController.saveFile(this,
+            appController.saveSpice(this,
                                    appController.getSubcircuitName(subcircuitName),
                                    node.getSpiceNetlist(),
                                    false);
@@ -57,14 +80,14 @@ void MainWindow::on_convertToSpiceButton_clicked()
     }
 }
 
-void MainWindow::on_convertToLibreButton_clicked()
+void MainWindow::updateLibrePCB()
 {
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
         AppState node = appController.updateLibre(libreNotation, spiceNotation);
-        ui->notationLibreTextEdit->setPlainText(node.getLibrePCBNetlist());
-        ui->nodeNameLabel->setText("Save name: " + node.getName());
+        ui->notationLibreTextEdit->setPlainText(node.getLibreNetlist());
+        ui->netlistNameLabel->setText("Save name: " + node.getName());
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
@@ -72,23 +95,23 @@ void MainWindow::on_convertToLibreButton_clicked()
     }
 }
 
-void MainWindow::on_subcircuitCheckBox_stateChanged(int arg1)
+void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
 {
     ui->subcircuitNameLineEdit->setEnabled(arg1);
     ui->subcircuitSaveCheckbox->setEnabled(arg1);
 }
 
-void MainWindow::on_actionNextNetlist_triggered()
+void MainWindow::nextNetlist()
 {
     updateState(appController.nextSave());
 }
 
-void MainWindow::on_actionPreviousNetlist_triggered()
+void MainWindow::previousNetlist()
 {
     updateState(appController.previousSave());
 }
 
-void MainWindow::on_actionLastNetlist_triggered()
+void MainWindow::lastNetlist()
 {
     updateState(appController.lastSave());
 }
@@ -98,60 +121,93 @@ void MainWindow::updateState(AppState node)
     if (node.isEmpty()) {
         return;
     }
-    ui->notationLibreTextEdit->setText(node.getLibrePCBNetlist());
+    ui->notationLibreTextEdit->setText(node.getLibreNetlist());
     ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
-    ui->nodeNameLabel->setText("Save name: " + node.getName());
+    ui->netlistNameLabel->setText("Save name: " + node.getName());
 }
 
-void MainWindow::save(bool forcedFileDialog)
+QString MainWindow::save(QString file, QString data, bool forcedFileDialog)
 {
-    QString lastSavedFile = appController.getLastSavedFile();
-    lastSavedFile = appController.saveFile(this,
-                                           lastSavedFile,
-                                           ui->notationSpiceTextEdit->toPlainText(),
-                                           forcedFileDialog);
-    appController.setLastSavedFile(lastSavedFile);
+    return appController.saveSpice(this, file, data, forcedFileDialog);
 }
 
-void MainWindow::on_actionSave_triggered()
+void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
 {
-    save(false);
+    QString fileName = save(ui->spiceFileLabel->text(),
+                            ui->notationSpiceTextEdit->toPlainText(),
+                            forcedFileDialog);
+    ui->spiceFileLabel->setText(fileName);
 }
 
-void MainWindow::on_actionSave_As_triggered()
+void MainWindow::saveSpice()
 {
-    save(true);
+    saveSpiceNetlist(true);
 }
 
-void MainWindow::on_actionSave_subcircuit_triggered()
+void MainWindow::saveSpiceAs()
+{
+    saveSpiceNetlist(false);
+}
+
+void MainWindow::saveSubcircuit()
 {
     if (canSaveSubcircuit) {
-        appController.saveFile(this,
-                               AppController::getSubcircuitName(ui->subcircuitNameLineEdit->text()),
-                               ui->notationSpiceTextEdit->toPlainText());
+        QString name = AppController::getSubcircuitName(ui->subcircuitNameLineEdit->text());
+        appController.saveSpice(this, name, ui->notationSpiceTextEdit->toPlainText());
     }
 }
 
-void MainWindow::on_actionDefault_directory_triggered()
+void MainWindow::closeSpice()
 {
-    DefaultDirectoryDialog dialog;
+    ui->notationSpiceTextEdit->setText("");
+    ui->spiceFileLabel->setText("");
+}
+
+void MainWindow::saveLibreNetlist(bool forcedFileDialog)
+{
+    QString fileName = save(ui->libreFileLabel->text(),
+                            ui->notationLibreTextEdit->toPlainText(),
+                            forcedFileDialog);
+    ui->libreFileLabel->setText(fileName);
+}
+
+void MainWindow::saveLibre()
+{
+    saveLibreNetlist(false);
+}
+
+void MainWindow::saveLibreAs() {
+    saveLibreNetlist(true);
+}
+
+void MainWindow::openDirectoryDialog()
+{
+    DirectoryDialog dialog;
     dialog.setModal(true);
     dialog.exec();
 }
 
-void MainWindow::on_actionOpen_LibrePCB_netlist_triggered()
+void MainWindow::openLibre()
 {
-    libreFileName = appController.getOpenFileName(this);
+    QString libreFileName = appController.getOpenFileName(this);
+    if (libreFileName.isEmpty()) {
+        return;
+    }
     QString data = appController.loadFile(libreFileName);
     ui->notationLibreTextEdit->setText(data);
-    ui->fileLabel->setText(libreFileName);
-    ui->fileLabel->setVisible(true);
+    ui->libreFileLabel->setText(libreFileName);
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::refreshLibre()
 {
-    QString data = appController.loadFile(libreFileName);
+    QString data = appController.loadFile(ui->libreFileLabel->text());
     if (!data.isEmpty()) {
         ui->notationLibreTextEdit->setText(data);
     }
+}
+
+void MainWindow::closeLibre()
+{
+    ui->notationLibreTextEdit->setText("");
+    ui->libreFileLabel->setText("");
 }

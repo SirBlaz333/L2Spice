@@ -52,7 +52,7 @@
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="nodeNameLabel">
+     <widget class="QLabel" name="netlistNameLabel">
       <property name="minimumSize">
        <size>
         <width>0</width>
@@ -129,7 +129,7 @@
             <property name="maximumSize">
              <size>
               <width>100</width>
-              <height>50</height>
+              <height>40</height>
              </size>
             </property>
             <property name="text">
@@ -138,39 +138,35 @@
            </widget>
           </item>
           <item alignment="Qt::AlignBottom">
-           <widget class="QLabel" name="fileLabel">
+           <widget class="QLabel" name="libreFileLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>30</height>
+              <height>40</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>30</height>
+              <height>40</height>
              </size>
             </property>
             <property name="text">
-             <string>current file</string>
+             <string/>
+            </property>
+            <property name="wordWrap">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="refreshButton">
+           <widget class="QPushButton" name="refreshLibreButton">
             <property name="minimumSize">
              <size>
               <width>40</width>
@@ -182,6 +178,9 @@
               <width>40</width>
               <height>40</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Update netlist from file</string>
             </property>
             <property name="text">
              <string/>
@@ -189,6 +188,61 @@
             <property name="icon">
              <iconset resource="../resources/resources.qrc">
               <normaloff>:/img/refresh.png</normaloff>:/img/refresh.png</iconset>
+            </property>
+            <property name="flat">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveLibreButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Save netlist</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/floppy-disk.png</normaloff>:/img/floppy-disk.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearLibreButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="toolTip">
+             <string>Close and clear</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/delete-symbol.png</normaloff>:/img/delete-symbol.png</iconset>
             </property>
            </widget>
           </item>
@@ -213,97 +267,22 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="convertToSpiceWidget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QPushButton" name="convertToSpiceButton">
           <property name="minimumSize">
            <size>
-            <width>400</width>
-            <height>50</height>
+            <width>200</width>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
-            <height>50</height>
+            <width>50000</width>
+            <height>30</height>
            </size>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <spacer name="horizontalSpacer_8">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QPushButton" name="convertToSpiceButton">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Convert to SPICE</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="arrowRightLabel">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap resource="../resources/resources.qrc">:/img/right-arrow.png</pixmap>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
+          <property name="text">
+           <string>Convert to SPICE</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -317,16 +296,22 @@
           <property name="minimumSize">
            <size>
             <width>400</width>
-            <height>50</height>
+            <height>70</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>50</height>
+            <height>70</height>
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>10</number>
+           </property>
            <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
@@ -348,8 +333,17 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
              <property name="text">
               <string>is subcircuit</string>
+             </property>
+             <property name="tristate">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -360,6 +354,12 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
              </property>
              <property name="text">
               <string>save as file</string>
@@ -422,6 +422,9 @@
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <item>
            <widget class="QLabel" name="spiceLabel">
             <property name="minimumSize">
@@ -442,17 +445,75 @@
            </widget>
           </item>
           <item>
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QLabel" name="spiceFileLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="sizeHint" stdset="0">
+            <property name="minimumSize">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>0</width>
+              <height>40</height>
              </size>
             </property>
-           </spacer>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveSpiceButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/floppy-disk.png</normaloff>:/img/floppy-disk.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="clearSpiceButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/delete-symbol.png</normaloff>:/img/delete-symbol.png</iconset>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -475,117 +536,36 @@
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="convertToLibreWidget" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+         <widget class="QPushButton" name="convertToLibreButton">
           <property name="minimumSize">
            <size>
-            <width>400</width>
-            <height>50</height>
+            <width>200</width>
+            <height>30</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
-            <height>50</height>
+            <width>500000</width>
+            <height>30</height>
            </size>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="arrowLeftLabel">
-             <property name="minimumSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>32</width>
-               <height>32</height>
-              </size>
-             </property>
-             <property name="layoutDirection">
-              <enum>Qt::LeftToRight</enum>
-             </property>
-             <property name="text">
-              <string/>
-             </property>
-             <property name="pixmap">
-              <pixmap resource="../resources/resources.qrc">:/img/left-arrow.png</pixmap>
-             </property>
-             <property name="scaledContents">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="convertToLibreButton">
-             <property name="minimumSize">
-              <size>
-               <width>200</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>30</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Update LibrePCB</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
+          <property name="text">
+           <string>Update LibrePCB</string>
+          </property>
          </widget>
         </item>
         <item>
-         <widget class="QWidget" name="emptyWidget" native="true">
-          <property name="minimumSize">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>400</width>
-            <height>50</height>
+            <width>40</width>
+            <height>70</height>
            </size>
           </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>50</height>
-           </size>
-          </property>
-         </widget>
+         </spacer>
         </item>
        </layout>
       </widget>
@@ -602,14 +582,27 @@
      <height>25</height>
     </rect>
    </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>35</height>
+    </size>
+   </property>
    <widget class="QMenu" name="fileEdit">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionOpen_LibrePCB_netlist"/>
+    <addaction name="actionOpenLibreNetlist"/>
+    <addaction name="actionSaveLibreNetlist"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_As"/>
-    <addaction name="actionSave_subcircuit"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="actionSaveSubcircuit"/>
    </widget>
    <widget class="QMenu" name="netlistEdit">
     <property name="title">
@@ -623,7 +616,7 @@
     <property name="title">
      <string>Preferences</string>
     </property>
-    <addaction name="actionDefault_directory"/>
+    <addaction name="actionOpenDirDialog"/>
    </widget>
    <addaction name="fileEdit"/>
    <addaction name="netlistEdit"/>
@@ -655,36 +648,41 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save SPICE</string>
+    <string>Save SPICE Netlist</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSave_As">
+  <action name="actionSaveAs">
    <property name="text">
-    <string>Save SPICE As ...</string>
+    <string>Save SPICE Netlist As ...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionSave_subcircuit">
+  <action name="actionSaveSubcircuit">
    <property name="text">
     <string>Save SPICE Subcircuit</string>
    </property>
   </action>
-  <action name="actionDefault_directory">
+  <action name="actionOpenDirDialog">
    <property name="text">
     <string>Default directory</string>
    </property>
   </action>
-  <action name="actionOpen_LibrePCB_netlist">
+  <action name="actionOpenLibreNetlist">
    <property name="text">
-    <string>Open LibrePCB</string>
+    <string>Open LibrePCB Netlist</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSaveLibreNetlist">
+   <property name="text">
+    <string>Save LibrePCB Netlist</string>
    </property>
   </action>
  </widget>

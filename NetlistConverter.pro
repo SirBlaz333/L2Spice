@@ -14,7 +14,7 @@ SOURCES += \
     src/app/appsettings.cpp \
     src/app/appstate.cpp \
     src/app/appinternalstorage.cpp \
-    src/ui/defaultdirectorydialog.cpp \
+    src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/file/filemanager.cpp \
     src/circuit/circuit.cpp \
@@ -29,6 +29,7 @@ SOURCES += \
     src/netlist/netlistparser.cpp \
     src/netlist/netlistproducer.cpp \
     src/netlist/netlistupdater.cpp \
+    src/ui/overflowinglabel.cpp \
     src/utils/uuidgenerator.cpp \
     src/utils/attributeutils.cpp \
     src/utils/characterutils.cpp
@@ -39,7 +40,7 @@ HEADERS += \
     src/app/appsettings.h \
     src/app/appstate.h \
     src/app/appinternalstorage.h \
-    src/ui/defaultdirectorydialog.h \
+    src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/file/filemanager.h \
     src/circuit/circuit.h \
@@ -54,12 +55,13 @@ HEADERS += \
     src/netlist/netlistparser.h \
     src/netlist/netlistproducer.h \
     src/netlist/netlistupdater.h \
+    src/ui/overflowinglabel.h \
     src/utils/uuidgenerator.h \
     src/utils/attributeutils.h \
     src/utils/characterutils.h
 
 FORMS += \
-    ui/defaultdirectorydialog.ui \
+    ui/directorydialog.ui \
     ui/mainwindow.ui
 
 # Default rules for deployment.

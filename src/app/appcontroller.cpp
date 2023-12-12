@@ -30,42 +30,45 @@ AppState AppController::updateLibre(QString oldLibreNotation, QString newSpiceNo
     return storage.lastElement();
 }
 
-QString AppController::saveFile(QWidget *parent,
-                                QString fileName,
-                                QString data,
-                                bool forcedFileDialog)
+QString saveFile(QWidget *parent,
+                 QString fileName,
+                 QString data,
+                 QString fileExtensionFilter,
+                 QString path,
+                 bool forcedFileDialog)
 {
-    QString fileExtenstionFilter = "Circuit File (*.cir)";
-    QString path = AppSettings::getSettings().value("DefaultDirectory").toString();
     fileName = FileManager::getSaveFileName(parent,
                                             fileName,
                                             path,
-                                            fileExtenstionFilter,
+                                            fileExtensionFilter,
                                             forcedFileDialog);
     FileManager::save(fileName, data);
     return fileName;
 }
 
+QString AppController::saveSpice(QWidget *parent,
+                                 QString fileName,
+                                 QString data,
+                                 bool forcedFileDialog)
+{
+    return saveFile(parent,
+                    fileName,
+                    data,
+                    "Circuit File (*.cir)",
+                    AppSettings::getSpiceDir(),
+                    forcedFileDialog);
+}
+
 QString AppController::getOpenFileName(QWidget *parent)
 {
     QString fileExtenstionFilter = "Circuit File (*.lp)";
-    QString path = AppSettings::getSettings().value("DefaultDirectory").toString();
+    QString path = AppSettings::getLibreDir();
     return FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
 }
 
 QString AppController::loadFile(QString fileName)
 {
     return FileManager::loadFile(fileName);
-}
-
-void AppController::setLastSavedFile(QString lastSavedFile)
-{
-    this->lastSavedFile = lastSavedFile;
-}
-
-QString AppController::getLastSavedFile() const
-{
-    return lastSavedFile;
 }
 
 AppState AppController::previousSave()

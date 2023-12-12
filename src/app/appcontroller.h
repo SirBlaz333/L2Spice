@@ -18,18 +18,15 @@ private:
     NetlistProducer producer;
     NetlistUpdater updater;
     AppInternalStorage storage;
-    QString lastSavedFile;
 
 public:
     AppController();
     ~AppController();
     AppState convertToSpice(QString libreNotation, bool isSubcircuit, QString subcircuitName);
     AppState updateLibre(QString oldLibreNotation, QString newSpiceNotation);
-    QString saveFile(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
+    QString saveSpice(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString getOpenFileName(QWidget *parent);
     QString loadFile(QString fileName);
-    void setLastSavedFile(QString lastSavedFile);
-    QString getLastSavedFile() const;
     AppState previousSave();
     AppState nextSave();
     AppState lastSave();

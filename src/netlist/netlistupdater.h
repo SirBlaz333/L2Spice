@@ -11,6 +11,9 @@ private:
     static const QRegularExpression nameRegex;
     static const QRegularExpression paramRegex;
     static const QRegularExpression attributeRegex;
+    static const QRegularExpression signalRegex;
+    static const QRegularExpression sourceTypesRegex;
+    static const QRegularExpression subcircuitRegex;
 
     QString getNewUnit(QString param, QString attribute);
     QString getNewAttribute(QString attribute, QString number, QString unit);
@@ -22,6 +25,7 @@ private:
     QString update(QString textToUpdate,
                    QString params,
                    QMap<QString, QString> componentsMap);
+    QString removeSubcircuitImports(QString param);
 public:
     NetlistUpdater();
     ~NetlistUpdater();

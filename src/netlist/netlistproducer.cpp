@@ -123,9 +123,8 @@ void NetlistProducer::writeSubcircuit(QMap<QString, QString> *subcircuits, QStri
     if ((*subcircuits).contains(subcircuitName)) {
         return;
     }
-    QString path = AppSettings::getSettings().value("DefaultDirectory").toString();
-    subcircuitName = AppController::getSubcircuitName(subcircuitName);
-    QString subcircuit = FileManager::loadFile(path + subcircuitName);
+    QString path = AppSettings::getSpiceDir();
+    QString subcircuit = FileManager::loadFile(path + AppController::getSubcircuitName(subcircuitName));
     (*subcircuits)[subcircuitName] = subcircuit;
     QRegularExpressionMatchIterator it = subcircuitIdentifierRegex.globalMatch(subcircuit);
     while (it.hasNext()) {
@@ -155,7 +154,9 @@ QString NetlistProducer::getAllSubcircuits(QSet<QString> usedComponents, QMap<QS
     }
     QString result;
     for (const auto &subcircuit : subcircuits) {
-        result += subcircuit + "\n";
+        if (!subcircuit.isEmpty()) {
+            result += subcircuit + "\n";
+        }
     }
     return result;
 }
@@ -186,9 +187,9 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     QString netlist = writeComponent("", component, netComponentsMap, netNumberMap, &usedComponents, false);
     if (!circuit.getModelMap().empty()) {
         netlist += "\n";
-    }
-    for (const auto &model : circuit.getModelMap()) {
-        netlist += ".MODEL " + model.getName() + " " + attribute_utils::writeAttributes(model, true) + "\n";
+        for (const auto &model : circuit.getModelMap()) {
+            netlist += ".MODEL " + model.getName() + " " + attribute_utils::writeAttributes(model, true) + "\n";
+        }
     }
     if (circuit.getSubcircuitStatus()) {
         netlist = ".SUBCKT " + circuit.getName() + " 0 "
