@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearSpiceButton, &QPushButton::clicked, this, &MainWindow::closeSpice);
     connect(ui->actionOpenLibreNetlist, &QAction::triggered, this, &MainWindow::openLibre);
     connect(ui->actionSaveLibreNetlist, &QAction::triggered, this, &MainWindow::saveLibre);
-    connect(ui->actionSave_LibrePCB_Netlist_AS, &QAction::triggered, this, &MainWindow::saveLibreAs);
+    connect(ui->actionSaveLibrePCBNetlistAs, &QAction::triggered, this, &MainWindow::saveLibreAs);
     connect(ui->saveLibreButton, &QPushButton::clicked, this, &MainWindow::saveLibre);
     connect(ui->refreshLibreButton, &QPushButton::clicked, this, &MainWindow::refreshLibre);
     connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
