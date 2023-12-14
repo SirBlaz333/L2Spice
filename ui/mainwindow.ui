@@ -161,7 +161,7 @@
              <string/>
             </property>
             <property name="wordWrap">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -281,7 +281,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Convert to SPICE</string>
+           <string>Convert to SPICE format</string>
           </property>
          </widget>
         </item>
@@ -340,7 +340,7 @@
               </size>
              </property>
              <property name="text">
-              <string>is subcircuit</string>
+              <string>convert to subcircuit</string>
              </property>
              <property name="tristate">
               <bool>false</bool>
@@ -550,7 +550,7 @@
            </size>
           </property>
           <property name="text">
-           <string>Update LibrePCB</string>
+           <string>Update LibrePCB netlist</string>
           </property>
          </widget>
         </item>
@@ -603,7 +603,6 @@
     <addaction name="actionSaveLibrePCBNetlistAs"/>
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
-    <addaction name="actionSaveSubcircuit"/>
    </widget>
    <widget class="QMenu" name="netlistEdit">
     <property name="title">

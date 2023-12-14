@@ -31,7 +31,6 @@ public:
     AppState previousSave();
     AppState nextSave();
     AppState lastSave();
-    static QString getSubcircuitName(QString fileName);
 };
 
 #endif // APPCONTROLLER_H

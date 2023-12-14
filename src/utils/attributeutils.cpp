@@ -1,8 +1,9 @@
 #include "attributeutils.h"
+#include "src/utils/regexutils.h"
 
 #include <QRegularExpression>
 
-QString attribute_utils::getUnitShortPrefix(QString unit)
+QString attributeUtils::getUnitShortPrefix(QString unit)
 {
     for (const auto &key : prefixes.keys()) {
         if (unit.contains(key)) {
@@ -12,7 +13,7 @@ QString attribute_utils::getUnitShortPrefix(QString unit)
     return "";
 }
 
-QString attribute_utils::getFullUnitPrefix(QString shortPrefix)
+QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
 {
     for (const auto &key : prefixes.keys()) {
         if (shortPrefix == prefixes[key]) {
@@ -25,7 +26,7 @@ QString attribute_utils::getFullUnitPrefix(QString shortPrefix)
 QString writeAttribute(Attribute attribute, bool includeName)
 {
     QString result = includeName ? attribute.getName() + "=" : "";
-    return result + attribute.getValue() + attribute_utils::getUnitShortPrefix(attribute.getUnit()) + " ";
+    return result + attribute.getValue() + attributeUtils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
 QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iterator end, bool includeName)
@@ -43,7 +44,7 @@ QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iter
     return result;
 }
 
-QString attribute_utils::writeAttributes(Component component, bool includeName)
+QString attributeUtils::writeAttributes(Component component, bool includeName)
 {
     QList<Attribute> attributes = component.getAttributeList();
     QList<Attribute>::iterator begin = attributes.begin();
@@ -53,7 +54,7 @@ QString attribute_utils::writeAttributes(Component component, bool includeName)
     return sourceType == "" ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
 }
 
-QString attribute_utils::getUnitWithoutPrefix(QString unit)
+QString attributeUtils::getUnitWithoutPrefix(QString unit)
 {
     for (const auto &key : prefixes.keys()) {
         if (unit.contains(key)) {
@@ -63,10 +64,9 @@ QString attribute_utils::getUnitWithoutPrefix(QString unit)
     return unit;
 }
 
-QString attribute_utils::getSourceType(QString value)
+QString attributeUtils::getSourceType(QString value)
 {
-    QRegularExpression sourceTypeRegex(R"({{\w+/(\w+)}})");
-    QRegularExpressionMatch match = sourceTypeRegex.match(value);
+    QRegularExpressionMatch match = RegexUtils::sourceTypeRegex->match(value);
     QList<QString> list = match.capturedTexts();
     if (match.hasMatch()) {
         return match.captured(1);

@@ -1,16 +1,13 @@
 #include "netlistproducer.h"
-#include "src/utils/attributeutils.h"
 
 #include <QMap>
 #include <QRegularExpression>
 #include <QSet>
 
 #include <src/file/filemanager.h>
-
-#include <src/app/appcontroller.h>
 #include <src/app/appsettings.h>
-
-const QRegularExpression NetlistProducer::subcircuitIdentifierRegex = QRegularExpression(R"(^X(\w+))", QRegularExpression::MultilineOption);
+#include <src/utils/attributeutils.h>
+#include <src/utils/regexutils.h>
 
 NetlistProducer::NetlistProducer() {}
 
@@ -39,7 +36,7 @@ QString writeComponent(Component component,
             result += writeSignal(signal.getNet().getUuid(), netOrderMap);
         }
     }
-    result += attribute_utils::writeAttributes(component, includeAttributeName);
+    result += attributeUtils::writeAttributes(component, includeAttributeName);
     result += "\n";
     return result;
 }
@@ -123,10 +120,9 @@ void NetlistProducer::writeSubcircuit(QMap<QString, QString> *subcircuits, QStri
     if ((*subcircuits).contains(subcircuitName)) {
         return;
     }
-    QString path = AppSettings::getSpiceDir();
-    QString subcircuit = FileManager::loadFile(path + AppController::getSubcircuitName(subcircuitName));
+    QString subcircuit = FileManager::loadFile(AppSettings::getSubcircuitDir() + subcircuitName + ".cir");
     (*subcircuits)[subcircuitName] = subcircuit;
-    QRegularExpressionMatchIterator it = subcircuitIdentifierRegex.globalMatch(subcircuit);
+    QRegularExpressionMatchIterator it = RegexUtils::subcircuitIdentifierRegex->globalMatch(subcircuit);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         writeSubcircuit(subcircuits, match.captured(1));
@@ -188,7 +184,7 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     if (!circuit.getModelMap().empty()) {
         netlist += "\n";
         for (const auto &model : circuit.getModelMap()) {
-            netlist += ".MODEL " + model.getName() + " " + attribute_utils::writeAttributes(model, true) + "\n";
+            netlist += ".MODEL " + model.getName() + " " + attributeUtils::writeAttributes(model, true) + "\n";
         }
     }
     if (circuit.getSubcircuitStatus()) {
@@ -203,7 +199,7 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     if (!circuit.getTran().getName().isEmpty()) {
         netlist += "\n.tran ";
         Component tran = circuit.getTran();\
-            netlist += attribute_utils::writeAttributes(tran, false);
+            netlist += attributeUtils::writeAttributes(tran, false);
     }
     return netlist;
 }

@@ -6,7 +6,6 @@
 class NetlistProducer
 {
 private:
-    static const QRegularExpression subcircuitIdentifierRegex;
     void writeSubcircuit(QMap<QString, QString> *subcircuits, QString subcircuitName);
     void writeSubcircuit(QMap<QString, QString> *subcircuits, Component component);
     QString getAllSubcircuits(QSet<QString> usedComponents, QMap<QString, Component> componentMap);

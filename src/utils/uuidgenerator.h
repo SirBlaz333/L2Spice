@@ -3,7 +3,7 @@
 
 #include <QString>
 
-namespace uuid_generator {
+namespace uuidGenerator {
 QString generateUUID();
 }
 

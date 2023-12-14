@@ -56,6 +56,7 @@ HEADERS += \
     src/netlist/netlistproducer.h \
     src/netlist/netlistupdater.h \
     src/ui/overflowinglabel.h \
+    src/utils/regexutils.h \
     src/utils/uuidgenerator.h \
     src/utils/attributeutils.h \
     src/utils/characterutils.h

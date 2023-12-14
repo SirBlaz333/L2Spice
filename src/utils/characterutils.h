@@ -3,7 +3,7 @@
 
 #include <QChar>
 
-namespace character_utils {
+namespace characterUtils {
 bool isWordComponent(QChar c);
 bool isLeftParanthesis(QChar c);
 bool isRightParanthesis(QChar c);

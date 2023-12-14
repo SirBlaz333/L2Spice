@@ -28,19 +28,15 @@ QString FileManager::getSaveFileName(QWidget *parent, QString fileName, QString 
     if (forcedFileDialog || fileName.isEmpty()) {
         return QFileDialog::getSaveFileName(parent, "Open File", path, filter);
     }
-    if (QFile(fileName).exists()) {
+    QFileInfo fileInfo(fileName);
+    if (fileInfo.isAbsolute() && fileInfo.exists()) {
         return fileName;
     }
-    return path + fileName;
+    return path = QDir(path).absoluteFilePath(fileName);;
 }
 
 void FileManager::save(QString fileName, QString data)
 {
-    QDir dir = QFileInfo(fileName).absoluteDir();
-    if (!dir.exists() && !dir.mkpath(".")) {
-        qDebug() << "Failed to create directory: " << dir.path();
-        return;
-    }
     QFile file(fileName);
     if (!fileName.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream stream(&file);

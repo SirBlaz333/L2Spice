@@ -1,24 +1,11 @@
 #include "netlistupdater.h"
 #include "src/utils/attributeutils.h"
+#include "src/utils/regexutils.h"
 #include <QList>
 #include <QMap>
 #include <QRegularExpression>
 #include <functional>
 #include <regex>
-
-const QRegularExpression NetlistUpdater::componentRegex = QRegularExpression(
-    R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
-const QRegularExpression NetlistUpdater::nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");
-const QRegularExpression NetlistUpdater::paramRegex = QRegularExpression(R"((\d*)(\w*))");
-const QRegularExpression NetlistUpdater::attributeRegex = QRegularExpression(
-    R"(\(attribute \"\w+\" \(type \w+\) (\(unit (\w+)\)) (\(value \"([\d\w]*)\"\))\))");
-const QRegularExpression NetlistUpdater::signalRegex = QRegularExpression(
-    R"(\(signal .+? \(net .+?\)\))");
-const QRegularExpression NetlistUpdater::sourceTypesRegex
-    = QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP)",
-                         QRegularExpression::CaseInsensitiveOption);
-const QRegularExpression NetlistUpdater::subcircuitRegex
-    = QRegularExpression(R"(\.SUBCKT.+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption);
 
 NetlistUpdater::NetlistUpdater() {}
 
@@ -54,9 +41,9 @@ QList<QString> splitParams(QString::iterator iterator, QString::iterator end){
     return split(iterator, end, [](QChar c) { return c == ' ' || c == '(' || c == ')'; });
 }
 
-QList<QString> findAllMatches(QRegularExpression regex, QString text)
+QList<QString> findAllMatches(QRegularExpression* regex, QString text)
 {
-    QRegularExpressionMatchIterator it = regex.globalMatch(text);
+    QRegularExpressionMatchIterator it = regex->globalMatch(text);
     QList<QString> list;
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
@@ -75,25 +62,25 @@ std::string findTextByPattern(const std::string &text, const std::string &patter
     return "";
 }
 
-QString getSubString(QRegularExpression regex, QString input, int captureGroup) {
-    return regex.match(input).captured(captureGroup);
+QString getSubString(QRegularExpression* regex, QString input, int captureGroup) {
+    return regex->match(input).captured(captureGroup);
 }
 
 QString NetlistUpdater::getNewUnit(QString param, QString attribute)
 {
-    QString unit = getSubString(attributeRegex, attribute, 2);
+    QString unit = getSubString(RegexUtils::attributeRegex, attribute, 2);
     if (unit == "none") {
         return unit;
     }
-    QString unitPrefixSymbol = getSubString(paramRegex, param, 2);
-    QString unitFullPrefix = attribute_utils::getFullUnitPrefix(unitPrefixSymbol);
-    QString unitWithoutPrefix = attribute_utils::getUnitWithoutPrefix(unit);
+    QString unitPrefixSymbol = getSubString(RegexUtils::paramRegex, param, 2);
+    QString unitFullPrefix = attributeUtils::getFullUnitPrefix(unitPrefixSymbol);
+    QString unitWithoutPrefix = attributeUtils::getUnitWithoutPrefix(unit);
     return unitFullPrefix + unitWithoutPrefix;
 }
 
 QString NetlistUpdater::getNewAttribute(QString attribute, QString value, QString unit)
 {
-    QRegularExpressionMatch match = attributeRegex.match(attribute);
+    QRegularExpressionMatch match = RegexUtils::attributeRegex->match(attribute);
     QStringList capturedText = match.capturedTexts();
     attribute.replace(capturedText.at(1), QString("(unit %1)").arg(unit));
     attribute.replace(capturedText.at(3), QString("(value \"%1\")").arg(value));
@@ -103,11 +90,11 @@ QString NetlistUpdater::getNewAttribute(QString attribute, QString value, QStrin
 QMap<QString, QString> NetlistUpdater::getComponents(QString textToUpdate)
 {
     QMap<QString, QString> map;
-    QRegularExpressionMatchIterator it = componentRegex.globalMatch(textToUpdate);
+    QRegularExpressionMatchIterator it = RegexUtils::componentRegex->globalMatch(textToUpdate);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         QString result = match.captured(0);
-        QString name = getSubString(nameRegex, result, 1);
+        QString name = getSubString(RegexUtils::nameRegex, result, 1);
         map[name] = result;
     }
 
@@ -121,7 +108,7 @@ QString NetlistUpdater::updateParameter(QString textToUpdate,
 {
     QString unit = getNewUnit(param, attribute);
     int group = unit == "none" ? 0 : 1;
-    QString value = getSubString(paramRegex, param, group);
+    QString value = getSubString(RegexUtils::paramRegex, param, group);
     QString newAttribute = getNewAttribute(attribute, value, unit);
     QString oldComponent = *component;
     component->replace(attribute, newAttribute);
@@ -138,7 +125,7 @@ QString NetlistUpdater::update(QString textToUpdate,
     paramList.pop_front();
     QString component = componentsMap[name];
     //erase signals;
-    QList<QString> signalList = findAllMatches(signalRegex, component);
+    QList<QString> signalList = findAllMatches(RegexUtils::signalRegex, component);
     paramList.erase(paramList.begin(), paramList.begin() + signalList.size());
     //check if there are parameters left;
     if (paramList.empty()) {
@@ -146,10 +133,10 @@ QString NetlistUpdater::update(QString textToUpdate,
     }
     //check if the first character in first attribute is a number or not
     //if it is not, that it is a source type and we don't need to modify it for now
-    if (sourceTypesRegex.match(paramList.first()).hasMatch()) {
+    if (RegexUtils::sourceTypesRegex->match(paramList.first()).hasMatch()) {
         paramList.pop_front();
     }
-    QList<QString> attributeList = findAllMatches(attributeRegex, component);
+    QList<QString> attributeList = findAllMatches(RegexUtils::attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
         textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
     }
@@ -159,7 +146,7 @@ QString NetlistUpdater::update(QString textToUpdate,
 
 QString NetlistUpdater::removeSubcircuitImports(QString param)
 {
-    QRegularExpressionMatchIterator it = subcircuitRegex.globalMatch(param);
+    QRegularExpressionMatchIterator it = RegexUtils::subcircuitRegex->globalMatch(param);
     while (it.hasNext()) {
         param.replace(it.next().captured(0), "");
     }

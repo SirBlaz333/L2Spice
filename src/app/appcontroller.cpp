@@ -1,5 +1,6 @@
 #include "appcontroller.h"
 #include "appsettings.h"
+#include "src/utils/regexutils.h"
 
 #include <src/circuit/circuit.h>
 
@@ -7,9 +8,7 @@ AppController::AppController() {}
 
 AppController::~AppController() {}
 
-AppState AppController::convertToSpice(QString libreNotation,
-                                       bool isSubcircuit,
-                                       QString subcircuitName)
+AppState AppController::convertToSpice(QString libreNotation, bool isSubcircuit, QString subcircuitName)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
@@ -30,46 +29,29 @@ AppState AppController::updateLibre(QString oldLibreNotation, QString newSpiceNo
     return storage.lastElement();
 }
 
-QString saveFile(QWidget *parent,
-                 QString fileName,
-                 QString data,
-                 QString fileExtensionFilter,
-                 QString path,
-                 bool forcedFileDialog)
+QString saveFile(QWidget *parent, QString fileName, QString data, QString fileExtensionFilter, QString path, bool forcedFileDialog)
 {
-    fileName = FileManager::getSaveFileName(parent,
-                                            fileName,
-                                            path,
-                                            fileExtensionFilter,
-                                            forcedFileDialog);
-    FileManager::save(fileName, data);
-    return fileName;
+    QString newFileName = FileManager::getSaveFileName(parent, fileName, path, fileExtensionFilter, forcedFileDialog);
+    if(newFileName.isEmpty()) {
+        return fileName;
+    }
+    FileManager::save(newFileName, data);
+    return newFileName;
 }
 
-QString AppController::saveSpice(QWidget *parent,
-                                 QString fileName,
-                                 QString data,
-                                 bool forcedFileDialog)
+QString AppController::saveSpice(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
 {
-    return saveFile(parent,
-                    fileName,
-                    data,
-                    "Circuit File (*.cir)",
-                    AppSettings::getSpiceDir(),
-                    forcedFileDialog);
+    QString dir = RegexUtils::subcircuitRegex->match(data).hasMatch()
+                      ? AppSettings::getSubcircuitDir()
+                      : AppSettings::getSpiceDir();
+    //what should I do if the fileName is pointing to the file which is circuit and I want to save subcircuit?
+    return saveFile(parent, fileName, data, "Circuit File (*.cir)", dir, forcedFileDialog);
+
 }
 
-QString AppController::saveLibre(QWidget *parent,
-                                 QString fileName,
-                                 QString data,
-                                 bool forcedFileDialog)
+QString AppController::saveLibre(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
 {
-    return saveFile(parent,
-                    fileName,
-                    data,
-                    "Libre PCB Circuit File (*.lp)",
-                    AppSettings::getLibreDir(),
-                    forcedFileDialog);
+    return saveFile(parent, fileName, data, "Libre PCB Circuit File (*.lp)", AppSettings::getLibreDir(), forcedFileDialog);
 }
 
 QString AppController::getOpenFileName(QWidget *parent)
@@ -97,10 +79,4 @@ AppState AppController::nextSave()
 AppState AppController::lastSave()
 {
     return storage.lastElement();
-}
-
-QString AppController::getSubcircuitName(QString fileName)
-{
-    fileName = fileName.isEmpty() ? "DEFAULT" : fileName;
-    return "/subcircuit/" + fileName + ".cir";
 }

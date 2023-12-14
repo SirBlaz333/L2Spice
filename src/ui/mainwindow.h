@@ -31,7 +31,6 @@ private slots:
     void openDirectoryDialog();
     void saveSpice();
     void saveSpiceAs();
-    void saveSubcircuit();
     void closeSpice();
     void openLibre();
     void refreshLibre();
@@ -41,7 +40,6 @@ private slots:
 
 private:
     AppController appController;
-    bool canSaveSubcircuit;
     Ui::MainWindow *ui;
     void updateState(AppState node);
     void saveSpiceNetlist(bool forcedFileDialog);
