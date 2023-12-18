@@ -127,18 +127,17 @@ QString NetlistUpdater::update(QString textToUpdate,
     //erase signals;
     QList<QString> signalList = findAllMatches(RegexUtils::signalRegex, component);
     paramList.erase(paramList.begin(), paramList.begin() + signalList.size());
-    //check if there are parameters left;
-    if (paramList.empty()) {
-        return textToUpdate;
-    }
     //check if the first character in first attribute is a number or not
     //if it is not, that it is a source type and we don't need to modify it for now
-    if (RegexUtils::sourceTypesRegex->match(paramList.first()).hasMatch()) {
+    if (!paramList.isEmpty() && RegexUtils::sourceTypesRegex->match(paramList.first()).hasMatch()) {
         paramList.pop_front();
     }
     QList<QString> attributeList = findAllMatches(RegexUtils::attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
         textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
+    }
+    for (int i = paramList.size(); i < attributeList.size(); i++) {
+        textToUpdate = updateParameter(textToUpdate, &component, "", attributeList[i]);
     }
 
     return textToUpdate;
