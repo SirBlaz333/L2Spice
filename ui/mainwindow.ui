@@ -137,31 +137,22 @@
             </property>
            </widget>
           </item>
-          <item alignment="Qt::AlignBottom">
-           <widget class="QLabel" name="libreFileLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
+          <item>
+           <widget class="OverflowingLabel" name="libreFileLabel">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
               <height>40</height>
              </size>
             </property>
-            <property name="text">
-             <string/>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
             </property>
-            <property name="wordWrap">
-             <bool>true</bool>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -295,7 +286,7 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>400</width>
+            <width>500</width>
             <height>70</height>
            </size>
           </property>
@@ -445,27 +436,21 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="spiceFileLabel">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
+           <widget class="OverflowingLabel" name="spiceFileLabel">
             <property name="maximumSize">
              <size>
               <width>16777215</width>
               <height>40</height>
              </size>
             </property>
-            <property name="text">
-             <string/>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
             </property>
            </widget>
           </item>
@@ -561,7 +546,7 @@
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
+            <width>500</width>
             <height>70</height>
            </size>
           </property>
@@ -688,6 +673,14 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>OverflowingLabel</class>
+   <extends>QFrame</extends>
+   <header>src/ui/overflowinglabel.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources/resources.qrc"/>
  </resources>

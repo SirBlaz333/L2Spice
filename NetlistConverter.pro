@@ -16,6 +16,7 @@ SOURCES += \
     src/app/appinternalstorage.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
+    src/ui/overflowinglabel.cpp \
     src/file/filemanager.cpp \
     src/circuit/circuit.cpp \
     src/circuit/element/attribute.cpp \
@@ -29,7 +30,6 @@ SOURCES += \
     src/netlist/netlistparser.cpp \
     src/netlist/netlistproducer.cpp \
     src/netlist/netlistupdater.cpp \
-    src/ui/overflowinglabel.cpp \
     src/utils/uuidgenerator.cpp \
     src/utils/attributeutils.cpp \
     src/utils/characterutils.cpp
@@ -42,6 +42,7 @@ HEADERS += \
     src/app/appinternalstorage.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
+    src/ui/overflowinglabel.h \
     src/file/filemanager.h \
     src/circuit/circuit.h \
     src/circuit/element/attribute.h \
@@ -55,7 +56,6 @@ HEADERS += \
     src/netlist/netlistparser.h \
     src/netlist/netlistproducer.h \
     src/netlist/netlistupdater.h \
-    src/ui/overflowinglabel.h \
     src/utils/regexutils.h \
     src/utils/uuidgenerator.h \
     src/utils/attributeutils.h \
