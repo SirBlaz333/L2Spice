@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <QSettings>
+#include <qmessagebox.h>
 
 QString FileManager::getOpenFileName(QWidget *parent, QString path, QString filter)
 {
@@ -43,6 +44,21 @@ void FileManager::save(QString fileName, QString data)
         stream << data;
         file.close();
     }
+}
+
+bool FileManager::confirmSaving(QString fileName, bool fileDialogWasShown)
+{
+    if (!fileDialogWasShown && QFile::exists(fileName)) {
+        QMessageBox::StandardButton reply =
+            QMessageBox::question(nullptr,
+                                  "File Exists",
+                                  "The file already exists. Do you want to override it?",
+                                  QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::No) {
+            return false;
+        }
+    }
+    return true;
 }
 
 QString FileManager::getPath(QWidget *parent, QString path)

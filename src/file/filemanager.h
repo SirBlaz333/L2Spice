@@ -17,6 +17,7 @@ public:
                                    bool forcedFileDialog = false);
     static void save(QString fileName = QString(),
                         QString data = QString());
+    static bool confirmSaving(QString fileName, bool fileDialogWasShown = false);
     static QString getPath(QWidget *parent = nullptr, QString path = QString());
     FileManager();
     ~FileManager();

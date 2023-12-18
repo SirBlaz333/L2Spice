@@ -32,11 +32,12 @@ AppState AppController::updateLibre(QString oldLibreNotation, QString newSpiceNo
 QString saveFile(QWidget *parent, QString fileName, QString data, QString fileExtensionFilter, QString path, bool forcedFileDialog)
 {
     QString newFileName = FileManager::getSaveFileName(parent, fileName, path, fileExtensionFilter, forcedFileDialog);
-    if(newFileName.isEmpty()) {
-        return fileName;
+    bool fileDialogWasShown = forcedFileDialog || (fileName != newFileName);
+    if (!newFileName.isEmpty() && FileManager::confirmSaving(newFileName, fileDialogWasShown)) {
+        FileManager::save(newFileName, data);
+        return newFileName;
     }
-    FileManager::save(newFileName, data);
-    return newFileName;
+    return fileName;
 }
 
 QString AppController::saveSpice(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
