@@ -18,6 +18,7 @@ public:
 private slots:
     void onSpiceDirToolButtonClicked();
     void onLibreDirToolButtonClicked();
+    void onSubcircuitDirToolButtonClicked();
     void onOkButtonClicked();
     void onCancelButtonClicked();
 

@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->saveLibreButton, &QPushButton::clicked, this, &MainWindow::saveLibre);
     connect(ui->refreshLibreButton, &QPushButton::clicked, this, &MainWindow::refreshLibre);
     connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
+    connect(ui->actionUserManual, &QAction::triggered, this, &MainWindow::openUserManual);
 }
 
 MainWindow::~MainWindow()
@@ -196,4 +198,11 @@ void MainWindow::closeLibre()
 {
     ui->notationLibreTextEdit->setText("");
     ui->libreFileLabel->setText("");
+}
+
+void MainWindow::openUserManual()
+{
+    QString userManualPath = "user_manual.pdf";
+    QUrl userManual = QUrl::fromLocalFile(userManualPath);
+    QDesktopServices::openUrl(userManual);
 }

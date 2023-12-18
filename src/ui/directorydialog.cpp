@@ -17,10 +17,12 @@ DirectoryDialog::DirectoryDialog(QWidget *parent)
     setWindowTitle("Default directories");
     ui->spiceDirLineEdit->setText(AppSettings::getSpiceDir());
     ui->libreDirLineEdit->setText(AppSettings::getLibreDir());
+    ui->subcircuitDirLineEdit->setText(AppSettings::getSubcircuitDir());
     ui->okButton->setProperty("class", "dialogButton");
     ui->cancelButton->setProperty("class", "dialogButton");
     connect(ui->spiceDirToolButton, &QPushButton::clicked, this, &DirectoryDialog::onSpiceDirToolButtonClicked);
     connect(ui->libreDirToolButton, &QPushButton::clicked, this, &DirectoryDialog::onLibreDirToolButtonClicked);
+    connect(ui->subcircuitDirToolButton, &QPushButton::clicked, this, &DirectoryDialog::onSubcircuitDirToolButtonClicked);
     connect(ui->okButton, &QPushButton::clicked, this, &DirectoryDialog::onOkButtonClicked);
     connect(ui->cancelButton, &QPushButton::clicked, this, &DirectoryDialog::onCancelButtonClicked);
 }
@@ -34,6 +36,7 @@ void DirectoryDialog::apply()
 {
     AppSettings::setSpiceDir(ui->spiceDirLineEdit->text());
     AppSettings::setLibreDir(ui->libreDirLineEdit->text());
+    AppSettings::setSubcircuitDir(ui->subcircuitDirLineEdit->text());
 }
 
 void DirectoryDialog::close()
@@ -53,6 +56,12 @@ void DirectoryDialog::onLibreDirToolButtonClicked()
     QString path = ui->libreDirLineEdit->text();
     QString newPath = FileManager::getPath(this, path);
     ui->libreDirLineEdit->setText(newPath);
+}
+
+void DirectoryDialog::onSubcircuitDirToolButtonClicked() {
+    QString path = ui->subcircuitDirLineEdit->text();
+    QString newPath = FileManager::getPath(this, path);
+    ui->subcircuitDirLineEdit->setText(newPath);
 }
 
 void DirectoryDialog::onOkButtonClicked()
