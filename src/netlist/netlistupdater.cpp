@@ -146,6 +146,9 @@ QString NetlistUpdater::update(QString textToUpdate,
 QString NetlistUpdater::removeSubcircuitImports(QString param)
 {
     QRegularExpressionMatchIterator it = RegexUtils::subcircuitRegex->globalMatch(param);
+    if (it.hasNext() && it.next().captured(0) == param) {
+        return param;
+    }
     while (it.hasNext()) {
         param.replace(it.next().captured(0), "");
     }
