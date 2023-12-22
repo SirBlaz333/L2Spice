@@ -26,7 +26,11 @@
    <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>Netlist Converter</string>
+   <string>L2Spice</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/img/logo.png</normaloff>:/img/logo.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true"/>

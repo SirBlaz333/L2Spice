@@ -24,6 +24,11 @@ QList<Attribute> Component::getAttributeList() const
 {
     return attributeList;
 }
+
+bool Component::removeAttribute(const Attribute attribute)
+{
+    return attributeList.removeOne(attribute);
+}
 QList<Signal> Component::getSignalList() const
 {
     return signalList;

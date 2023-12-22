@@ -8,5 +8,6 @@
         <file>img/delete-symbol.png</file>
         <file>img/square.png</file>
         <file>img/grey_square.png</file>
+        <file>img/logo.png</file>
     </qresource>
 </RCC>

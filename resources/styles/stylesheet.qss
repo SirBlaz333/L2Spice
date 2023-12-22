@@ -8,6 +8,10 @@ QWidget:disabled {
 }
 
 QLabel {
+    font-weight: normal;
+}
+
+QLabel[class="bold"] {
     font-weight: bold;
 }
 

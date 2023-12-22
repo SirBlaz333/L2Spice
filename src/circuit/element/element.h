@@ -19,6 +19,10 @@ public:
     QString getElementType() const;
     void setProperty(const QString &propertyName, const QString &property);
     virtual void setProperty(const QString &propertyName, const Element *property);
+    bool operator==(const Element &other) const
+    {
+        return this->uuid == other.uuid && this->name == other.name;
+    }
 };
 
 #endif // ELEMENT_H

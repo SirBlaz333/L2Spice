@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->subcircuitNameLineEdit->setEnabled(false);
     ui->subcircuitSaveCheckbox->setEnabled(false);
+    ui->netlistNameLabel->setProperty("class", "bold");
+    ui->libreLabel->setProperty("class", "bold");
+    ui->spiceLabel->setProperty("class", "bold");
     ui->saveLibreButton->setProperty("class", "netlistStateButton");
     ui->refreshLibreButton->setProperty("class", "netlistStateButton");
     ui->clearLibreButton->setProperty("class", "netlistStateButton");

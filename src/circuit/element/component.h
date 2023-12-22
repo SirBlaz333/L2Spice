@@ -29,6 +29,7 @@ public:
     QString getValue() const;
     bool getLockAssembly() const;
     QList<Attribute> getAttributeList() const;
+    bool removeAttribute(Attribute attribute);
     QList<Signal> getSignalList() const;
     const Device getDevice() const;
     void setProperty(const QString &propertyName, const Element* property);
