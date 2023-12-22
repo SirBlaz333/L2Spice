@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->refreshLibreButton, &QPushButton::clicked, this, &MainWindow::refreshLibre);
     connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
     connect(ui->actionUserManual, &QAction::triggered, this, &MainWindow::openUserManual);
+    connect(ui->actionLibrePCBDocumenation, &QAction::triggered, this, &MainWindow::openLibreDocumentation);
 }
 
 MainWindow::~MainWindow()
@@ -208,4 +209,9 @@ void MainWindow::openUserManual()
     QString userManualPath = "user_manual.pdf";
     QUrl userManual = QUrl::fromLocalFile(userManualPath);
     QDesktopServices::openUrl(userManual);
+}
+
+void MainWindow::openLibreDocumentation()
+{
+    QDesktopServices::openUrl(QUrl("https://librepcb.org/docs/"));
 }

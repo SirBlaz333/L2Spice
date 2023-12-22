@@ -595,7 +595,7 @@
    </widget>
    <widget class="QMenu" name="netlistEdit">
     <property name="title">
-     <string>Netlist</string>
+     <string>History</string>
     </property>
     <addaction name="actionLastNetlist"/>
     <addaction name="actionPreviousNetlist"/>
@@ -612,6 +612,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionUserManual"/>
+    <addaction name="actionLibrePCBDocumenation"/>
    </widget>
    <addaction name="fileEdit"/>
    <addaction name="netlistEdit"/>
@@ -662,7 +663,7 @@
   </action>
   <action name="actionOpenDirDialog">
    <property name="text">
-    <string>Default directory</string>
+    <string>Default Directories</string>
    </property>
   </action>
   <action name="actionOpenLibreNetlist">
@@ -685,7 +686,12 @@
   </action>
   <action name="actionUserManual">
    <property name="text">
-    <string>User manual</string>
+    <string>L2Spice User Manual</string>
+   </property>
+  </action>
+  <action name="actionLibrePCBDocumenation">
+   <property name="text">
+    <string>LibrePCB Documenation</string>
    </property>
   </action>
  </widget>

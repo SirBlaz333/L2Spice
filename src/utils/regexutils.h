@@ -17,7 +17,7 @@ namespace RegexUtils {
     Q_GLOBAL_STATIC(QRegularExpression, sourceTypesRegex,
                     QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP)", QRegularExpression::CaseInsensitiveOption));
     Q_GLOBAL_STATIC(QRegularExpression, subcircuitRegex,
-                    QRegularExpression(R"(\.SUBCKT.+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption));
+                    QRegularExpression(R"(\.SUBCKT (\w+) .+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption));
     Q_GLOBAL_STATIC(QRegularExpression, subcircuitIdentifierRegex,
                     QRegularExpression(R"(^X(\w+))", QRegularExpression::MultilineOption));
     Q_GLOBAL_STATIC(QRegularExpression, sourceTypeRegex,

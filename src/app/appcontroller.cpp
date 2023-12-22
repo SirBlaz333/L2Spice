@@ -42,10 +42,13 @@ QString saveFile(QWidget *parent, QString fileName, QString data, QString fileEx
 
 QString AppController::saveSpice(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
 {
-    QString dir = RegexUtils::subcircuitRegex->match(data).hasMatch()
-                      ? AppSettings::getSubcircuitDir()
-                      : AppSettings::getSpiceDir();
-    //what should I do if the fileName is pointing to the file which is circuit and I want to save subcircuit?
+    QString dir = AppSettings::getSpiceDir();
+    QRegularExpressionMatch match = RegexUtils::subcircuitRegex->match(data);
+    if (match.hasMatch()) {
+        dir = AppSettings::getSubcircuitDir();
+        QString name = match.captured(1);
+        fileName = dir + "/" + name + ".cir";
+    }
     return saveFile(parent, fileName, data, "Circuit File (*.cir)", dir, forcedFileDialog);
 
 }
