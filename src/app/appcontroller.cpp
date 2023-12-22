@@ -48,6 +48,9 @@ QString AppController::saveSpice(QWidget *parent, QString fileName, QString data
         dir = AppSettings::getSubcircuitDir();
         QString name = match.captured(1);
         fileName = dir + "/" + name + ".cir";
+    } else if (fileName.contains(AppSettings::getSubcircuitDir())) {
+        forcedFileDialog = true;
+        fileName = "";
     }
     return saveFile(parent, fileName, data, "Circuit File (*.cir)", dir, forcedFileDialog);
 
