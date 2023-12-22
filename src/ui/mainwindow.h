@@ -39,6 +39,7 @@ private slots:
     void closeLibre();
     void openUserManual();
     void openLibreDocumentation();
+    void loadExample();
 
 private:
     AppController appController;

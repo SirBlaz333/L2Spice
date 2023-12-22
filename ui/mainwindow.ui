@@ -613,6 +613,7 @@
     </property>
     <addaction name="actionUserManual"/>
     <addaction name="actionLibrePCBDocumenation"/>
+    <addaction name="actionLoadExample"/>
    </widget>
    <addaction name="fileEdit"/>
    <addaction name="netlistEdit"/>
@@ -692,6 +693,11 @@
   <action name="actionLibrePCBDocumenation">
    <property name="text">
     <string>LibrePCB Documenation</string>
+   </property>
+  </action>
+  <action name="actionLoadExample">
+   <property name="text">
+    <string>Load Example</string>
    </property>
   </action>
  </widget>

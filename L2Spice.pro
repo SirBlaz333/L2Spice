@@ -65,6 +65,8 @@ FORMS += \
     ui/directorydialog.ui \
     ui/mainwindow.ui
 
+RC_ICONS = resources/img/logo_small.ico
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

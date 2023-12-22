@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->clearLibreButton, &QPushButton::clicked, this, &MainWindow::closeLibre);
     connect(ui->actionUserManual, &QAction::triggered, this, &MainWindow::openUserManual);
     connect(ui->actionLibrePCBDocumenation, &QAction::triggered, this, &MainWindow::openLibreDocumentation);
+    connect(ui->actionLoadExample, &QAction::triggered, this, &MainWindow::loadExample);
 }
 
 MainWindow::~MainWindow()
@@ -214,4 +215,9 @@ void MainWindow::openUserManual()
 void MainWindow::openLibreDocumentation()
 {
     QDesktopServices::openUrl(QUrl("https://librepcb.org/docs/"));
+}
+
+void MainWindow::loadExample()
+{
+    ui->notationLibreTextEdit->setText(appController.loadFile("example.lp"));
 }
