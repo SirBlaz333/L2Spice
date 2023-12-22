@@ -3,7 +3,7 @@
 const QString AppSettings::libreDir = "DefaultLibreDir";
 const QString AppSettings::spiceDir = "DefaultSpiceDir";
 const QString AppSettings::subcircuitDir = "DefaultSubcircuitDir";
-QSettings AppSettings::settings = QSettings("USMB", "NetlistConverter");
+QSettings AppSettings::settings = QSettings("USMB", "L2Spice");
 
 QString AppSettings::getSpiceDir()
 {
