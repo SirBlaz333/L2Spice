@@ -186,10 +186,11 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
     } else {
         QString subcircuits = getAllSubcircuits(usedComponents, componentMap);
         netlist = subcircuits + netlist;
-    }
 
-    if (!circuit.getTran().getName().isEmpty()) {
-        netlist += circuit.getTran().print();
+        if (!circuit.getTran().getName().isEmpty()) {
+            netlist += circuit.getTran().print();
+        }
+        netlist += "\n.end";
     }
     return netlist;
 }
