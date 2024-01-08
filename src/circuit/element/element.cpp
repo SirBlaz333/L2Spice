@@ -15,6 +15,11 @@ QString Element::getElementType() const
     return elementType;
 }
 
+QString Element::print(QString parentUUID)
+{
+    return name + " " + uuid;
+}
+
 void Element::setProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "name") {

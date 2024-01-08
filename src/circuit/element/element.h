@@ -17,6 +17,7 @@ public:
     QString getUuid() const;
     QString getName() const;
     QString getElementType() const;
+    QString print(QString parentUUID = QString());
     void setProperty(const QString &propertyName, const QString &property);
     virtual void setProperty(const QString &propertyName, const Element *property);
     bool operator==(const Element &other) const
