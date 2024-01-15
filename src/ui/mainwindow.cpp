@@ -60,6 +60,16 @@ void showError(const std::exception &e, QString message)
     errorMessage.exec();
 }
 
+void showWarning(QString message) {
+    QMessageBox warning;
+    warning.setIcon(QMessageBox::Warning);
+    warning.setWindowTitle("Warning");
+    warning.setText(message);
+    warning.setMinimumWidth(150);
+    warning.addButton(QMessageBox::Ok);
+    warning.exec();
+}
+
 void MainWindow::convertToSpice()
 {
     try {
@@ -67,6 +77,10 @@ void MainWindow::convertToSpice()
         bool isSubcircuit = ui->subcircuitCheckBox->isChecked();
         QString subcircuitName = ui->subcircuitNameLineEdit->text();
         AppState node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
+        if (node.getSpiceNetlist().isEmpty()) {
+            showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
+            return;
+        }
         ui->notationSpiceTextEdit->setPlainText(node.getSpiceNetlist());
         ui->netlistNameLabel->setText("Save name: " + node.getName());
         bool subcircuitState = ui->subcircuitCheckBox->isChecked() && ui->subcircuitSaveCheckbox->isChecked();
@@ -78,7 +92,7 @@ void MainWindow::convertToSpice()
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
-        showError(e, "Cannot convert: " + message);
+        showError(e, "Cannot convert: " + message + "\nLibrePCB circuit is incorrect");
     }
 }
 

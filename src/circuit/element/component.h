@@ -18,7 +18,6 @@ private:
     QList<QString> list;
     QList<Attribute> attributeList;
     QList<Signal> signalList;
-    QMap<QString, QString> netLabelMap;
     const Device* device;
     void setChildProperty(const QString &propertyName, const QString &property);
 
@@ -34,8 +33,6 @@ public:
     bool removeAttribute(Attribute attribute);
     QList<Signal> getSignalList() const;
     const Device getDevice() const;
-    QString print(QString parentUUID = QString()) const;
-    void setNetLabelMap(QMap<QString, QString> map);
     void setProperty(const QString &propertyName, const Element* property);
 };
 

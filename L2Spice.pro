@@ -14,6 +14,7 @@ SOURCES += \
     src/app/appsettings.cpp \
     src/app/appstate.cpp \
     src/app/appinternalstorage.cpp \
+    src/netlist/componentprinter.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowinglabel.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     src/app/appsettings.h \
     src/app/appstate.h \
     src/app/appinternalstorage.h \
+    src/netlist/componentprinter.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/ui/overflowinglabel.h \

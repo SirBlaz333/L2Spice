@@ -1,14 +1,19 @@
 #ifndef NETLISTPRODUCER_H
 #define NETLISTPRODUCER_H
 
+#include "src/netlist/componentprinter.h"
 #include <src/circuit/circuit.h>
 
 class NetlistProducer
 {
 private:
-    void writeSubcircuit(QMap<QString, QString> *subcircuits, QString subcircuitName);
-    void writeSubcircuit(QMap<QString, QString> *subcircuits, Component component);
-    QString getAllSubcircuits(QSet<QString> usedComponents, QMap<QString, Component> componentMap);
+    ComponentPrinter componentPrinter;
+    QString writeComponents(QString parentSignalUuid,
+                            Component component,
+                            QMap<QString, QList<Component>> netComponentsMap,
+                            QMap<QString, QString> netLabelMap,
+                            QSet<QString> *usedComponents);
+
 public:
     NetlistProducer();
     ~NetlistProducer();

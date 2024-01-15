@@ -29,7 +29,7 @@ QString NetlistParser::nextDataInQuotes()
 
 void NetlistParser::parseComponents(QString::iterator last)
 {
-    while (currentCharacter != last) {
+    while (currentCharacter < last) {
         parseComponent("", last); // parsing elements in netlist.
     }
 }
@@ -37,7 +37,7 @@ void NetlistParser::parseComponents(QString::iterator last)
 void NetlistParser::parseComponent(QString parentUuid,
                                    QString::iterator last)
 {
-    while (currentCharacter != last) {
+    while (currentCharacter < last) {
         currentCharacter++;
         if (characterUtils::isLeftParanthesis(*currentCharacter)) {
             parseElement(parentUuid, last); // parse element in ();
@@ -72,7 +72,7 @@ void NetlistParser::parseElement(QString parentUuid,
         // get the parent element from the storage using uuid
         Element *parent = elementMap[parentUuid].get();
         //if an element with current uuid is already in the storage, just add it to the parent.
-        if (elementMap.count(value) != 0) {
+        if (elementMap.contains(value)) {
             Element *element = elementMap[value].get();
             parent->setProperty(name, element);
         } else {
