@@ -5,9 +5,9 @@
 
 QString attributeUtils::getUnitShortPrefix(QString unit)
 {
-    for (const auto &key : prefixes.keys()) {
+    for (const auto &key : prefixes->keys()) {
         if (unit.contains(key)) {
-            return prefixes[key];
+            return prefixes->value(key);
         }
     }
     return "";
@@ -15,8 +15,8 @@ QString attributeUtils::getUnitShortPrefix(QString unit)
 
 QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
 {
-    for (const auto &key : prefixes.keys()) {
-        if (shortPrefix == prefixes[key]) {
+    for (const auto &key : prefixes->keys()) {
+        if (shortPrefix == prefixes->value(key)) {
             return key;
         }
     }
@@ -56,7 +56,7 @@ QString attributeUtils::writeAttributes(Component component, bool includeName)
 
 QString attributeUtils::getUnitWithoutPrefix(QString unit)
 {
-    for (const auto &key : prefixes.keys()) {
+    for (const auto &key : prefixes->keys()) {
         if (unit.contains(key)) {
             return unit.mid(key.length(), unit.length());
         }
@@ -67,7 +67,6 @@ QString attributeUtils::getUnitWithoutPrefix(QString unit)
 QString attributeUtils::getSourceType(QString value)
 {
     QRegularExpressionMatch match = RegexUtils::sourceTypeRegex->match(value);
-    QList<QString> list = match.capturedTexts();
     if (match.hasMatch()) {
         return match.captured(1);
     }
