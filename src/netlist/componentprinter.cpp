@@ -65,5 +65,12 @@ QString ComponentPrinter::print(Component component, QString parentUUID)
 
 QString ComponentPrinter::printOutput(Component component)
 {
+    if (component.getElementType() == "probe") {
+        QString result = ".PRINT " + attributeUtils::writeAttributes(component, false) + " ";
+        for (Signal signal : component.getSignalList()) {
+            result += writeSignal(signal.getNet().getUuid(), netLabelMap);
+        }
+        return result + "\n";
+    }
     return component.getName() + "\n";
 }
