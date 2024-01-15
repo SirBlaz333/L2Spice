@@ -39,10 +39,10 @@ QString NetlistProducer::writeComponents(QString parentSignalUuid,
     return result;
 }
 
-QMap<QString, QList<Component>> createNetComponentsMap(QMap<QString, Component> componentMap)
+QMap<QString, QList<Component>> createNetComponentsMap(QList<Component> components)
 {
     QMap<QString, QList<Component>> map;
-    for (const auto &component : componentMap) {
+    for (Component &component : components) {
         QList<Signal> signalList = component.getSignalList();
         for (Signal signal : signalList) {
             QList<Component> componentList = map[signal.getNet().getUuid()];
@@ -53,9 +53,9 @@ QMap<QString, QList<Component>> createNetComponentsMap(QMap<QString, Component> 
     return map;
 }
 
-Component findComponent(QString uuid, QMap<QString, Component> componentMap)
+Component findComponent(QString uuid, QList<Component> componentMap)
 {
-    for (const auto &component: componentMap) {
+    for (Component &component: componentMap) {
         for (Signal &signal : component.getSignalList()) {
             if (signal.getNet().getUuid() == uuid) {
                 return component;
@@ -108,12 +108,11 @@ void writeSubcircuit(QMap<QString, QString> *subcircuits, Component component)
     }
 }
 
-QString getAllSubcircuits(QSet<QString> usedComponents, QMap<QString, Component> componentMap)
+QString getAllSubcircuits(QSet<QString> usedComponents, QList<Component> components)
 {
     QMap<QString, QString> subcircuits;
-    for (const auto &uuid : usedComponents) {
-        Component component = componentMap[uuid];
-        if (component.getValue() == "{{SUBCIRCUIT}}") {
+    for (Component &component : components) {
+        if (usedComponents.contains(component.getUuid()) && component.getValue() == "{{SUBCIRCUIT}}") {
             writeSubcircuit(&subcircuits, component);
         }
     }
@@ -126,7 +125,7 @@ QString getAllSubcircuits(QSet<QString> usedComponents, QMap<QString, Component>
     return result;
 }
 
-QMap<QString, QString> createNetLabelMap(QMap<QString, Net> netMap)
+QMap<QString, QString> createNetLabelMap(QList<Net> netMap)
 {
     QMap<QString, QString> netNumberMap;
     QSet<QString> usersNetLabels;
@@ -165,16 +164,16 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
 
 QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
 {
-    QMap<QString, Component> componentMap = circuit.getComponentMap();
-    QMap<QString, QList<Component>> netComponentsMap = createNetComponentsMap(componentMap);
-    QMap<QString, QString> netLabelMap = createNetLabelMap(circuit.getNetMap());
-    Component component = findComponent(getFirstComponentUuid(netLabelMap), componentMap);
+    QList<Component> components = circuit.getComponents();
+    QMap<QString, QList<Component>> netComponentsMap = createNetComponentsMap(components);
+    QMap<QString, QString> netLabelMap = createNetLabelMap(circuit.getNets());
+    Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
     componentPrinter = ComponentPrinter(netLabelMap);
     QString netlist = writeComponents("", component, netComponentsMap, netLabelMap, &usedComponents);
-    if (!circuit.getModelMap().empty()) {
+    if (!circuit.getModels().empty()) {
         netlist += "\n";
-        for (const auto &model : circuit.getModelMap()) {
+        for (Component &model : circuit.getModels()) {
             netlist += componentPrinter.print(model) + "\n";
         }
     }
@@ -183,9 +182,15 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
                   + createSubcircuitLine(netLabelMap, netComponentsMap)
                  + "\n\n*circuit\n" + netlist + "\n.ENDS\n";
     } else {
-        QString subcircuits = getAllSubcircuits(usedComponents, componentMap);
+        QString subcircuits = getAllSubcircuits(usedComponents, components);
         netlist = subcircuits + netlist;
 
+        if (!circuit.getOutputs().empty()) {
+            netlist += "\n";
+            for(Component &component : circuit.getOutputs()) {
+                netlist += componentPrinter.printOutput(component);
+            }
+        }
         if (!circuit.getTran().getName().isEmpty()) {
             netlist += componentPrinter.print(circuit.getTran());
         }

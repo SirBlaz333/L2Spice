@@ -46,11 +46,8 @@ void Component::setChildProperty(const QString &propertyName, const QString &pro
     } else if (propertyName == "lib_variant") {
         libVariant = property;
     } else if (propertyName == "value") {
-        if (property == "{{MODEL/JJ}}") {
-            elementType = "model";
-        }
-        if (property == "{{TRAN}}") {
-            elementType = "tran";
+        if (specialComponents->contains(property)) {
+            elementType = specialComponents->value(property);
         }
         value = property;
     } else if (propertyName == "lock_assembly") {

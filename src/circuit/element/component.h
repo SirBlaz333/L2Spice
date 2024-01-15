@@ -8,6 +8,11 @@
 #include <QList>
 #include <QMap>
 
+typedef QMap<QString, QString> specialComponentsMap;
+Q_GLOBAL_STATIC(specialComponentsMap,
+                specialComponents,
+                {{"{{MODEL/JJ}}", "model"}, {"{{TRAN}}", "tran"}, {"{{PROBE}}", "probe"}, {"{{METER}}", "meter"}});
+
 class Component : public Element
 {
 private:

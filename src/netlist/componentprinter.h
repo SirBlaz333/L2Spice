@@ -17,6 +17,7 @@ public:
     ~ComponentPrinter();
 
     QString print(Component component, QString parentUUID = QString());
+    QString printOutput(Component component);
 };
 
 #endif // COMPONENTPRINTER_H

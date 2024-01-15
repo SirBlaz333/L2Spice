@@ -22,21 +22,26 @@ void Circuit::addElement(const Element *element)
     }
     if (element->getElementType() == "net") {
         const Net *net = dynamic_cast<const Net *>(element);
-        netMap[net->getUuid()] = *net;
+        nets.append(*net);
         return;
     }
     if (element->getElementType() == "component") {
         const Component *component = dynamic_cast<const Component *>(element);
-        componentMap[component->getUuid()] = *component;
+        components.append(*component);
         return;
     }
     if (element->getElementType() == "model") {
         const Component *component = dynamic_cast<const Component *>(element);
-        modelMap[component->getUuid()] = *component;
+        models.append(*component);
         return;
     }
     if (element->getElementType() == "tran") {
         tran = dynamic_cast<const Component *>(element);
+        return;
+    }
+    if (element->getElementType() == "probe" || element->getElementType() == "meter") {
+        const Component *component = dynamic_cast<const Component *>(element);
+        outputs.append(*component);
         return;
     }
 }
@@ -76,17 +81,22 @@ const Component Circuit::getTran() const
     return *tran;
 }
 
-QMap<QString, Net> Circuit::getNetMap() const
+QList<Net> Circuit::getNets() const
 {
-    return netMap;
+    return nets;
 }
 
-QMap<QString, Component> Circuit::getComponentMap() const
+QList<Component> Circuit::getComponents() const
 {
-    return componentMap;
+    return components;
 }
 
-QMap<QString, Component> Circuit::getModelMap() const
+QList<Component> Circuit::getModels() const
 {
-    return modelMap;
+    return models;
+}
+
+QList<Component> Circuit::getOutputs() const
+{
+    return outputs;
 }

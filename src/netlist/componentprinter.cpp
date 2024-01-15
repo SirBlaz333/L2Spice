@@ -63,3 +63,7 @@ QString ComponentPrinter::print(Component component, QString parentUUID)
     return "";
 }
 
+QString ComponentPrinter::printOutput(Component component)
+{
+    return component.getName() + "\n";
+}
