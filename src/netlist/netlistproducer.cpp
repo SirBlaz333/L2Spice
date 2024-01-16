@@ -15,7 +15,7 @@ NetlistProducer::~NetlistProducer() {}
 
 QString NetlistProducer::writeComponents(QString parentSignalUuid,
                            Component component,
-                           QMap<QString, QList<Component>> netComponentsMap,
+                           QMap<QString, QSet<Component>> netComponentsMap,
                            QMap<QString, QString> netLabelMap,
                            QSet<QString> *usedComponents)
 {
@@ -26,8 +26,8 @@ QString NetlistProducer::writeComponents(QString parentSignalUuid,
     QString result = componentPrinter.print(component, parentSignalUuid).trimmed() + "\n";
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentSignalUuid) {
-            QList<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
-            for (Component &component : componentList) {
+            QSet<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
+            for (const Component &component : componentList) {
                 result += writeComponents(signal.getNet().getUuid(),
                                          component,
                                          netComponentsMap,
@@ -39,15 +39,15 @@ QString NetlistProducer::writeComponents(QString parentSignalUuid,
     return result;
 }
 
-QMap<QString, QList<Component>> createNetComponentsMap(QList<Component> components)
+QMap<QString, QSet<Component>> createNetComponentsMap(QList<Component> components)
 {
-    QMap<QString, QList<Component>> map;
+    QMap<QString, QSet<Component>> map;
     for (Component &component : components) {
         QList<Signal> signalList = component.getSignalList();
         for (Signal &signal : signalList) {
-            QList<Component> componentList = map[signal.getNet().getUuid()];
-            componentList.push_back(component);
-            map[signal.getNet().getUuid()] = componentList;
+            QSet<Component> components = map[signal.getNet().getUuid()];
+            components.insert(component);
+            map[signal.getNet().getUuid()] = components;
         }
     }
     return map;
@@ -66,11 +66,11 @@ Component findComponent(QString uuid, QList<Component> componentMap)
 }
 
 QString createSubcircuitLine(QMap<QString, QString> netNumberMap,
-                             QMap<QString, QList<Component>> netComponentsMap)
+                             QMap<QString, QSet<Component>> netComponentsMap)
 {
     QList<QString> inOutList;
     for (auto const &key : netComponentsMap.keys()) {
-        QList<Component> components = netComponentsMap[key];
+        QSet<Component> components = netComponentsMap[key];
         if (components.size() == 1) {
             inOutList.push_back(netNumberMap[key]);
         }
@@ -165,11 +165,11 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
 QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
 {
     QList<Component> components = circuit.getComponents();
-    QMap<QString, QList<Component>> netComponentsMap = createNetComponentsMap(components);
+    QMap<QString, QSet<Component>> netComponentsMap = createNetComponentsMap(components);
     QMap<QString, QString> netLabelMap = createNetLabelMap(circuit.getNets());
     Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
-    componentPrinter = ComponentPrinter(netLabelMap);
+    componentPrinter = ComponentPrinter(netLabelMap, netComponentsMap);
     QString netlist = writeComponents("", component, netComponentsMap, netLabelMap, &usedComponents);
     if (!circuit.getModels().empty()) {
         netlist += "\n";

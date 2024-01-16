@@ -10,7 +10,7 @@ private:
     ComponentPrinter componentPrinter;
     QString writeComponents(QString parentSignalUuid,
                             Component component,
-                            QMap<QString, QList<Component>> netComponentsMap,
+                            QMap<QString, QSet<Component>> netComponentsMap,
                             QMap<QString, QString> netLabelMap,
                             QSet<QString> *usedComponents);
 

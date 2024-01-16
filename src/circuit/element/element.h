@@ -2,6 +2,7 @@
 #define ELEMENT_H
 
 #include <QString>
+#include <qhashfunctions.h>
 
 class Element
 {
@@ -24,5 +25,13 @@ public:
         return this->uuid == other.uuid && this->name == other.name;
     }
 };
+
+inline size_t qHash(const Element &element, size_t seed) noexcept
+{
+    QtPrivate::QHashCombine hash;
+    seed = hash(seed, element.getName());
+    seed = hash(seed, element.getUuid());
+    return seed;
+}
 
 #endif // ELEMENT_H
