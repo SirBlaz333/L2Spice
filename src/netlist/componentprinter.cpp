@@ -63,14 +63,17 @@ QString ComponentPrinter::print(Component component, QString parentUUID)
     return "";
 }
 
+QString printProbe(Component component, QMap<QString, QString> netLabelMap) {
+    return ".PRINT "
+           + attributeUtils::writeAttributes(component, false) + " "
+           + writeSignal(component.getSignalList().constFirst().getNet().getUuid(), netLabelMap)
+           + "0\n";
+}
+
 QString ComponentPrinter::printOutput(Component component)
 {
     if (component.getElementType() == "probe") {
-        QString result = ".PRINT " + attributeUtils::writeAttributes(component, false) + " ";
-        for (Signal signal : component.getSignalList()) {
-            result += writeSignal(signal.getNet().getUuid(), netLabelMap);
-        }
-        return result + "\n";
+        printProbe(component, netLabelMap);
     }
     return component.getName() + "\n";
 }

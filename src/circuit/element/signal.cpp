@@ -1,6 +1,6 @@
 #include "signal.h"
 
-const Net Signal::getNet()
+const Net Signal::getNet() const
 {
     return *net;
 }

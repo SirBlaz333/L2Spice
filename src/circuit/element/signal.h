@@ -13,7 +13,7 @@ private:
 public:
     Signal();
     ~Signal();
-    const Net getNet();
+    const Net getNet() const;
 
 };
 
