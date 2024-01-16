@@ -24,7 +24,7 @@ QString NetlistProducer::writeComponents(QString parentSignalUuid,
     }
     usedComponents->insert({component.getUuid()});
     QString result = componentPrinter.print(component, parentSignalUuid).trimmed() + "\n";
-    for (Signal signal : component.getSignalList()) {
+    for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentSignalUuid) {
             QList<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
             for (Component &component : componentList) {
@@ -44,7 +44,7 @@ QMap<QString, QList<Component>> createNetComponentsMap(QList<Component> componen
     QMap<QString, QList<Component>> map;
     for (Component &component : components) {
         QList<Signal> signalList = component.getSignalList();
-        for (Signal signal : signalList) {
+        for (Signal &signal : signalList) {
             QList<Component> componentList = map[signal.getNet().getUuid()];
             componentList.push_back(component);
             map[signal.getNet().getUuid()] = componentList;
@@ -77,7 +77,7 @@ QString createSubcircuitLine(QMap<QString, QString> netNumberMap,
     }
     std::sort(inOutList.begin(), inOutList.end());
     QString result;
-    for (QString signalNumber : inOutList) {
+    for (QString &signalNumber : inOutList) {
         result += signalNumber + " ";
     }
     result.chop(1);
