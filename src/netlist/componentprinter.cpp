@@ -110,10 +110,8 @@ QString printMeter(Component component,
             intersection.append(component);
         }
     }
-    if (intersection.size() != 1) {
-        return printNodev(printType, netLabelMap, firstUuid, secondUuid);
-    }
-    if (!device.getValue().isEmpty() && device.getValue() != intersection.first().getName()) {
+    if (intersection.size() != 1
+        || (!device.getValue().isEmpty() && device.getValue() != intersection.first().getName())) {
         return printNodev(printType, netLabelMap, firstUuid, secondUuid);
     }
     return ".PRINT " + printType.getValue() + " " + intersection.first().getName();
