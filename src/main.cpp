@@ -6,11 +6,17 @@
 #include <QFile>
 #include <QSettings>
 
+#include <src/console/consoleapplication.h>
+
 QString initStyles();
 void initSettings();
 
 int main(int argc, char *argv[])
 {
+    if (argc > 1) {
+        ConsoleApplication c(argc, argv);
+        return c.exec();
+    }
     QApplication a(argc, argv);
     MainWindow w;
     a.setStyleSheet(initStyles());
