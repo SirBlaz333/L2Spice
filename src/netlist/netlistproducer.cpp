@@ -22,7 +22,7 @@ QString NetlistProducer::writeComponents(QString parentSignalUuid,
     if (usedComponents->contains(component.getUuid()) || component.getValue() == "GND" || netComponentsMap.empty()) {
         return "";
     }
-    usedComponents->insert({component.getUuid()});
+    usedComponents->insert(component.getUuid());
     QString result = componentPrinter.print(component, parentSignalUuid).trimmed() + "\n";
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentSignalUuid) {
@@ -186,10 +186,7 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
         netlist = subcircuits + netlist;
 
         if (!circuit.getOutputs().empty()) {
-            netlist += "\n";
-            for(Component &component : circuit.getOutputs()) {
-                netlist += componentPrinter.printOutput(component);
-            }
+            netlist += "\n" + componentPrinter.printOutputs(circuit.getOutputs());
         }
         if (!circuit.getTran().getName().isEmpty()) {
             netlist += componentPrinter.print(circuit.getTran());

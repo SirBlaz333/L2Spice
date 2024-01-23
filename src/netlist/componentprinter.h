@@ -12,6 +12,7 @@ class ComponentPrinter
 private:
     QMap<QString, QString> netLabelMap;
     QMap<QString, QSet<Component>> netComponentsMap;
+    QString printOutput(Component component);
 
 public:
     ComponentPrinter();
@@ -20,7 +21,7 @@ public:
     ~ComponentPrinter();
 
     QString print(Component component, QString parentUUID = QString());
-    QString printOutput(Component component);
+    QString printOutputs(QList<Component> components);
 };
 
 #endif // COMPONENTPRINTER_H
