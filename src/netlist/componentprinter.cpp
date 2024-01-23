@@ -65,8 +65,14 @@ QString ComponentPrinter::print(Component component, QString parentUUID)
 }
 
 QString printProbe(Component component, QMap<QString, QString> netLabelMap) {
+    Attribute printType;
+    for (Attribute &attribute : component.getAttributeList()) {
+        if (attribute.getName() == "PRINT_TYPE") {
+            printType = attribute;
+        }
+    }
     return ".PRINT "
-           + attributeUtils::writeAttributes(component, false) + " "
+           + printType.getValue() + " "
            + writeSignal(component.getSignalList().constFirst().getNet().getUuid(), netLabelMap)
            + "0";
 }
@@ -117,8 +123,7 @@ QString printMeter(Component component,
     return ".PRINT " + printType.getValue() + " " + intersection.first().getName();
 }
 
-QString ComponentPrinter::printOutput(Component component)
-{
+QString ComponentPrinter::printOutput(Component component) {
     if (component.getElementType() == "probe") {
         return printProbe(component, netLabelMap) + "\n";
     }
@@ -126,4 +131,32 @@ QString ComponentPrinter::printOutput(Component component)
         return printMeter(component, netLabelMap, netComponentsMap) + "\n";
     }
     return "";
+}
+
+QString ComponentPrinter::printOutputs(QList<Component> components)
+{
+    QMap<QString, QList<Component>> fileOutputsMap;
+    for (Component &component : components) {
+        QString fileName = "";
+        for (Attribute &attribute : component.getAttributeList()) {
+            if (attribute.getName() == "FILENAME") {
+                fileName = attribute.getValue();
+            }
+        }
+        QList<Component> assignedComponents = fileOutputsMap.value(fileName);
+        assignedComponents.append(component);
+        fileOutputsMap.insert(fileName, assignedComponents);
+    }
+    QString result;
+    QList<QString> fileNames = fileOutputsMap.keys();
+    fileNames.sort();
+    for (QString &fileName : fileNames) {
+        if (!fileName.isEmpty()) {
+            result += ".FILE " + fileName + "\n";
+        }
+        for (Component component : fileOutputsMap.value(fileName)) {
+            result += printOutput(component);
+        }
+    }
+    return result;
 }
