@@ -12,6 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->subcircuitNameLineEdit->setEnabled(false);
     ui->subcircuitSaveCheckbox->setEnabled(false);
+    ui->writeOutputOnConsoleCheckbox->setEnabled(true);
+    ui->writeOutputInFilesCheckbox->setEnabled(true);
     ui->josimRadioButton->setChecked(true);
     ui->netlistNameLabel->setProperty("class", "bold");
     ui->libreLabel->setProperty("class", "bold");

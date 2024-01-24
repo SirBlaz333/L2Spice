@@ -88,6 +88,12 @@
           <bool>false</bool>
          </property>
          <widget class="QFrame" name="subcircuitFrame">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>0</height>
+           </size>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_3">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -271,6 +277,12 @@
           </layout>
          </widget>
          <widget class="QFrame" name="outputFrame">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_13">
@@ -368,7 +380,7 @@
               </spacer>
              </item>
              <item>
-              <widget class="QCheckBox" name="writeOutputInConsoleCheckbox">
+              <widget class="QCheckBox" name="writeOutputOnConsoleCheckbox">
                <property name="minimumSize">
                 <size>
                  <width>100</width>
@@ -398,6 +410,12 @@
           </layout>
          </widget>
          <widget class="QFrame" name="versionFrame">
+          <property name="minimumSize">
+           <size>
+            <width>200</width>
+            <height>0</height>
+           </size>
+          </property>
           <layout class="QVBoxLayout" name="verticalLayout_6">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_14">
