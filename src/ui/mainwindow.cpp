@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->subcircuitNameLineEdit->setEnabled(false);
     ui->subcircuitSaveCheckbox->setEnabled(false);
+    ui->josimRadioButton->setChecked(true);
     ui->netlistNameLabel->setProperty("class", "bold");
     ui->libreLabel->setProperty("class", "bold");
     ui->spiceLabel->setProperty("class", "bold");
@@ -22,6 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->clearSpiceButton->setProperty("class", "netlistStateButton");
     ui->convertToSpiceButton->setProperty("class", "conversionButton");
     ui->convertToLibreButton->setProperty("class", "conversionButton");
+    ui->subcircuitFrame->setProperty("class", "conversionParameter");
+    ui->outputFrame->setProperty("class", "conversionParameter");
+    ui->versionFrame->setProperty("class", "conversionParameter");
     connect(ui->convertToSpiceButton, &QPushButton::clicked, this, &MainWindow::convertToSpice);
     connect(ui->convertToLibreButton, &QPushButton::clicked, this, &MainWindow::updateLibrePCB);
     connect(ui->subcircuitCheckBox,&QCheckBox::stateChanged, this,&MainWindow::subcircuitCheckBoxStateChanged);

@@ -202,3 +202,49 @@ QToolButton {
     padding: 0px;
     border-radius: 6px;
 }
+
+QWidget[class="conversionParameter"] {
+    border: 4px black;
+    border-style: none dotted none dotted;
+}
+
+QRadioButton {
+    spacing: 3px;
+}
+
+QRadioButton::indicator {
+    background-color: #FFFFFF;
+    margin: 2px;
+    font: inherit;
+    color: black;
+    width: 14px;
+    height: 14px;
+    padding: 3px;
+    border: 2px solid black;
+    border-radius: 11px;
+}
+
+QRadioButton::indicator:disabled {
+    border: 2px solid #999999;
+}
+
+QRadioButton::indicator:disabled:checked {
+    border: 2px solid #999999;
+    image: url(:/img/grey_circle.png);
+}
+
+QRadioButton::indicator:checked {
+    image: url(:/img/circle.png);
+}
+
+QRadioButton::indicator:unchecked {
+    background-color: #FFFFFF;
+}
+
+QRadioButton::indicator:checked:hover, QRadioButton::indicator:unchecked:hover {
+    border: 2px outset #777777;
+}
+
+QRadioButton::indicator:checked:hover {
+    image: url(:/img/grey_circle.png);
+}
