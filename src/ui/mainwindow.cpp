@@ -16,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->netlistNameLabel->setProperty("class", "bold");
     ui->libreLabel->setProperty("class", "bold");
     ui->spiceLabel->setProperty("class", "bold");
+    ui->subcircuitLabel->setProperty("class", "parameterPanelLabel");
+    ui->outputLabel->setProperty("class", "parameterPanelLabel");
+    ui->simulatorLabel->setProperty("class", "parameterPanelLabel");
     ui->saveLibreButton->setProperty("class", "netlistStateButton");
     ui->refreshLibreButton->setProperty("class", "netlistStateButton");
     ui->clearLibreButton->setProperty("class", "netlistStateButton");
