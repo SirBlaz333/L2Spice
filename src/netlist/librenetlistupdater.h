@@ -1,10 +1,10 @@
-#ifndef NETLISTUPDATER_H
-#define NETLISTUPDATER_H
+#ifndef LIBRENETLISTUPDATER_H
+#define LIBRENETLISTUPDATER_H
 
 #include <QString>
 
 
-class NetlistUpdater
+class LibreNetlistUpdater
 {
 private:
     QString getNewUnit(QString param, QString attribute);
@@ -19,9 +19,9 @@ private:
                    QMap<QString, QString> componentsMap);
     QString removeSubcircuitImports(QString param);
 public:
-    NetlistUpdater();
-    ~NetlistUpdater();
+    LibreNetlistUpdater();
+    ~LibreNetlistUpdater();
     QString updateNetlist(QString textToUpdate, QString oldVersion, QString newVersion);
 };
 
-#endif // NETLISTUPDATER_H
+#endif // LIBRENETLISTUPDATER_H

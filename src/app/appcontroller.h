@@ -4,9 +4,9 @@
 #include "appinternalstorage.h"
 #include "appstate.h"
 
-#include <src/netlist/netlistparser.h>
-#include <src/netlist/netlistproducer.h>
-#include <src/netlist/netlistupdater.h>
+#include <src/netlist/librenetlistparser.h>
+#include <src/netlist/spicenetlistproducer.h>
+#include <src/netlist/librenetlistupdater.h>
 #include <src/file/filemanager.h>
 
 #include <QWidget>
@@ -14,9 +14,9 @@
 class AppController
 {
 private:
-    NetlistParser parser;
-    NetlistProducer producer;
-    NetlistUpdater updater;
+    LibreNetlistParser parser;
+    SpiceNetlistProducer producer;
+    LibreNetlistUpdater updater;
     AppInternalStorage storage;
 
 public:

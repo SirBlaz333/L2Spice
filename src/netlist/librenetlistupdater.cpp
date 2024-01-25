@@ -1,4 +1,4 @@
-#include "netlistupdater.h"
+#include "librenetlistupdater.h"
 #include "src/utils/attributeutils.h"
 #include "src/utils/regexutils.h"
 #include <QList>
@@ -7,9 +7,9 @@
 #include <functional>
 #include <regex>
 
-NetlistUpdater::NetlistUpdater() {}
+LibreNetlistUpdater::LibreNetlistUpdater() {}
 
-NetlistUpdater::~NetlistUpdater() {}
+LibreNetlistUpdater::~LibreNetlistUpdater() {}
 
 QList<QString> split(QString::iterator iterator,
                      QString::iterator end,
@@ -66,7 +66,7 @@ QString getSubString(QRegularExpression* regex, QString input, int captureGroup)
     return regex->match(input).captured(captureGroup);
 }
 
-QString NetlistUpdater::getNewUnit(QString param, QString attribute)
+QString LibreNetlistUpdater::getNewUnit(QString param, QString attribute)
 {
     QString unit = getSubString(RegexUtils::attributeRegex, attribute, 2);
     if (unit == "none") {
@@ -78,7 +78,7 @@ QString NetlistUpdater::getNewUnit(QString param, QString attribute)
     return unitFullPrefix + unitWithoutPrefix;
 }
 
-QString NetlistUpdater::getNewAttribute(QString attribute, QString value, QString unit)
+QString LibreNetlistUpdater::getNewAttribute(QString attribute, QString value, QString unit)
 {
     QRegularExpressionMatch match = RegexUtils::attributeRegex->match(attribute);
     QStringList capturedText = match.capturedTexts();
@@ -87,7 +87,7 @@ QString NetlistUpdater::getNewAttribute(QString attribute, QString value, QStrin
     return attribute;
 }
 
-QMap<QString, QString> NetlistUpdater::getComponents(QString textToUpdate)
+QMap<QString, QString> LibreNetlistUpdater::getComponents(QString textToUpdate)
 {
     QMap<QString, QString> map;
     QRegularExpressionMatchIterator it = RegexUtils::componentRegex->globalMatch(textToUpdate);
@@ -101,7 +101,7 @@ QMap<QString, QString> NetlistUpdater::getComponents(QString textToUpdate)
     return map;
 }
 
-QString NetlistUpdater::updateParameter(QString textToUpdate,
+QString LibreNetlistUpdater::updateParameter(QString textToUpdate,
                                         QString *component,
                                         QString param,
                                         QString attribute)
@@ -115,7 +115,7 @@ QString NetlistUpdater::updateParameter(QString textToUpdate,
     return textToUpdate.replace(oldComponent, *component);
 }
 
-QString NetlistUpdater::update(QString textToUpdate,
+QString LibreNetlistUpdater::update(QString textToUpdate,
                                QString params,
                                QMap<QString, QString> componentsMap)
 {
@@ -143,7 +143,7 @@ QString NetlistUpdater::update(QString textToUpdate,
     return textToUpdate;
 }
 
-QString NetlistUpdater::removeSubcircuitImports(QString param)
+QString LibreNetlistUpdater::removeSubcircuitImports(QString param)
 {
     QRegularExpressionMatchIterator it = RegexUtils::subcircuitRegex->globalMatch(param);
     if (it.hasNext() && it.next().captured(0) == param) {
@@ -155,7 +155,7 @@ QString NetlistUpdater::removeSubcircuitImports(QString param)
     return param;
 }
 
-QString NetlistUpdater::updateNetlist(QString textToUpdate, QString oldParams, QString newParams)
+QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString oldParams, QString newParams)
 {
     newParams = removeSubcircuitImports(newParams);
     oldParams = removeSubcircuitImports(oldParams);

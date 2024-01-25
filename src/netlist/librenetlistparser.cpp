@@ -1,8 +1,8 @@
-#include "netlistparser.h"
+#include "librenetlistparser.h"
 #include "src/utils/characterutils.h"
 #include "src/utils/uuidgenerator.h"
 
-QString NetlistParser::nextWord()
+QString LibreNetlistParser::nextWord()
 {
     if (characterUtils::isQuotes(*currentCharacter)) {
         return nextDataInQuotes();
@@ -15,7 +15,7 @@ QString NetlistParser::nextWord()
     return result;
 }
 
-QString NetlistParser::nextDataInQuotes()
+QString LibreNetlistParser::nextDataInQuotes()
 {
     QString result;
     currentCharacter++; //skip the opening quote.
@@ -27,14 +27,14 @@ QString NetlistParser::nextDataInQuotes()
     return result;
 }
 
-void NetlistParser::parseComponents(QString::iterator last)
+void LibreNetlistParser::parseComponents(QString::iterator last)
 {
     while (currentCharacter < last) {
         parseComponent("", last); // parsing elements in netlist.
     }
 }
 
-void NetlistParser::parseComponent(QString parentUuid,
+void LibreNetlistParser::parseComponent(QString parentUuid,
                                    QString::iterator last)
 {
     while (currentCharacter < last) {
@@ -48,7 +48,7 @@ void NetlistParser::parseComponent(QString parentUuid,
     }
 }
 
-void NetlistParser::parseElement(QString parentUuid,
+void LibreNetlistParser::parseElement(QString parentUuid,
                                  QString::iterator last)
 {
     currentCharacter++;
@@ -82,7 +82,7 @@ void NetlistParser::parseElement(QString parentUuid,
     currentCharacter++;
 }
 
-Element* NetlistParser::createNewElement(QString name, QString uuid)
+Element* LibreNetlistParser::createNewElement(QString name, QString uuid)
 {
     // create pointer to Element's child from the factory.
     QSharedPointer<Element> element = elementFactory[name]();
@@ -97,7 +97,7 @@ Element* NetlistParser::createNewElement(QString name, QString uuid)
     return elementMap[uuid].get();
 }
 
-NetlistParser::NetlistParser()
+LibreNetlistParser::LibreNetlistParser()
 {
     elementFactory["variant"] = []() { return QSharedPointer<Variant>::create(); };
     elementFactory["netclass"] = []() { return QSharedPointer<NetClass>::create(); };
@@ -109,9 +109,9 @@ NetlistParser::NetlistParser()
     elementFactory["device"] = []() { return QSharedPointer<Device>::create(); };
 }
 
-NetlistParser::~NetlistParser() {}
+LibreNetlistParser::~LibreNetlistParser() {}
 
-Circuit NetlistParser::parseLibreNotation(QString input)
+Circuit LibreNetlistParser::parseLibreNotation(QString input)
 {
     elementMap = QMap<QString, QSharedPointer<Element>>();
     currentCharacter = input.begin();

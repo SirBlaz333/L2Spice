@@ -1,12 +1,12 @@
-#ifndef NETLISTPARSER_H
-#define NETLISTPARSER_H
+#ifndef LIBRENETLISTPARSER_H
+#define LIBRENETLISTPARSER_H
 
 #include <QMap>
 #include <QSharedPointer>
 #include <src/circuit/circuit.h>
 #include <src/circuit/element/element.h>
 
-class NetlistParser
+class LibreNetlistParser
 {
 private:
     QMap<QString, std::function<QSharedPointer<Element>()>> elementFactory;
@@ -20,9 +20,9 @@ private:
     Element* createNewElement(QString name, QString uuid);
     void parseElement(QString parentUuid, QString::iterator last);
 public:
-    NetlistParser();
-    ~NetlistParser();
+    LibreNetlistParser();
+    ~LibreNetlistParser();
     Circuit parseLibreNotation(QString input);
 };
 
-#endif // NETLISTPARSER_H
+#endif // LIBRENETLISTPARSER_H

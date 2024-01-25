@@ -1,4 +1,4 @@
-#include "netlistproducer.h"
+#include "spicenetlistproducer.h"
 
 #include <QMap>
 #include <QRegularExpression>
@@ -9,11 +9,11 @@
 #include <src/utils/attributeutils.h>
 #include <src/utils/regexutils.h>
 
-NetlistProducer::NetlistProducer() {}
+SpiceNetlistProducer::SpiceNetlistProducer() {}
 
-NetlistProducer::~NetlistProducer() {}
+SpiceNetlistProducer::~SpiceNetlistProducer() {}
 
-QString NetlistProducer::writeComponents(QString parentSignalUuid,
+QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
                            Component component,
                            QMap<QString, QSet<Component>> netComponentsMap,
                            QMap<QString, QString> netLabelMap,
@@ -162,7 +162,7 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
     return "";
 }
 
-QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params)
+QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params)
 {
     QList<Component> components = circuit.getComponents();
     QMap<QString, QSet<Component>> netComponentsMap = createNetComponentsMap(components);

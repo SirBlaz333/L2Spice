@@ -16,6 +16,9 @@ SOURCES += \
     src/app/appinternalstorage.cpp \
     src/app/conversionparams.cpp \
     src/console/consoleapplication.cpp \
+    src/netlist/librenetlistparser.cpp \
+    src/netlist/librenetlistupdater.cpp \
+    src/netlist/spicenetlistproducer.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowinglabel.cpp \
@@ -29,9 +32,6 @@ SOURCES += \
     src/circuit/element/netclass.cpp \
     src/circuit/element/signal.cpp \
     src/circuit/element/variant.cpp \
-    src/netlist/netlistparser.cpp \
-    src/netlist/netlistproducer.cpp \
-    src/netlist/netlistupdater.cpp \
     src/netlist/componentprinter.cpp \
     src/utils/uuidgenerator.cpp \
     src/utils/attributeutils.cpp \
@@ -45,6 +45,9 @@ HEADERS += \
     src/app/appinternalstorage.h \
     src/app/conversionparams.h \
     src/console/consoleapplication.h \
+    src/netlist/librenetlistparser.h \
+    src/netlist/librenetlistupdater.h \
+    src/netlist/spicenetlistproducer.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/ui/overflowinglabel.h \
@@ -58,9 +61,6 @@ HEADERS += \
     src/circuit/element/netclass.h \
     src/circuit/element/signal.h \
     src/circuit/element/variant.h \
-    src/netlist/netlistparser.h \
-    src/netlist/netlistproducer.h \
-    src/netlist/netlistupdater.h \
     src/netlist/componentprinter.h \
     src/utils/regexutils.h \
     src/utils/uuidgenerator.h \

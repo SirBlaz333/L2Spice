@@ -1,11 +1,11 @@
-#ifndef NETLISTPRODUCER_H
-#define NETLISTPRODUCER_H
+#ifndef SPICENETLISTPRODUCER_H
+#define SPICENETLISTPRODUCER_H
 
 #include "src/netlist/componentprinter.h"
 #include <src/app/conversionparams.h>
 #include <src/circuit/circuit.h>
 
-class NetlistProducer
+class SpiceNetlistProducer
 {
 private:
     ComponentPrinter componentPrinter;
@@ -16,9 +16,9 @@ private:
                             QSet<QString> *usedComponents);
 
 public:
-    NetlistProducer();
-    ~NetlistProducer();
+    SpiceNetlistProducer();
+    ~SpiceNetlistProducer();
     QString produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params);
 };
 
-#endif // NETLISTPRODUCER_H
+#endif // SPICENETLISTPRODUCER_H
