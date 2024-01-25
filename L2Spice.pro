@@ -9,16 +9,17 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/app/conversiondata.cpp \
     src/main.cpp \
     src/app/appcontroller.cpp \
     src/app/appsettings.cpp \
     src/app/appinternalstorage.cpp \
-    src/app/conversionparams.cpp \
     src/console/consoleapplication.cpp \
-    src/netlist/librenetlistparser.cpp \
-    src/netlist/librenetlistupdater.cpp \
-    src/netlist/spicenetlistproducer.cpp \
+    src/conversion/librenetlistparser.cpp \
+    src/conversion/librenetlistupdater.cpp \
+    src/conversion/spicenetlistproducer.cpp \
+    src/conversion/data/conversionparams.cpp \
+    src/conversion/data/conversiondata.cpp \
+    src/conversion/output/componentprinter.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowinglabel.cpp \
@@ -32,22 +33,22 @@ SOURCES += \
     src/circuit/element/netclass.cpp \
     src/circuit/element/signal.cpp \
     src/circuit/element/variant.cpp \
-    src/netlist/componentprinter.cpp \
     src/utils/uuidgenerator.cpp \
     src/utils/attributeutils.cpp \
     src/utils/characterutils.cpp
 
 HEADERS += \
-    src/app/conversiondata.h \
     src/main.h \
     src/app/appcontroller.h \
     src/app/appsettings.h \
     src/app/appinternalstorage.h \
-    src/app/conversionparams.h \
     src/console/consoleapplication.h \
-    src/netlist/librenetlistparser.h \
-    src/netlist/librenetlistupdater.h \
-    src/netlist/spicenetlistproducer.h \
+    src/conversion/librenetlistparser.h \
+    src/conversion/librenetlistupdater.h \
+    src/conversion/spicenetlistproducer.h \
+    src/conversion/data/conversionparams.h \
+    src/conversion/data/conversiondata.h \
+    src/conversion/output/componentprinter.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/ui/overflowinglabel.h \
@@ -61,7 +62,6 @@ HEADERS += \
     src/circuit/element/netclass.h \
     src/circuit/element/signal.h \
     src/circuit/element/variant.h \
-    src/netlist/componentprinter.h \
     src/utils/regexutils.h \
     src/utils/uuidgenerator.h \
     src/utils/attributeutils.h \

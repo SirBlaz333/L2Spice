@@ -2,7 +2,7 @@
 #define APPINTERNALSTORAGE_H
 
 #include <QList>
-#include <src/app/conversiondata.h>
+#include <src/conversion/data/conversiondata.h>
 
 class AppInternalStorage
 {

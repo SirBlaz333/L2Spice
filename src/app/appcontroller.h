@@ -2,11 +2,11 @@
 #define APPCONTROLLER_H
 
 #include "appinternalstorage.h"
-#include "conversiondata.h"
 
-#include <src/netlist/librenetlistparser.h>
-#include <src/netlist/spicenetlistproducer.h>
-#include <src/netlist/librenetlistupdater.h>
+#include <src/conversion/data/conversionparams.h>
+#include <src/conversion/librenetlistparser.h>
+#include <src/conversion/librenetlistupdater.h>
+#include <src/conversion/spicenetlistproducer.h>
 #include <src/file/filemanager.h>
 
 #include <QWidget>

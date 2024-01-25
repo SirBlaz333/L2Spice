@@ -1,8 +1,8 @@
 #ifndef SPICENETLISTPRODUCER_H
 #define SPICENETLISTPRODUCER_H
 
-#include "src/netlist/componentprinter.h"
-#include <src/app/conversionparams.h>
+#include "src/conversion/output/componentprinter.h"
+#include <src/conversion/data/conversionparams.h>
 #include <src/circuit/circuit.h>
 
 class SpiceNetlistProducer
