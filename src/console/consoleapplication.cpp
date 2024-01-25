@@ -53,9 +53,17 @@ int ConsoleApplication::exec()
     QString inputFileName = QString::fromStdString(get_option(args, "-i", "--input"));
     QString outputFileName = QString::fromStdString(get_option(args, "-o", "--output"));
     QString input = fileManager.loadFile(inputFileName);
-    bool isSubcircuit = has_option(args, "-s", "--subcircuit");
+    bool subcircuitStatus = has_option(args, "-s", "--subcircuit");
     QString subcircuitName = QString::fromStdString(get_option(args, "-s", "--subcircuit"));
-    AppState state = appController.convertToSpice(input, isSubcircuit, subcircuitName);
+    bool fileOutput = has_option(args, "-wf", "--without-file");
+    bool consoleOutput = has_option(args, "-wc", "--without-console");
+    int converterVersion = has_option(args, "-j", "--jsim") ? 1 : 0;
+    ConversionParams conversionParams(subcircuitStatus,
+                                      subcircuitName,
+                                      fileOutput,
+                                      consoleOutput,
+                                      converterVersion);
+    AppState state = appController.convertToSpice(input, conversionParams);
     fileManager.save(outputFileName, state.getSpiceNetlist());
     std::cout << "Converted successfully!";
     return 0;

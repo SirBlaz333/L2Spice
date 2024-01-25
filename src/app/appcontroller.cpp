@@ -8,12 +8,11 @@ AppController::AppController() {}
 
 AppController::~AppController() {}
 
-AppState AppController::convertToSpice(QString libreNotation, bool isSubcircuit, QString subcircuitName)
+AppState AppController::convertToSpice(QString libreNotation, ConversionParams &params)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
-        circuit.setSubcircuitStatus(isSubcircuit, subcircuitName);
-        QString spiceNotation = producer.produceSpiceNotationNetlist(circuit);
+        QString spiceNotation = producer.produceSpiceNotationNetlist(circuit, params);
         storage.addElement(libreNotation, spiceNotation);
     }
     return storage.lastElement();

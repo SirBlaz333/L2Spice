@@ -162,7 +162,7 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
     return "";
 }
 
-QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
+QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params)
 {
     QList<Component> components = circuit.getComponents();
     QMap<QString, QSet<Component>> netComponentsMap = createNetComponentsMap(components);
@@ -177,8 +177,8 @@ QString NetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit)
             netlist += componentPrinter.print(model) + "\n";
         }
     }
-    if (circuit.getSubcircuitStatus()) {
-        netlist = ".SUBCKT " + circuit.getName() + " 0 "
+    if (params.getSubcircuitStatus()) {
+        netlist = ".SUBCKT " + params.getSubcircuitName() + " 0 "
                   + createSubcircuitLine(netLabelMap, netComponentsMap)
                  + "\n\n*circuit\n" + netlist + "\n.ENDS\n";
     } else {

@@ -83,9 +83,17 @@ void MainWindow::convertToSpice()
 {
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
-        bool isSubcircuit = ui->subcircuitCheckBox->isChecked();
+        bool subcircuitStatus = ui->subcircuitCheckBox->isChecked();
         QString subcircuitName = ui->subcircuitNameLineEdit->text();
-        AppState node = appController.convertToSpice(libreNotation, isSubcircuit, subcircuitName);
+        bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
+        bool consoleOutput = ui->writeOutputInFilesCheckbox->isChecked();
+        int converterVersion = ui->josimRadioButton->isChecked() ? 1 : 0;
+        ConversionParams conversionParams(subcircuitStatus,
+                                          subcircuitName,
+                                          fileOutput,
+                                          consoleOutput,
+                                          converterVersion);
+        AppState node = appController.convertToSpice(libreNotation, conversionParams);
         if (node.getSpiceNetlist().isEmpty()) {
             showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
             return;

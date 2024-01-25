@@ -22,7 +22,7 @@ private:
 public:
     AppController();
     ~AppController();
-    AppState convertToSpice(QString libreNotation, bool isSubcircuit, QString subcircuitName);
+    AppState convertToSpice(QString libreNotation, ConversionParams &params);
     AppState updateLibre(QString oldLibreNotation, QString newSpiceNotation);
     QString saveSpice(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString saveLibre(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);

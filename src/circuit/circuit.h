@@ -11,8 +11,6 @@ class Circuit
 {
 private:
     bool empty = true;
-    bool isSubcircuit;
-    QString name;
     const Variant* variant;
     const NetClass* netclass;
     const Component* tran = nullptr;
@@ -33,9 +31,6 @@ public:
     QList<Component> getModels() const;
     QList<Component> getOutputs() const;
     void addElement(const Element *element);
-    void setSubcircuitStatus(bool isSubcircuit, QString name);
-    bool getSubcircuitStatus() const;
-    QString getName() const;
 };
 
 #endif // CIRCUIT_H

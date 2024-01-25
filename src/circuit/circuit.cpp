@@ -46,23 +46,6 @@ void Circuit::addElement(const Element *element)
     }
 }
 
-void Circuit::setSubcircuitStatus(bool isSubcircuit, QString name)
-{
-    this->isSubcircuit = isSubcircuit;
-    this->name = name == "" ? "DEFAULT" : name;
-}
-
-
-bool Circuit::getSubcircuitStatus() const
-{
-    return isSubcircuit;
-}
-
-QString Circuit::getName() const
-{
-    return name;
-}
-
 const Variant Circuit::getVariant() const
 {
     return *variant;
