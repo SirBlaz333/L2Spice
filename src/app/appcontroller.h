@@ -2,7 +2,7 @@
 #define APPCONTROLLER_H
 
 #include "appinternalstorage.h"
-#include "appstate.h"
+#include "conversiondata.h"
 
 #include <src/netlist/librenetlistparser.h>
 #include <src/netlist/spicenetlistproducer.h>
@@ -22,15 +22,15 @@ private:
 public:
     AppController();
     ~AppController();
-    AppState convertToSpice(QString libreNotation, ConversionParams &params);
-    AppState updateLibre(QString oldLibreNotation, QString newSpiceNotation);
+    ConversionData convertToSpice(QString libreNotation, ConversionParams &params);
+    ConversionData updateLibre(QString oldLibreNotation, QString newSpiceNotation);
     QString saveSpice(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString saveLibre(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString getOpenFileName(QWidget *parent);
     QString loadFile(QString fileName);
-    AppState previousSave();
-    AppState nextSave();
-    AppState lastSave();
+    ConversionData previousSave();
+    ConversionData nextSave();
+    ConversionData lastSave();
 };
 
 #endif // APPCONTROLLER_H

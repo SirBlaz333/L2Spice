@@ -2,18 +2,18 @@
 #define APPINTERNALSTORAGE_H
 
 #include <QList>
-#include <src/app/appstate.h>
+#include <src/app/conversiondata.h>
 
 class AppInternalStorage
 {
     int counter = 0;
     int currentElement;
-    QList<AppState> storage;
+    QList<ConversionData> storage;
 public:
     void addElement(QString LibrePCBNetlist, QString SpiceNotation);
-    AppState lastElement();
-    AppState nextElement();
-    AppState previousElement();
+    ConversionData lastElement();
+    ConversionData nextElement();
+    ConversionData previousElement();
     AppInternalStorage();
     ~AppInternalStorage();
 };

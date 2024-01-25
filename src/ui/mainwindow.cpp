@@ -93,7 +93,7 @@ void MainWindow::convertToSpice()
                                           fileOutput,
                                           consoleOutput,
                                           converterVersion);
-        AppState node = appController.convertToSpice(libreNotation, conversionParams);
+        ConversionData node = appController.convertToSpice(libreNotation, conversionParams);
         if (node.getSpiceNetlist().isEmpty()) {
             showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
             return;
@@ -118,7 +118,7 @@ void MainWindow::updateLibrePCB()
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-        AppState node = appController.updateLibre(libreNotation, spiceNotation);
+        ConversionData node = appController.updateLibre(libreNotation, spiceNotation);
         ui->notationLibreTextEdit->setPlainText(node.getLibreNetlist());
         ui->netlistNameLabel->setText("Save name: " + node.getName());
     } catch (const std::exception &e) {
@@ -149,7 +149,7 @@ void MainWindow::lastNetlist()
     updateState(appController.lastSave());
 }
 
-void MainWindow::updateState(AppState node)
+void MainWindow::updateState(ConversionData node)
 {
     if (node.isEmpty()) {
         return;

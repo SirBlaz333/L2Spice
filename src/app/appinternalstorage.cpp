@@ -3,7 +3,7 @@
 void AppInternalStorage::addElement(QString LibrePCBNetlist, QString SpiceNotation)
 {
     QString name = "Netlist" + QString::number(counter++);
-    AppState node(name, LibrePCBNetlist, SpiceNotation);
+    ConversionData node(name, LibrePCBNetlist, SpiceNotation);
     storage.push_back(node);
     if (storage.size() > 5) {
         storage.pop_front();
@@ -11,20 +11,20 @@ void AppInternalStorage::addElement(QString LibrePCBNetlist, QString SpiceNotati
     currentElement = storage.size() - 1;
 }
 
-AppState AppInternalStorage::lastElement()
+ConversionData AppInternalStorage::lastElement()
 {
     currentElement = storage.size() - 1;
-    return storage.empty() ? AppState() : storage.last();
+    return storage.empty() ? ConversionData() : storage.last();
 }
 
-AppState AppInternalStorage::nextElement()
+ConversionData AppInternalStorage::nextElement()
 {
-    return currentElement < storage.size() - 1 ? storage[++currentElement] : AppState();
+    return currentElement < storage.size() - 1 ? storage[++currentElement] : ConversionData();
 }
 
-AppState AppInternalStorage::previousElement()
+ConversionData AppInternalStorage::previousElement()
 {
-    return currentElement > 0 ? storage[--currentElement] : AppState();
+    return currentElement > 0 ? storage[--currentElement] : ConversionData();
 }
 
 AppInternalStorage::AppInternalStorage() {}

@@ -44,7 +44,7 @@ private slots:
 private:
     AppController appController;
     Ui::MainWindow *ui;
-    void updateState(AppState node);
+    void updateState(ConversionData node);
     void saveSpiceNetlist(bool forcedFileDialog);
     void saveLibreNetlist(bool forcedFileDialog);
 };

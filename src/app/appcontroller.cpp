@@ -8,7 +8,7 @@ AppController::AppController() {}
 
 AppController::~AppController() {}
 
-AppState AppController::convertToSpice(QString libreNotation, ConversionParams &params)
+ConversionData AppController::convertToSpice(QString libreNotation, ConversionParams &params)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
@@ -18,7 +18,7 @@ AppState AppController::convertToSpice(QString libreNotation, ConversionParams &
     return storage.lastElement();
 }
 
-AppState AppController::updateLibre(QString oldLibreNotation, QString newSpiceNotation)
+ConversionData AppController::updateLibre(QString oldLibreNotation, QString newSpiceNotation)
 {
     QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
     QString newLibreNotation = updater.updateNetlist(oldLibreNotation,
@@ -72,17 +72,17 @@ QString AppController::loadFile(QString fileName)
     return FileManager::loadFile(fileName);
 }
 
-AppState AppController::previousSave()
+ConversionData AppController::previousSave()
 {
     return storage.previousElement();
 }
 
-AppState AppController::nextSave()
+ConversionData AppController::nextSave()
 {
     return storage.nextElement();
 }
 
-AppState AppController::lastSave()
+ConversionData AppController::lastSave()
 {
     return storage.lastElement();
 }
