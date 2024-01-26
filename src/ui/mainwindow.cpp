@@ -86,7 +86,7 @@ void MainWindow::convertToSpice()
         bool subcircuitStatus = ui->subcircuitCheckBox->isChecked();
         QString subcircuitName = ui->subcircuitNameLineEdit->text();
         bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
-        bool consoleOutput = ui->writeOutputInFilesCheckbox->isChecked();
+        bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
         int converterVersion = ui->josimRadioButton->isChecked() ? 1 : 0;
         ConversionParams conversionParams(subcircuitStatus,
                                           subcircuitName,

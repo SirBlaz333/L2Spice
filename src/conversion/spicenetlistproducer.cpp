@@ -181,7 +181,7 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
         QString subcircuits = getAllSubcircuits(usedComponents, components);
         netlist = subcircuits + netlist;
 
-        if (!circuit.getOutputs().empty()) {
+        if (!circuit.getOutputs().empty() && (params.getConsoleOutput() || params.getFileOutput())) {
             netlist += "\n" + printer.printOutputs(circuit.getOutputs());
         }
         if (!circuit.getTran().getName().isEmpty()) {

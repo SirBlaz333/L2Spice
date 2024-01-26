@@ -143,7 +143,10 @@ QString ComponentPrinter::printOutput(Component component) {
 
 QString ComponentPrinter::printOutputs(QList<Component> components)
 {
-    QMap<QString, QList<Component>> fileOutputsMap;
+    if (!params.getConsoleOutput() && !params.getFileOutput()) {
+        return *EMPTY_STRING;
+    }
+    QMap<QString, QList<Component>> outputsMap;
     for (Component &component : components) {
         QString fileName = *EMPTY_STRING;
         for (Attribute &attribute : component.getAttributeList()) {
@@ -151,18 +154,21 @@ QString ComponentPrinter::printOutputs(QList<Component> components)
                 fileName = attribute.getValue();
             }
         }
-        QList<Component> assignedComponents = fileOutputsMap.value(fileName);
+        QList<Component> assignedComponents = outputsMap.value(fileName);
         assignedComponents.append(component);
-        fileOutputsMap.insert(fileName, assignedComponents);
+        outputsMap.insert(fileName, assignedComponents);
+    }
+    if (!params.getConsoleOutput()) {
+        outputsMap.remove(*EMPTY_STRING);
     }
     QString result;
-    QList<QString> fileNames = fileOutputsMap.keys();
+    QList<QString> fileNames = outputsMap.keys();
     fileNames.sort();
     for (QString &fileName : fileNames) {
-        if (!fileName.isEmpty()) {
+        if (!fileName.isEmpty() && params.getFileOutput()) {
             result += ".FILE " + fileName + "\n";
         }
-        for (Component &component : fileOutputsMap.value(fileName)) {
+        for (Component &component : outputsMap.value(fileName)) {
             result += printOutput(component);
         }
     }
