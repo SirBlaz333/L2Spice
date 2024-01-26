@@ -15,24 +15,20 @@ SpiceNetlistProducer::~SpiceNetlistProducer() {}
 
 QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
                            Component component,
+                           ComponentPrinter printer,
                            QMap<QString, QSet<Component>> netComponentsMap,
-                           QMap<QString, QString> netLabelMap,
                            QSet<QString> *usedComponents)
 {
     if (usedComponents->contains(component.getUuid()) || component.getValue() == "GND" || netComponentsMap.empty()) {
         return "";
     }
     usedComponents->insert(component.getUuid());
-    QString result = componentPrinter.print(component, parentSignalUuid).trimmed() + "\n";
+    QString result = printer.print(component, parentSignalUuid).trimmed() + "\n";
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentSignalUuid) {
             QSet<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
             for (const Component &component : componentList) {
-                result += writeComponents(signal.getNet().getUuid(),
-                                         component,
-                                         netComponentsMap,
-                                         netLabelMap,
-                                         usedComponents);
+                result += writeComponents(signal.getNet().getUuid(), component, printer, netComponentsMap, usedComponents);
             }
         }
     }
@@ -169,12 +165,12 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
     QMap<QString, QString> netLabelMap = createNetLabelMap(circuit.getNets());
     Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
-    componentPrinter = ComponentPrinter(netLabelMap, netComponentsMap);
-    QString netlist = writeComponents("", component, netComponentsMap, netLabelMap, &usedComponents);
+    ComponentPrinter printer(netLabelMap, netComponentsMap, params);
+    QString netlist = writeComponents("", component, printer, netComponentsMap, &usedComponents);
     if (!circuit.getModels().empty()) {
         netlist += "\n";
         for (Component &model : circuit.getModels()) {
-            netlist += componentPrinter.print(model) + "\n";
+            netlist += printer.print(model) + "\n";
         }
     }
     if (params.getSubcircuitStatus()) {
@@ -186,10 +182,10 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
         netlist = subcircuits + netlist;
 
         if (!circuit.getOutputs().empty()) {
-            netlist += "\n" + componentPrinter.printOutputs(circuit.getOutputs());
+            netlist += "\n" + printer.printOutputs(circuit.getOutputs());
         }
         if (!circuit.getTran().getName().isEmpty()) {
-            netlist += componentPrinter.print(circuit.getTran());
+            netlist += printer.print(circuit.getTran());
         }
         if (!netlist.trimmed().isEmpty()) {
             netlist += "\n.end";

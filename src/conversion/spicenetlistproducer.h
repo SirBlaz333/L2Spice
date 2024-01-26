@@ -8,11 +8,10 @@
 class SpiceNetlistProducer
 {
 private:
-    ComponentPrinter componentPrinter;
     QString writeComponents(QString parentSignalUuid,
                             Component component,
+                            ComponentPrinter printer,
                             QMap<QString, QSet<Component>> netComponentsMap,
-                            QMap<QString, QString> netLabelMap,
                             QSet<QString> *usedComponents);
 
 public:

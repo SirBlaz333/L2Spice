@@ -1,10 +1,20 @@
 #include "componentprinter.h"
 #include "src/utils/attributeutils.h"
 
+Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
+Q_GLOBAL_STATIC(QString, MODEL, QString(".MODEL %1 %2"));
+Q_GLOBAL_STATIC(QString, TRAN, QString("\n.tran %1"));
+Q_GLOBAL_STATIC(QString, PROBE, QString(".PRINT %1 %2 0\n"));
+Q_GLOBAL_STATIC(QString, METER, QString(".PRINT %1 %2\n"));
+Q_GLOBAL_STATIC(QString, NODEV, QString(".PRINT NODEV %1 %2\n"));
+Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2\n"));
+
 ComponentPrinter::ComponentPrinter(const QMap<QString, QString> &netLabelMap,
-                                   const QMap<QString, QSet<Component> > &netComponentsMap)
+                                   const QMap<QString, QSet<Component> > &netComponentsMap,
+                                   const ConversionParams &params)
     : netLabelMap(netLabelMap)
     , netComponentsMap(netComponentsMap)
+    , params(params)
 {}
 
 ComponentPrinter::ComponentPrinter() {}
@@ -13,7 +23,7 @@ ComponentPrinter::~ComponentPrinter() {}
 
 QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
 {
-    return uuid.isEmpty() || netLabelMap.isEmpty() ? "_ " : netLabelMap[uuid] + " ";
+    return uuid.isEmpty() || netLabelMap.isEmpty() ? "_ " : netLabelMap[uuid];
 }
 
 QString printComponent(Component component, QString parentUUID, QMap<QString, QString> netLabelMap)
@@ -25,11 +35,11 @@ QString printComponent(Component component, QString parentUUID, QMap<QString, QS
         component.removeAttribute(list.first());
     }
     if (!parentUUID.isEmpty()) {
-        result += writeSignal(parentUUID, netLabelMap);
+        result += writeSignal(parentUUID, netLabelMap) + " ";
     }
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentUUID) {
-            result += writeSignal(signal.getNet().getUuid(), netLabelMap);
+            result += writeSignal(signal.getNet().getUuid(), netLabelMap) + " ";
         }
     }
     if (component.getValue() == "VCC") {
@@ -41,12 +51,12 @@ QString printComponent(Component component, QString parentUUID, QMap<QString, QS
 
 QString printModel(Component model)
 {
-    return ".MODEL " + model.getName() + " " + attributeUtils::writeAttributes(model, true);
+    return MODEL->arg(model.getName(), attributeUtils::writeAttributes(model, true));
 }
 
 QString printTran(Component tran)
 {
-    return "\n.tran " + attributeUtils::writeAttributes(tran, false);
+    return TRAN->arg(attributeUtils::writeAttributes(tran, false));
 }
 
 QString ComponentPrinter::print(Component component, QString parentUUID)
@@ -61,7 +71,7 @@ QString ComponentPrinter::print(Component component, QString parentUUID)
     if (elementType == "tran") {
         return printTran(component);
     }
-    return "";
+    return *EMPTY_STRING;
 }
 
 QString printProbe(Component component, QMap<QString, QString> netLabelMap) {
@@ -71,23 +81,21 @@ QString printProbe(Component component, QMap<QString, QString> netLabelMap) {
             printType = attribute;
         }
     }
-    return ".PRINT "
-           + printType.getValue() + " "
-           + writeSignal(component.getSignalList().constFirst().getNet().getUuid(), netLabelMap)
-           + "0";
+    QString signal = writeSignal(component.getSignalList().constFirst().getNet().getUuid(), netLabelMap);
+    return PROBE->arg(printType.getValue(), signal);
 }
 
 
-QString getNodevMode(Attribute printType)
+QString* getNodevMode(Attribute printType)
 {
     if (printType.getValue() == "PHASE") {
-        return ".PRINT NODEP ";
+        return NODEP;
     }
-    return ".PRINT NODEV ";
+    return NODEV;
 }
 
 QString printNodev(Attribute printType, QMap<QString, QString> netLabelMap, QString firstUuid, QString secondUuid) {
-    return getNodevMode(printType) + netLabelMap.value(firstUuid) + " " + netLabelMap.value(secondUuid);
+    return getNodevMode(printType)->arg(netLabelMap.value(firstUuid), netLabelMap.value(secondUuid));
 }
 
 QString printMeter(Component component,
@@ -120,24 +128,24 @@ QString printMeter(Component component,
         || (!device.getValue().isEmpty() && device.getValue() != intersection.first().getName())) {
         return printNodev(printType, netLabelMap, firstUuid, secondUuid);
     }
-    return ".PRINT " + printType.getValue() + " " + intersection.first().getName();
+    return METER->arg(printType.getValue(), intersection.first().getName());
 }
 
 QString ComponentPrinter::printOutput(Component component) {
     if (component.getElementType() == "probe") {
-        return printProbe(component, netLabelMap) + "\n";
+        return printProbe(component, netLabelMap);
     }
     if (component.getElementType() == "meter") {
-        return printMeter(component, netLabelMap, netComponentsMap) + "\n";
+        return printMeter(component, netLabelMap, netComponentsMap);
     }
-    return "";
+    return *EMPTY_STRING;
 }
 
 QString ComponentPrinter::printOutputs(QList<Component> components)
 {
     QMap<QString, QList<Component>> fileOutputsMap;
     for (Component &component : components) {
-        QString fileName = "";
+        QString fileName = *EMPTY_STRING;
         for (Attribute &attribute : component.getAttributeList()) {
             if (attribute.getName() == "FILENAME") {
                 fileName = attribute.getValue();

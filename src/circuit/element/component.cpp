@@ -1,5 +1,10 @@
 #include "component.h"
 
+typedef QMap<QString, QString> specialComponentsMap;
+Q_GLOBAL_STATIC(specialComponentsMap,
+                specialComponents,
+                {{"{{MODEL/JJ}}", "model"}, {"{{TRAN}}", "tran"}, {"{{PROBE}}", "probe"}, {"{{METER}}", "meter"}});
+
 QString Component::getLibComponent() const
 {
     return libComponent;

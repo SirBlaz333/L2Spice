@@ -3,6 +3,13 @@
 
 #include <QRegularExpression>
 
+typedef QMap<QString, QString> prefixesMap;
+
+Q_GLOBAL_STATIC(
+    prefixesMap,
+    prefixes,
+    {{"pico", "p"}, {"nano", "n"}, {"micro", "u"}, {"milli", "m"}, {"kilo", "k"}, {"mega", "meg"}});
+
 QString attributeUtils::getUnitShortPrefix(QString unit)
 {
     for (const auto &key : prefixes->keys()) {

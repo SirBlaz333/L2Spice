@@ -58,7 +58,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void showError(const std::exception &e, QString message)
+void showError(QString message)
 {
     QMessageBox errorMessage;
     errorMessage.setIcon(QMessageBox::Critical);
@@ -109,7 +109,7 @@ void MainWindow::convertToSpice()
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
-        showError(e, "Cannot convert: " + message + "\nLibrePCB circuit is incorrect");
+        showError("Cannot convert: " + message + "\nLibrePCB circuit is incorrect");
     }
 }
 
@@ -124,7 +124,7 @@ void MainWindow::updateLibrePCB()
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
-        showError(e, "Cannot update: " + message);
+        showError("Cannot update: " + message);
     }
 }
 
