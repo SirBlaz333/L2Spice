@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/console/flag.cpp \
     src/main.cpp \
     src/app/appcontroller.cpp \
     src/app/appsettings.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
     src/utils/characterutils.cpp
 
 HEADERS += \
+    src/console/flag.h \
     src/main.h \
     src/app/appcontroller.h \
     src/app/appsettings.h \
