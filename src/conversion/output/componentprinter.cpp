@@ -8,6 +8,9 @@ Q_GLOBAL_STATIC(QString, PROBE, QString(".PRINT %1 %2 0\n"));
 Q_GLOBAL_STATIC(QString, METER, QString(".PRINT %1 %2\n"));
 Q_GLOBAL_STATIC(QString, NODEV, QString(".PRINT NODEV %1 %2\n"));
 Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2\n"));
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
+Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
+Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
 
 ComponentPrinter::ComponentPrinter(const QMap<QString, QString> &netLabelMap,
                                    const QMap<QString, QSet<Component> > &netComponentsMap,
@@ -28,18 +31,18 @@ QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
 
 QString printComponent(Component component, QString parentUUID, QMap<QString, QString> netLabelMap)
 {
-    QString result = component.getName() + " ";
+    QString result = component.getName() + *WORD_SEPARATOR;
     QList<Attribute> list = component.getAttributeList();
     if (component.getValue() == "{{SUBCIRCUIT}}") {
-        result = "X" + list.first().getValue().toUpper() + " " + result;
+        result = SUBCIRCUIT->arg(list.first().getValue().toUpper(), result);
         component.removeAttribute(list.first());
     }
     if (!parentUUID.isEmpty()) {
-        result += writeSignal(parentUUID, netLabelMap) + " ";
+        result += writeSignal(parentUUID, netLabelMap) + *WORD_SEPARATOR;
     }
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentUUID) {
-            result += writeSignal(signal.getNet().getUuid(), netLabelMap) + " ";
+            result += writeSignal(signal.getNet().getUuid(), netLabelMap) + *WORD_SEPARATOR;
         }
     }
     if (component.getValue() == "VCC") {
@@ -166,7 +169,7 @@ QString ComponentPrinter::printOutputs(QList<Component> components)
     fileNames.sort();
     for (QString &fileName : fileNames) {
         if (!fileName.isEmpty() && params.getFileOutput()) {
-            result += ".FILE " + fileName + "\n";
+            result += FILE_OUTPUT->arg(fileName);
         }
         for (Component &component : outputsMap.value(fileName)) {
             result += printOutput(component);

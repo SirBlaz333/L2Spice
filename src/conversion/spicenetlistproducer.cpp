@@ -9,6 +9,17 @@
 #include <src/utils/attributeutils.h>
 #include <src/utils/regexutils.h>
 
+Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
+Q_GLOBAL_STATIC(QString, LINE_SEPARATOR, QString("\n"));
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString(".SUBCKT %1 0 %2\n\n*circuit\n%3\n.ENDS\n"));
+Q_GLOBAL_STATIC(int, ONE_CONNECTION, 1);
+Q_GLOBAL_STATIC(int, CONNECTION_ID_MULTIPLIER, 10);
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT_VALUE, "{{SUBCIRCUIT}}");
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT_NAME, "SUBCIRCUIT_NAME");
+Q_GLOBAL_STATIC(QString, GROUND, QString("GND"));
+Q_GLOBAL_STATIC(QString, GROUND_ID, QString("0"));
+Q_GLOBAL_STATIC(QString, END, QString("\n.end"));
+
 SpiceNetlistProducer::SpiceNetlistProducer() {}
 
 SpiceNetlistProducer::~SpiceNetlistProducer() {}
@@ -19,11 +30,11 @@ QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
                            QMap<QString, QSet<Component>> netComponentsMap,
                            QSet<QString> *usedComponents)
 {
-    if (usedComponents->contains(component.getUuid()) || component.getValue() == "GND" || netComponentsMap.empty()) {
-        return "";
+    if (usedComponents->contains(component.getUuid()) || component.getValue() == *GROUND || netComponentsMap.empty()) {
+        return *EMPTY_STRING;
     }
     usedComponents->insert(component.getUuid());
-    QString result = printer.print(component, parentSignalUuid).trimmed() + "\n";
+    QString result = printer.print(component, parentSignalUuid).trimmed() + *LINE_SEPARATOR;
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentSignalUuid) {
             QSet<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
@@ -61,13 +72,12 @@ Component findComponent(QString uuid, QList<Component> componentMap)
     return Component();
 }
 
-QString createSubcircuitLine(QMap<QString, QString> netNumberMap,
-                             QMap<QString, QSet<Component>> netComponentsMap)
+QString getSubcircuitIO(QMap<QString, QString> netNumberMap, QMap<QString, QSet<Component>> netComponentsMap)
 {
     QList<QString> inOutList;
     for (auto const &key : netComponentsMap.keys()) {
         QSet<Component> components = netComponentsMap[key];
-        if (components.size() == 1) {
+        if (components.size() == *ONE_CONNECTION) {
             inOutList.push_back(netNumberMap[key]);
         }
     }
@@ -97,7 +107,7 @@ void writeSubcircuit(QMap<QString, QString> *subcircuits, QString subcircuitName
 void writeSubcircuit(QMap<QString, QString> *subcircuits, Component component)
 {
     for (Attribute &attribute : component.getAttributeList()) {
-        if (attribute.getName() == "SUBCIRCUIT_NAME") {
+        if (attribute.getName() == *SUBCIRCUIT_NAME) {
             writeSubcircuit(subcircuits, attribute.getValue());
             break;
         }
@@ -108,14 +118,14 @@ QString getAllSubcircuits(QSet<QString> usedComponents, QList<Component> compone
 {
     QMap<QString, QString> subcircuits;
     for (Component &component : components) {
-        if (usedComponents.contains(component.getUuid()) && component.getValue() == "{{SUBCIRCUIT}}") {
+        if (usedComponents.contains(component.getUuid()) && component.getValue() == *SUBCIRCUIT) {
             writeSubcircuit(&subcircuits, component);
         }
     }
     QString result;
     for (const auto &subcircuit : subcircuits) {
         if (!subcircuit.isEmpty()) {
-            result += subcircuit + "\n";
+            result += subcircuit + *LINE_SEPARATOR;
         }
     }
     return result;
@@ -127,8 +137,8 @@ QMap<QString, QString> createNetLabelMap(QList<Net> netMap)
     QSet<QString> usersNetLabels;
     for (const auto &net : netMap) {
         QString name = net.getName();
-        if (name == "GND" || name == "") {
-            netNumberMap.insert(net.getUuid(), "0");
+        if (name == *GROUND || name.isEmpty()) {
+            netNumberMap.insert(net.getUuid(), *GROUND_ID);
         } else if (net.getAutoMode() == false) {
             netNumberMap[net.getUuid()] = net.getName();
             usersNetLabels.insert(net.getName());
@@ -141,7 +151,7 @@ QMap<QString, QString> createNetLabelMap(QList<Net> netMap)
         }
         QString number;
         do {
-            number = QString::number(10 * counter++);
+            number = QString::number(*CONNECTION_ID_MULTIPLIER * counter++);
         } while (usersNetLabels.contains(number));
         netNumberMap[net.getUuid()] = number;
     }
@@ -151,11 +161,11 @@ QMap<QString, QString> createNetLabelMap(QList<Net> netMap)
 QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
 {
     for (const auto &key : netNumberMap.keys()) {
-        if (netNumberMap[key] != "0") {
+        if (netNumberMap[key] != *GROUND_ID) {
             return key;
         }
     }
-    return "";
+    return *EMPTY_STRING;
 }
 
 QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params)
@@ -166,29 +176,28 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
     Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
     ComponentPrinter printer(netLabelMap, netComponentsMap, params);
-    QString netlist = writeComponents("", component, printer, netComponentsMap, &usedComponents);
+    QString netlist = writeComponents(*EMPTY_STRING, component, printer, netComponentsMap, &usedComponents);
     if (!circuit.getModels().empty()) {
-        netlist += "\n";
+        netlist += *LINE_SEPARATOR;
         for (Component &model : circuit.getModels()) {
-            netlist += printer.print(model) + "\n";
+            netlist += printer.print(model) + *LINE_SEPARATOR;
         }
     }
     if (params.getSubcircuitStatus()) {
-        netlist = ".SUBCKT " + params.getSubcircuitName() + " 0 "
-                  + createSubcircuitLine(netLabelMap, netComponentsMap)
-                 + "\n\n*circuit\n" + netlist + "\n.ENDS\n";
+        QString io = getSubcircuitIO(netLabelMap, netComponentsMap);
+        netlist = SUBCIRCUIT->arg(params.getSubcircuitName(), io, netlist);
     } else {
         QString subcircuits = getAllSubcircuits(usedComponents, components);
         netlist = subcircuits + netlist;
 
         if (!circuit.getOutputs().empty() && (params.getConsoleOutput() || params.getFileOutput())) {
-            netlist += "\n" + printer.printOutputs(circuit.getOutputs());
+            netlist += *LINE_SEPARATOR + printer.printOutputs(circuit.getOutputs());
         }
         if (!circuit.getTran().getName().isEmpty()) {
             netlist += printer.print(circuit.getTran());
         }
         if (!netlist.trimmed().isEmpty()) {
-            netlist += "\n.end";
+            netlist += *END;
         }
     }
     return netlist.trimmed();

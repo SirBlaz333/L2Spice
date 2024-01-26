@@ -9,6 +9,8 @@ Q_GLOBAL_STATIC(
     prefixesMap,
     prefixes,
     {{"pico", "p"}, {"nano", "n"}, {"micro", "u"}, {"milli", "m"}, {"kilo", "k"}, {"mega", "meg"}});
+Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
+Q_GLOBAL_STATIC(int, SOURCE_GROUP, 1);
 
 QString attributeUtils::getUnitShortPrefix(QString unit)
 {
@@ -17,7 +19,7 @@ QString attributeUtils::getUnitShortPrefix(QString unit)
             return prefixes->value(key);
         }
     }
-    return "";
+    return *EMPTY_STRING;
 }
 
 QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
@@ -27,12 +29,12 @@ QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
             return key;
         }
     }
-    return "";
+    return *EMPTY_STRING;
 }
 
 QString writeAttribute(Attribute attribute, bool includeName)
 {
-    QString result = includeName ? attribute.getName() + "=" : "";
+    QString result = includeName ? attribute.getName() + "=" : *EMPTY_STRING;
     return result + attribute.getValue() + attributeUtils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
@@ -58,7 +60,7 @@ QString attributeUtils::writeAttributes(Component component, bool includeName)
     QList<Attribute>::iterator end = attributes.end();
     QString sourceType = getSourceType(component.getValue());
     QString attributesLine = writeAttributes(begin, end, includeName);
-    return sourceType == "" ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
+    return sourceType == *EMPTY_STRING ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
 }
 
 QString attributeUtils::getUnitWithoutPrefix(QString unit)
@@ -75,7 +77,7 @@ QString attributeUtils::getSourceType(QString value)
 {
     QRegularExpressionMatch match = RegexUtils::sourceTypeRegex->match(value);
     if (match.hasMatch()) {
-        return match.captured(1);
+        return match.captured(*SOURCE_GROUP);
     }
-    return match.hasMatch() ? match.captured(1) : "";
+    return match.hasMatch() ? match.captured(*SOURCE_GROUP) : *EMPTY_STRING;
 }
