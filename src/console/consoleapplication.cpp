@@ -43,7 +43,7 @@ bool has_option(const std::vector<std::string> &args, const Flag *flag)
 int ConsoleApplication::exec()
 {
     const std::vector<std::string> args(argv + 1, argv + argc);
-    if (argc > 10) {
+    if (argc > 16) {
         throw std::runtime_error("Too many input parameters!");
     }
     if (has_option(args, HELP_FLAG)) {
