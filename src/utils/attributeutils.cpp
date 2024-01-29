@@ -53,16 +53,6 @@ QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iter
     return result;
 }
 
-QString attributeUtils::writeAttributes(Component component, bool includeName)
-{
-    QList<Attribute> attributes = component.getAttributeList();
-    QList<Attribute>::iterator begin = attributes.begin();
-    QList<Attribute>::iterator end = attributes.end();
-    QString sourceType = getSourceType(component.getValue());
-    QString attributesLine = writeAttributes(begin, end, includeName);
-    return sourceType == *EMPTY_STRING ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
-}
-
 QString attributeUtils::writeAttributes(QList<Attribute> attributes, QString value, bool includeName)
 {
     QList<Attribute>::iterator begin = attributes.begin();

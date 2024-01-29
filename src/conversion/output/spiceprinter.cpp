@@ -51,7 +51,7 @@ QString printComponent(Component component, QString parentUUID, QMap<QString, QS
     if (component.getValue() == "VCC") {
         result += "0 ";
     }
-    result += attributeUtils::writeAttributes(component, false);
+    result += attributeUtils::writeAttributes(component.getAttributeList(), component.getValue());
     return result;
 }
 
@@ -73,7 +73,7 @@ QString printTran(Component tran)
             break;
         }
     }
-    return TRAN->arg(attributeUtils::writeAttributes(tran, false));
+    return TRAN->arg(attributeUtils::writeAttributes(tran.getAttributeList()));
 }
 
 QString SpicePrinter::print(Component component, QString parentUUID)
