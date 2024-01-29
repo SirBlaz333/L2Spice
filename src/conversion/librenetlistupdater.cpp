@@ -126,7 +126,7 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
     QString component = componentsMap[name];
     //erase signals;
     QList<QString> signalList = findAllMatches(RegexUtils::signalRegex, component);
-    paramList.erase(paramList.begin(), paramList.begin() + signalList.size());
+    paramList.erase(paramList.constBegin(), paramList.constBegin() + signalList.size());
     //check if the first character in first attribute is a number or not
     //if it is not, that it is a source type and we don't need to modify it for now
     if (!paramList.isEmpty() && RegexUtils::sourceTypesRegex->match(paramList.first()).hasMatch()) {
