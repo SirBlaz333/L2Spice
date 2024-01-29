@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     src/console/flag.cpp \
+    src/conversion/output/spiceprinter.cpp \
     src/main.cpp \
     src/app/appcontroller.cpp \
     src/app/appsettings.cpp \
@@ -20,7 +21,6 @@ SOURCES += \
     src/conversion/spicenetlistproducer.cpp \
     src/conversion/data/conversionparams.cpp \
     src/conversion/data/conversiondata.cpp \
-    src/conversion/output/componentprinter.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowinglabel.cpp \
@@ -40,6 +40,7 @@ SOURCES += \
 
 HEADERS += \
     src/console/flag.h \
+    src/conversion/output/spiceprinter.h \
     src/main.h \
     src/app/appcontroller.h \
     src/app/appsettings.h \
@@ -50,7 +51,6 @@ HEADERS += \
     src/conversion/spicenetlistproducer.h \
     src/conversion/data/conversionparams.h \
     src/conversion/data/conversiondata.h \
-    src/conversion/output/componentprinter.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/ui/overflowinglabel.h \

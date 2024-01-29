@@ -26,7 +26,7 @@ SpiceNetlistProducer::~SpiceNetlistProducer() {}
 
 QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
                            Component component,
-                           ComponentPrinter printer,
+                                              SpicePrinter printer,
                            QMap<QString, QSet<Component>> netComponentsMap,
                            QSet<QString> *usedComponents)
 {
@@ -175,7 +175,7 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
     QMap<QString, QString> netLabelMap = createNetLabelMap(circuit.getNets());
     Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
-    ComponentPrinter printer(netLabelMap, netComponentsMap, params);
+    SpicePrinter printer(netLabelMap, netComponentsMap, params);
     QString netlist = writeComponents(*EMPTY_STRING, component, printer, netComponentsMap, &usedComponents);
     if (!circuit.getModels().empty()) {
         netlist += *LINE_SEPARATOR;

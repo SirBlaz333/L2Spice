@@ -1,5 +1,5 @@
-#ifndef COMPONENTPRINTER_H
-#define COMPONENTPRINTER_H
+#ifndef SPICEPRINTER_H
+#define SPICEPRINTER_H
 
 #include <QString>
 #include <QMap>
@@ -8,7 +8,7 @@
 #include <src/circuit/element/component.h>
 #include <src/conversion/data/conversionparams.h>
 
-class ComponentPrinter
+class SpicePrinter
 {
 private:
     QMap<QString, QString> netLabelMap;
@@ -17,14 +17,14 @@ private:
     QString printOutput(Component component);
 
 public:
-    ComponentPrinter();
-    ComponentPrinter(const QMap<QString, QString> &netLabelMap,
+    SpicePrinter();
+    SpicePrinter(const QMap<QString, QString> &netLabelMap,
                      const QMap<QString, QSet<Component>> &netComponentsMap,
                      const ConversionParams &params);
-    ~ComponentPrinter();
+    ~SpicePrinter();
 
     QString print(Component component, QString parentUUID = QString());
     QString printOutputs(QList<Component> components);
 };
 
-#endif // COMPONENTPRINTER_H
+#endif // SPICEPRINTER_H

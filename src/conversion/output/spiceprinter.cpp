@@ -1,4 +1,4 @@
-#include "componentprinter.h"
+#include "spiceprinter.h"
 #include "src/utils/attributeutils.h"
 
 Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
@@ -12,7 +12,7 @@ Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
 Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
 Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
 
-ComponentPrinter::ComponentPrinter(const QMap<QString, QString> &netLabelMap,
+SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                                    const QMap<QString, QSet<Component> > &netComponentsMap,
                                    const ConversionParams &params)
     : netLabelMap(netLabelMap)
@@ -20,9 +20,9 @@ ComponentPrinter::ComponentPrinter(const QMap<QString, QString> &netLabelMap,
     , params(params)
 {}
 
-ComponentPrinter::ComponentPrinter() {}
+SpicePrinter::SpicePrinter() {}
 
-ComponentPrinter::~ComponentPrinter() {}
+SpicePrinter::~SpicePrinter() {}
 
 QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
 {
@@ -62,7 +62,7 @@ QString printTran(Component tran)
     return TRAN->arg(attributeUtils::writeAttributes(tran, false));
 }
 
-QString ComponentPrinter::print(Component component, QString parentUUID)
+QString SpicePrinter::print(Component component, QString parentUUID)
 {
     QString elementType = component.getElementType();
     if (elementType == "component") {
@@ -134,7 +134,7 @@ QString printMeter(Component component,
     return METER->arg(printType.getValue(), intersection.first().getName());
 }
 
-QString ComponentPrinter::printOutput(Component component) {
+QString SpicePrinter::printOutput(Component component) {
     if (component.getElementType() == "probe") {
         return printProbe(component, netLabelMap);
     }
@@ -144,7 +144,7 @@ QString ComponentPrinter::printOutput(Component component) {
     return *EMPTY_STRING;
 }
 
-QString ComponentPrinter::printOutputs(QList<Component> components)
+QString SpicePrinter::printOutputs(QList<Component> components)
 {
     if (!params.getConsoleOutput() && !params.getFileOutput()) {
         return *EMPTY_STRING;
