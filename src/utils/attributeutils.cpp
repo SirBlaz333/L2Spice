@@ -63,6 +63,15 @@ QString attributeUtils::writeAttributes(Component component, bool includeName)
     return sourceType == *EMPTY_STRING ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
 }
 
+QString attributeUtils::writeAttributes(QList<Attribute> attributes, QString value, bool includeName)
+{
+    QList<Attribute>::iterator begin = attributes.begin();
+    QList<Attribute>::iterator end = attributes.end();
+    QString sourceType = getSourceType(value);
+    QString attributesLine = writeAttributes(begin, end, includeName);
+    return sourceType == *EMPTY_STRING ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
+}
+
 QString attributeUtils::getUnitWithoutPrefix(QString unit)
 {
     for (const auto &key : prefixes->keys()) {

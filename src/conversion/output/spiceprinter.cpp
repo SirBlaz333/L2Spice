@@ -11,6 +11,9 @@ Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2\n"));
 Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
 Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
 Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
+Q_GLOBAL_STATIC(int, JSIM, 0);
+Q_GLOBAL_STATIC(QSet<QString>, JSIM_MODEL_ATTRIBUTES,
+                {"RTYPE", "CCT", "VG", "DELV", "ICON", "R0", "RN", "CAP", "ICRIT"});
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                                    const QMap<QString, QSet<Component> > &netComponentsMap,
@@ -52,13 +55,24 @@ QString printComponent(Component component, QString parentUUID, QMap<QString, QS
     return result;
 }
 
-QString printModel(Component model)
+QString printModel(Component model, bool isJSIM)
 {
-    return MODEL->arg(model.getName(), attributeUtils::writeAttributes(model, true));
+    QList<Attribute> attributes = model.getAttributeList();
+    if(isJSIM) {
+        auto condition = [](Attribute attribute) { return !JSIM_MODEL_ATTRIBUTES->contains(attribute.getName()); };
+        attributes.erase(std::remove_if(attributes.begin(), attributes.end(), condition));
+    }
+    return MODEL->arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
 }
 
 QString printTran(Component tran)
 {
+    for (Attribute &attribute : tran.getAttributeList()) {
+        if (attribute.getName() == "ANALYSIS") {
+            tran.removeAttribute(attribute);
+            break;
+        }
+    }
     return TRAN->arg(attributeUtils::writeAttributes(tran, false));
 }
 
@@ -69,7 +83,7 @@ QString SpicePrinter::print(Component component, QString parentUUID)
         return printComponent(component, parentUUID, netLabelMap);
     }
     if (elementType == "model") {
-        return printModel(component);
+        return printModel(component, params.getConvertorVersion() == *JSIM);
     }
     if (elementType == "tran") {
         return printTran(component);

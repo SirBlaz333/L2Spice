@@ -9,7 +9,8 @@
 namespace attributeUtils {
 QString getUnitShortPrefix(QString unit);
 QString getFullUnitPrefix(QString shortPrefix);
-QString writeAttributes(Component component, bool includeName);
+QString writeAttributes(Component component, bool includeName = false);
+QString writeAttributes(QList<Attribute> attibutes, QString value = QString(), bool includeName = false);
 QString getUnitWithoutPrefix(QString unit);
 QString getSourceType(QString value);
 } // namespace attribute_utils
