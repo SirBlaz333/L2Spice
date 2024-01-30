@@ -11,17 +11,21 @@ namespace RegexUtils {
     Q_GLOBAL_STATIC(QRegularExpression, paramRegex,
                     QRegularExpression(R"((\d*)(\w*))"));
     Q_GLOBAL_STATIC(QRegularExpression, attributeRegex,
-                    QRegularExpression(R"(\(attribute \"\w+\" \(type \w+\) (\(unit (\w+)\)) (\(value \"([\d\w]*)\"\))\))"));
+                    QRegularExpression(R"(\(attribute \"(\w+)\" \(type \w+\) (\(unit (\w+)\)) (\(value \"([\d\w]*)\"\))\))"));
     Q_GLOBAL_STATIC(QRegularExpression, signalRegex,
                     QRegularExpression(R"(\(signal .+? \(net .+?\)\))"));
     Q_GLOBAL_STATIC(QRegularExpression, sourceTypesRegex,
-                    QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP)", QRegularExpression::CaseInsensitiveOption));
+                    QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP|jj)", QRegularExpression::CaseInsensitiveOption));
     Q_GLOBAL_STATIC(QRegularExpression, subcircuitRegex,
                     QRegularExpression(R"(\.SUBCKT (\w+) .+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption));
     Q_GLOBAL_STATIC(QRegularExpression, subcircuitIdentifierRegex,
                     QRegularExpression(R"(^X(\w+))", QRegularExpression::MultilineOption));
     Q_GLOBAL_STATIC(QRegularExpression, sourceTypeRegex,
                     QRegularExpression(R"({{\w+/(\w+)}})"));
+    Q_GLOBAL_STATIC(QRegularExpression, specialDeclaration,
+                    QRegularExpression(R"(\.\w+)"));
+    Q_GLOBAL_STATIC(QRegularExpression, paramWithName,
+                    QRegularExpression(R"((\w+)=(\w+))"));
 };
 
 #endif // REGEXUTILS_H

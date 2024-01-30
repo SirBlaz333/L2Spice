@@ -9,6 +9,8 @@
 
 Q_GLOBAL_STATIC(QString, EMPTY_STRING, "");
 Q_GLOBAL_STATIC(QString, DEFAULT_UNIT, "none");
+Q_GLOBAL_STATIC(QSet<QString>, JSIM_MODEL_ATTRIBUTES,
+                {"RTYPE", "CCT", "VG", "DELV", "ICON", "R0", "RN", "CAP", "ICRIT"});
 
 LibreNetlistUpdater::LibreNetlistUpdater() {}
 
@@ -44,7 +46,7 @@ QList<QString> splitParams(QString::iterator iterator, QString::iterator end){
     return split(iterator, end, [](QChar c) { return c == ' ' || c == '(' || c == ')'; });
 }
 
-QList<QString> findAllMatches(QRegularExpression* regex, QString text)
+QList<QString> findAllMatches(QRegularExpression *regex, QString text)
 {
     QRegularExpressionMatchIterator it = regex->globalMatch(text);
     QList<QString> list;
@@ -53,6 +55,17 @@ QList<QString> findAllMatches(QRegularExpression* regex, QString text)
         list.append(match.captured(0));
     }
     return list;
+}
+
+QString getAttribute(QList<QString> attributes, QString desiredName)
+{
+    for (QString attribute : attributes) {
+        QRegularExpressionMatch match = RegexUtils::attributeRegex->match(attribute);
+        if (match.captured(1) == desiredName) {
+            return match.captured(0);
+        }
+    }
+    return "";
 }
 
 std::string findTextByPattern(const std::string &text, const std::string &pattern)
@@ -71,7 +84,7 @@ QString getSubString(QRegularExpression* regex, QString input, int captureGroup)
 
 QString LibreNetlistUpdater::getNewUnit(QString param, QString attribute)
 {
-    QString unit = getSubString(RegexUtils::attributeRegex, attribute, 2);
+    QString unit = getSubString(RegexUtils::attributeRegex, attribute, 3);
     if (unit == *DEFAULT_UNIT) {
         return unit;
     }
@@ -85,8 +98,8 @@ QString LibreNetlistUpdater::getNewAttribute(QString attribute, QString value, Q
 {
     QRegularExpressionMatch match = RegexUtils::attributeRegex->match(attribute);
     QStringList capturedText = match.capturedTexts();
-    attribute.replace(capturedText.at(1), QString("(unit %1)").arg(unit));
-    attribute.replace(capturedText.at(3), QString("(value \"%1\")").arg(value));
+    attribute.replace(capturedText.at(2), QString("(unit %1)").arg(unit));
+    attribute.replace(capturedText.at(4), QString("(value \"%1\")").arg(value));
     return attribute;
 }
 
@@ -123,7 +136,11 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
                                QMap<QString, QString> componentsMap)
 {
     QList<QString> paramList = splitParams(params.begin(), params.end());
-    QString name = paramList[0];
+    //remove the element if it is .MODEL, .PRINT, etc.
+    if (RegexUtils::specialDeclaration->match(paramList.first()).hasMatch()) {
+        paramList.pop_front();
+    }
+    QString name = paramList.first();
     //remove the name;
     paramList.pop_front();
     QString component = componentsMap[name];
@@ -135,12 +152,17 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
     if (!paramList.isEmpty() && RegexUtils::sourceTypesRegex->match(paramList.first()).hasMatch()) {
         paramList.pop_front();
     }
-    QList<QString> attributeList = findAllMatches(RegexUtils::attributeRegex, component);
+    QList<QString> attributes = findAllMatches(RegexUtils::attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
-        textToUpdate = updateParameter(textToUpdate, &component, paramList[i], attributeList[i]);
+        QRegularExpressionMatch match = RegexUtils::paramWithName->match(paramList[i]);
+        QString value = match.hasMatch() ? match.captured(2) : paramList[i];
+        QString attribute = match.hasMatch() ? getAttribute(attributes, match.captured(1))
+                                             : attributes.first();
+        textToUpdate = updateParameter(textToUpdate, &component, value, attribute);
+        attributes.removeOne(attribute);
     }
-    for (int i = paramList.size(); i < attributeList.size(); i++) {
-        textToUpdate = updateParameter(textToUpdate, &component, *EMPTY_STRING, attributeList[i]);
+    for (QString &attribute : attributes) {
+        textToUpdate = updateParameter(textToUpdate, &component, *EMPTY_STRING, attribute);
     }
 
     return textToUpdate;
@@ -173,7 +195,7 @@ QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString oldPara
         QString oldRow = oldRows[i];
         QString newRow = newRows[i];
         if (oldRow != newRow) {
-            textToUpdate = update(textToUpdate, newRow, componentsMap);
+            textToUpdate = update(textToUpdate, newRow.trimmed(), componentsMap);
         }
         i++;
     }
