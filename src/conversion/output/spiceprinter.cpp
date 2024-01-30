@@ -14,6 +14,11 @@ Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
 Q_GLOBAL_STATIC(int, JSIM, 0);
 Q_GLOBAL_STATIC(QSet<QString>, JSIM_MODEL_ATTRIBUTES,
                 {"RTYPE", "CCT", "VG", "DELV", "ICON", "R0", "RN", "CAP", "ICRIT"});
+Q_GLOBAL_STATIC(QString, CURRENT_WARNING,
+    QString("*WARNING! There is multiple devices are connected to the ammeter %1. The first "
+            "connected device was chose. Specify the device name in the params.\n"));
+Q_GLOBAL_STATIC(QString, CURRENT_ERROR,
+                QString("*ERROR! Ammeter %1 was misplaced. Cannot display of output.\n"));
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                                    const QMap<QString, QSet<Component> > &netComponentsMap,
@@ -111,8 +116,8 @@ QString* getNodevMode(Attribute printType)
     return NODEV;
 }
 
-QString printNodev(Attribute printType, QMap<QString, QString> netLabelMap, QString firstUuid, QString secondUuid) {
-    return getNodevMode(printType)->arg(netLabelMap.value(firstUuid), netLabelMap.value(secondUuid));
+QString printNodev(Attribute printType, QString firstSignal, QString secondSignal) {
+    return getNodevMode(printType)->arg(firstSignal, secondSignal);
 }
 
 QString printMeter(Component component,
@@ -124,6 +129,7 @@ QString printMeter(Component component,
     QSet<Component> first = netComponentsMap.value(firstUuid);
     QSet<Component> second = netComponentsMap.value(secondUuid);
     Attribute device, printType;
+
     for (Attribute &attribute : component.getAttributeList()) {
         if (attribute.getName() == "DEVICE_NAME") {
             device = attribute;
@@ -132,20 +138,40 @@ QString printMeter(Component component,
             printType = attribute;
         }
     }
-    if (first.isEmpty() || second.isEmpty()) {
-        return printNodev(printType, netLabelMap, firstUuid, secondUuid);
-    }
+
     QList<Component> intersection;
     for (const Component &component : first) {
         if (second.contains(component)) {
             intersection.append(component);
         }
     }
-    if (intersection.size() != 1
-        || (!device.getValue().isEmpty() && device.getValue() != intersection.first().getName())) {
-        return printNodev(printType, netLabelMap, firstUuid, secondUuid);
+
+    if (intersection.empty()) {
+        if (printType.getValue() == "DEVI") {
+            return CURRENT_ERROR->arg(component.getName());
+        }
+        return printNodev(printType, netLabelMap[firstUuid], netLabelMap[secondUuid]);
     }
-    return METER->arg(printType.getValue(), intersection.first().getName());
+
+    if (device.getName().isEmpty() && intersection.size() == 1) {
+        return METER->arg(printType.getValue(), intersection.first().getName());
+    }
+
+    auto condition = [&device](const Component &component) {
+        return device.getValue() == component.getName();
+    };
+    bool deviceMatchesComponent = std::any_of(intersection.begin(),intersection.end(), condition);
+
+    if (deviceMatchesComponent) {
+        return METER->arg(printType.getValue(), device.getValue());
+    }
+
+    if (printType.getValue() == "DEVI") {
+        return CURRENT_WARNING->arg(component.getName())
+               + METER->arg(printType.getValue(), intersection.first().getName());
+    }
+
+    return printNodev(printType, netLabelMap[firstUuid], netLabelMap[secondUuid]);
 }
 
 QString SpicePrinter::printOutput(Component component) {
