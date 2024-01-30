@@ -118,7 +118,7 @@ QString getAllSubcircuits(QSet<QString> usedComponents, QList<Component> compone
 {
     QMap<QString, QString> subcircuits;
     for (Component &component : components) {
-        if (usedComponents.contains(component.getUuid()) && component.getValue() == *SUBCIRCUIT) {
+        if (usedComponents.contains(component.getUuid()) && component.getValue() == *SUBCIRCUIT_VALUE) {
             writeSubcircuit(&subcircuits, component);
         }
     }
