@@ -26,6 +26,8 @@ namespace RegexUtils {
                     QRegularExpression(R"(\.\w+)"));
     Q_GLOBAL_STATIC(QRegularExpression, paramWithName,
                     QRegularExpression(R"((\w+)=(\w+))"));
+    Q_GLOBAL_STATIC(QRegularExpression, projectPath,
+                    QRegularExpression(R"(.+[\\|/](\w+)[\\|/]circuit[\\|/]circuit\.lp)"));
 };
 
 #endif // REGEXUTILS_H

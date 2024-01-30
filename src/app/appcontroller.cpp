@@ -2,17 +2,39 @@
 #include "appsettings.h"
 #include "src/utils/regexutils.h"
 
+#include <iomanip>
 #include <src/circuit/circuit.h>
+
+Q_GLOBAL_STATIC(QString, META_LINE, "*Converted %1 from %2 by L2Spice for %3 simulator.\n\n");
 
 AppController::AppController() {}
 
 AppController::~AppController() {}
 
+QString getTime()
+{
+    auto currentTime = std::chrono::system_clock::now();
+    std::time_t currentTimeAsTimeT = std::chrono::system_clock::to_time_t(currentTime);
+    std::tm *currentTimeAsTM = std::localtime(&currentTimeAsTimeT);
+    std::ostringstream oss;
+    oss << std::put_time(currentTimeAsTM, "%Y-%m-%d %H:%M:%S");
+    return QString::fromStdString(oss.str());
+}
+
+QString getMetaInfo(ConversionParams &params, QString source)
+{
+    QString simulator = params.getConvertorVersion() == 1 ? "JoSIM" : "JSIM";
+    QRegularExpressionMatch match = RegexUtils::projectPath->match(source);
+    QString project = match.captured(1);
+    return META_LINE->arg(getTime(), project, simulator);
+}
+
 ConversionData AppController::convertToSpice(QString libreNotation, ConversionParams &params)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
-        QString spiceNotation = producer.produceSpiceNotationNetlist(circuit, params);
+        QString spiceNotation = getMetaInfo(params, currentSource) +
+                                producer.produceSpiceNotationNetlist(circuit, params);
         storage.addElement(libreNotation, spiceNotation);
     }
     return storage.lastElement();
@@ -64,7 +86,8 @@ QString AppController::getOpenFileName(QWidget *parent)
 {
     QString fileExtenstionFilter = "Libre PCB Circuit File (*.lp)";
     QString path = AppSettings::getLibreDir();
-    return FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
+    currentSource = FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
+    return currentSource;
 }
 
 QString AppController::loadFile(QString fileName)
