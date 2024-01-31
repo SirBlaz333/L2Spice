@@ -4,8 +4,8 @@
 #include <QRegularExpression>
 #include <QSet>
 
-#include <src/file/filemanager.h>
 #include <src/app/appsettings.h>
+#include <src/file/filemanager.h>
 #include <src/utils/attributeutils.h>
 #include <src/utils/regexutils.h>
 
@@ -25,12 +25,14 @@ SpiceNetlistProducer::SpiceNetlistProducer() {}
 SpiceNetlistProducer::~SpiceNetlistProducer() {}
 
 QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
-                           Component component,
+                                              Component component,
                                               SpicePrinter printer,
-                           QMap<QString, QSet<Component>> netComponentsMap,
-                           QSet<QString> *usedComponents)
+                                              QMap<QString, QSet<Component>> netComponentsMap,
+                                              QSet<QString> *usedComponents)
 {
-    if (usedComponents->contains(component.getUuid()) || component.getValue() == *GROUND || netComponentsMap.empty()) {
+    if (usedComponents->contains(component.getUuid())
+        || component.getValue() == *GROUND
+        || netComponentsMap.empty()) {
         return *EMPTY_STRING;
     }
     usedComponents->insert(component.getUuid());
@@ -39,7 +41,11 @@ QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
         if (signal.getNet().getUuid() != parentSignalUuid) {
             QSet<Component> componentList = netComponentsMap[signal.getNet().getUuid()];
             for (const Component &component : componentList) {
-                result += writeComponents(signal.getNet().getUuid(), component, printer, netComponentsMap, usedComponents);
+                result += writeComponents(signal.getNet().getUuid(),
+                                          component,
+                                          printer,
+                                          netComponentsMap,
+                                          usedComponents);
             }
         }
     }
@@ -62,7 +68,7 @@ QMap<QString, QSet<Component>> createNetComponentsMap(QList<Component> component
 
 Component findComponent(QString uuid, QList<Component> componentMap)
 {
-    for (Component &component: componentMap) {
+    for (Component &component : componentMap) {
         for (Signal &signal : component.getSignalList()) {
             if (signal.getNet().getUuid() == uuid) {
                 return component;
@@ -72,7 +78,8 @@ Component findComponent(QString uuid, QList<Component> componentMap)
     return Component();
 }
 
-QString getSubcircuitIO(QMap<QString, QString> netNumberMap, QMap<QString, QSet<Component>> netComponentsMap)
+QString getSubcircuitIO(QMap<QString, QString> netNumberMap,
+                        QMap<QString, QSet<Component>> netComponentsMap)
 {
     QList<QString> inOutList;
     for (auto const &key : netComponentsMap.keys()) {
@@ -95,9 +102,11 @@ void writeSubcircuit(QMap<QString, QString> *subcircuits, QString subcircuitName
     if ((*subcircuits).contains(subcircuitName)) {
         return;
     }
-    QString subcircuit = FileManager::loadFile(AppSettings::getSubcircuitDir() + subcircuitName + ".cir");
+    QString subcircuit = FileManager::loadFile(AppSettings::getSubcircuitDir() + subcircuitName
+                                               + ".cir");
     (*subcircuits)[subcircuitName] = subcircuit;
-    QRegularExpressionMatchIterator it = RegexUtils::subcircuitIdentifierRegex->globalMatch(subcircuit);
+    QRegularExpressionMatchIterator it = RegexUtils::subcircuitIdentifierRegex->globalMatch(
+        subcircuit);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         writeSubcircuit(subcircuits, match.captured(1));
@@ -118,7 +127,8 @@ QString getAllSubcircuits(QSet<QString> usedComponents, QList<Component> compone
 {
     QMap<QString, QString> subcircuits;
     for (Component &component : components) {
-        if (usedComponents.contains(component.getUuid()) && component.getValue() == *SUBCIRCUIT_VALUE) {
+        if (usedComponents.contains(component.getUuid())
+            && component.getValue() == *SUBCIRCUIT_VALUE) {
             writeSubcircuit(&subcircuits, component);
         }
     }
@@ -168,7 +178,8 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
     return *EMPTY_STRING;
 }
 
-QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params)
+QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit,
+                                                          const ConversionParams &params)
 {
     QList<Component> components = circuit.getComponents();
     QMap<QString, QSet<Component>> netComponentsMap = createNetComponentsMap(components);
@@ -176,7 +187,11 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
     Component component = findComponent(getFirstComponentUuid(netLabelMap), components);
     QSet<QString> usedComponents;
     SpicePrinter printer(netLabelMap, netComponentsMap, params);
-    QString netlist = writeComponents(*EMPTY_STRING, component, printer, netComponentsMap, &usedComponents);
+    QString netlist = writeComponents(*EMPTY_STRING,
+                                      component,
+                                      printer,
+                                      netComponentsMap,
+                                      &usedComponents);
     if (!circuit.getModels().empty()) {
         netlist += *LINE_SEPARATOR;
         for (Component &model : circuit.getModels()) {

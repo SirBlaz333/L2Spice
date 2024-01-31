@@ -11,7 +11,7 @@ Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2\n"));
 Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
 Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
 Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
-Q_GLOBAL_STATIC(int, JSIM, 0);
+Q_GLOBAL_STATIC(int, JSIM_VERSION, 0);
 Q_GLOBAL_STATIC(QSet<QString>, JSIM_MODEL_ATTRIBUTES,
                 {"RTYPE", "CCT", "VG", "DELV", "ICON", "R0", "RN", "CAP", "ICRIT"});
 Q_GLOBAL_STATIC(QString, CURRENT_WARNING,
@@ -37,7 +37,7 @@ QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
     return uuid.isEmpty() || netLabelMap.isEmpty() ? "_ " : netLabelMap[uuid];
 }
 
-QString printComponent(Component component, QString parentUUID, QMap<QString, QString> netLabelMap)
+QString SpicePrinter::printComponent(Component component, QString parentUUID)
 {
     QString result = component.getName() + *WORD_SEPARATOR;
     QList<Attribute> list = component.getAttributeList();
@@ -60,10 +60,10 @@ QString printComponent(Component component, QString parentUUID, QMap<QString, QS
     return result;
 }
 
-QString printModel(Component model, bool isJSIM)
+QString SpicePrinter::printModel(Component model)
 {
     QList<Attribute> attributes = model.getAttributeList();
-    if(isJSIM) {
+    if(params.getConvertorVersion() == *JSIM_VERSION) {
         auto condition = [](Attribute attribute) { return !JSIM_MODEL_ATTRIBUTES->contains(attribute.getName()); };
         attributes.erase(std::remove_if(attributes.begin(), attributes.end(), condition));
     }
@@ -85,10 +85,10 @@ QString SpicePrinter::print(Component component, QString parentUUID)
 {
     QString elementType = component.getElementType();
     if (elementType == "component") {
-        return printComponent(component, parentUUID, netLabelMap);
+        return printComponent(component, parentUUID);
     }
     if (elementType == "model") {
-        return printModel(component, params.getConvertorVersion() == *JSIM);
+        return printModel(component);
     }
     if (elementType == "tran") {
         return printTran(component);
@@ -96,7 +96,7 @@ QString SpicePrinter::print(Component component, QString parentUUID)
     return *EMPTY_STRING;
 }
 
-QString printProbe(Component component, QMap<QString, QString> netLabelMap) {
+QString SpicePrinter::printProbe(Component component) {
     Attribute printType;
     for (Attribute &attribute : component.getAttributeList()) {
         if (attribute.getName() == "PRINT_TYPE") {
@@ -120,10 +120,7 @@ QString printNodev(Attribute printType, QString firstSignal, QString secondSigna
     return getNodevMode(printType)->arg(firstSignal, secondSignal);
 }
 
-QString printMeter(Component component,
-                   QMap<QString, QString> netLabelMap,
-                   QMap<QString, QSet<Component>> netComponentsMap,
-                   int convertorVersion)
+QString SpicePrinter::printMeter(Component component)
 {
     QString firstUuid = component.getSignalList().constFirst().getNet().getUuid();
     QString secondUuid = component.getSignalList().constLast().getNet().getUuid();
@@ -139,7 +136,7 @@ QString printMeter(Component component,
         if (attribute.getName() == "PRINT_TYPE") {
             printType = attribute;
         }
-        if (attribute.getName() == "CURRENT_MODE" && convertorVersion == 0) {
+        if (attribute.getName() == "CURRENT_MODE" && params.getConvertorVersion() == 0) {
             mode = " " + attribute.getValue();
         }
     }
@@ -181,10 +178,10 @@ QString printMeter(Component component,
 
 QString SpicePrinter::printOutput(Component component) {
     if (component.getElementType() == "probe") {
-        return printProbe(component, netLabelMap);
+        return printProbe(component);
     }
     if (component.getElementType() == "meter") {
-        return printMeter(component, netLabelMap, netComponentsMap, params.getConvertorVersion());
+        return printMeter(component);
     }
     return *EMPTY_STRING;
 }

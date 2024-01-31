@@ -59,7 +59,7 @@ QList<QString> findAllMatches(QRegularExpression *regex, QString text)
 
 QString getAttribute(QList<QString> attributes, QString desiredName)
 {
-    for (QString attribute : attributes) {
+    for (QString &attribute : attributes) {
         QRegularExpressionMatch match = RegexUtils::attributeRegex->match(attribute);
         if (match.captured(1) == desiredName) {
             return match.captured(0);
@@ -118,9 +118,9 @@ QMap<QString, QString> LibreNetlistUpdater::getComponents(QString textToUpdate)
 }
 
 QString LibreNetlistUpdater::updateParameter(QString textToUpdate,
-                                        QString *component,
-                                        QString param,
-                                        QString attribute)
+                                             QString *component,
+                                             QString param,
+                                             QString attribute)
 {
     QString unit = getNewUnit(param, attribute);
     int group = unit == *DEFAULT_UNIT ? 0 : 1;
@@ -132,8 +132,8 @@ QString LibreNetlistUpdater::updateParameter(QString textToUpdate,
 }
 
 QString LibreNetlistUpdater::update(QString textToUpdate,
-                               QString params,
-                               QMap<QString, QString> componentsMap)
+                                    QString params,
+                                    QMap<QString, QString> componentsMap)
 {
     QList<QString> paramList = splitParams(params.begin(), params.end());
     //remove the element if it is .MODEL, .PRINT, etc.
