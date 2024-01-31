@@ -36,14 +36,16 @@ QString FileManager::getSaveFileName(QWidget *parent, QString fileName, QString 
     return path = QDir(path).absoluteFilePath(fileName);;
 }
 
-void FileManager::save(QString fileName, QString data)
+bool FileManager::save(QString fileName, QString data)
 {
     QFile file(fileName);
     if (!fileName.isEmpty() && file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate)) {
         QTextStream stream(&file);
         stream << data;
         file.close();
+        return true;
     }
+    return false;
 }
 
 bool FileManager::confirmSaving(QString fileName, bool fileDialogWasShown)
