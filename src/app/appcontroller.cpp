@@ -29,25 +29,23 @@ QString getMetaInfo(ConversionParams &params, QString source)
     return META_LINE->arg(getTime(), project, simulator);
 }
 
-ConversionData AppController::convertToSpice(QString libreNotation, ConversionParams &params)
+QString AppController::convertToSpice(QString libreNotation, ConversionParams &params)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
         QString spiceNotation = getMetaInfo(params, currentSource) +
                                 producer.produceSpiceNotationNetlist(circuit, params);
-        storage.addElement(libreNotation, spiceNotation);
+        return spiceNotation;
     }
-    return storage.lastElement();
+    return "";
 }
 
-ConversionData AppController::updateLibre(QString oldLibreNotation, QString newSpiceNotation)
+QString AppController::updateLibre(QString oldLibreNotation, QString oldSpiceNotation, QString newSpiceNotation)
 {
-    QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
     QString newLibreNotation = updater.updateNetlist(oldLibreNotation,
                                                      oldSpiceNotation,
                                                      newSpiceNotation);
-    storage.addElement(newLibreNotation, newSpiceNotation);
-    return storage.lastElement();
+    return newLibreNotation;
 }
 
 QString saveFile(QWidget *parent, QString fileName, QString data, QString fileExtensionFilter, QString path, bool forcedFileDialog)
@@ -93,19 +91,4 @@ QString AppController::getOpenFileName(QWidget *parent)
 QString AppController::loadFile(QString fileName)
 {
     return FileManager::loadFile(fileName);
-}
-
-ConversionData AppController::previousSave()
-{
-    return storage.previousElement();
-}
-
-ConversionData AppController::nextSave()
-{
-    return storage.nextElement();
-}
-
-ConversionData AppController::lastSave()
-{
-    return storage.lastElement();
 }

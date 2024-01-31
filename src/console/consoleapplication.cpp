@@ -68,8 +68,8 @@ int ConsoleApplication::exec()
                                       fileOutput,
                                       consoleOutput,
                                       converterVersion);
-    ConversionData state = appController.convertToSpice(input, conversionParams);
-    fileManager.save(outputFileName, state.getSpiceNetlist());
+    QString spiceNetlist = appController.convertToSpice(input, conversionParams);
+    fileManager.save(outputFileName, spiceNetlist);
     std::cout << "Converted successfully!";
     return 0;
 }

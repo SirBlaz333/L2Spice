@@ -28,8 +28,6 @@ SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
     , params(params)
 {}
 
-SpicePrinter::SpicePrinter() {}
-
 SpicePrinter::~SpicePrinter() {}
 
 QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)

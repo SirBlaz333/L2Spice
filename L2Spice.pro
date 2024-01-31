@@ -9,6 +9,7 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/app/appstate.cpp \
     src/console/flag.cpp \
     src/conversion/output/spiceprinter.cpp \
     src/main.cpp \
@@ -20,7 +21,6 @@ SOURCES += \
     src/conversion/librenetlistupdater.cpp \
     src/conversion/spicenetlistproducer.cpp \
     src/conversion/data/conversionparams.cpp \
-    src/conversion/data/conversiondata.cpp \
     src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowinglabel.cpp \
@@ -39,6 +39,7 @@ SOURCES += \
     src/utils/characterutils.cpp
 
 HEADERS += \
+    src/app/appstate.h \
     src/console/flag.h \
     src/conversion/output/spiceprinter.h \
     src/main.h \
@@ -50,7 +51,6 @@ HEADERS += \
     src/conversion/librenetlistupdater.h \
     src/conversion/spicenetlistproducer.h \
     src/conversion/data/conversionparams.h \
-    src/conversion/data/conversiondata.h \
     src/ui/directorydialog.h \
     src/ui/mainwindow.h \
     src/ui/overflowinglabel.h \

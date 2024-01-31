@@ -1,30 +1,44 @@
 #include "appinternalstorage.h"
 
-void AppInternalStorage::addElement(QString LibrePCBNetlist, QString SpiceNotation)
+AppState AppInternalStorage::addElement(QString libreNetlist,
+                                        QString spiceNetlist,
+                                        QString libreSourceFile,
+                                        QString spiceSourceFile)
 {
     QString name = "Netlist" + QString::number(counter++);
-    ConversionData node(name, LibrePCBNetlist, SpiceNotation);
+    AppState node(name, libreNetlist, spiceNetlist, libreSourceFile, spiceSourceFile);
     storage.push_back(node);
     if (storage.size() > 5) {
         storage.pop_front();
     }
-    currentElement = storage.size() - 1;
+    currentElementId = storage.size() - 1;
+    return lastElement();
 }
 
-ConversionData AppInternalStorage::lastElement()
+AppState AppInternalStorage::lastElement()
 {
-    currentElement = storage.size() - 1;
-    return storage.empty() ? ConversionData() : storage.last();
+    currentElementId = storage.size() - 1;
+    return storage.empty() ? AppState() : storage.last();
 }
 
-ConversionData AppInternalStorage::nextElement()
+AppState AppInternalStorage::nextElement()
 {
-    return currentElement < storage.size() - 1 ? storage[++currentElement] : ConversionData();
+    return currentElementId < storage.size() - 1 ? storage[++currentElementId] : AppState();
 }
 
-ConversionData AppInternalStorage::previousElement()
+AppState AppInternalStorage::previousElement()
 {
-    return currentElement > 0 ? storage[--currentElement] : ConversionData();
+    return currentElementId > 0 ? storage[--currentElementId] : AppState();
+}
+
+AppState AppInternalStorage::currentElement()
+{
+    return storage[currentElementId];
+}
+
+void AppInternalStorage::updateCurrentElement(AppState newState)
+{
+    storage[currentElementId] = newState;
 }
 
 AppInternalStorage::AppInternalStorage() {}

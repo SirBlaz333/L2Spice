@@ -23,15 +23,12 @@ private:
 public:
     AppController();
     ~AppController();
-    ConversionData convertToSpice(QString libreNotation, ConversionParams &params);
-    ConversionData updateLibre(QString oldLibreNotation, QString newSpiceNotation);
+    QString convertToSpice(QString libreNotation, ConversionParams &params);
+    QString updateLibre(QString oldLibreNotation, QString oldSpiceNotation, QString newSpiceNotation);
     QString saveSpice(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString saveLibre(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
     QString getOpenFileName(QWidget *parent);
     QString loadFile(QString fileName);
-    ConversionData previousSave();
-    ConversionData nextSave();
-    ConversionData lastSave();
 };
 
 #endif // APPCONTROLLER_H

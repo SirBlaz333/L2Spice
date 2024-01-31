@@ -93,17 +93,18 @@ void MainWindow::convertToSpice()
                                           fileOutput,
                                           consoleOutput,
                                           converterVersion);
-        ConversionData node = appController.convertToSpice(libreNotation, conversionParams);
-        if (node.getSpiceNetlist().isEmpty()) {
+        QString spiceNetlist = appController.convertToSpice(libreNotation, conversionParams);
+        if (spiceNetlist.isEmpty()) {
             showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
             return;
         }
-        ui->notationSpiceTextEdit->setPlainText(node.getSpiceNetlist());
-        ui->netlistNameLabel->setText("Save name: " + node.getName());
+        ui->notationSpiceTextEdit->setPlainText(spiceNetlist);
+        AppState state = generateNewState();
+        ui->netlistNameLabel->setText("Save name: " + state.getName());
         bool subcircuitState = ui->subcircuitCheckBox->isChecked() && ui->subcircuitSaveCheckbox->isChecked();
         if (subcircuitState) {
             subcircuitName = subcircuitName.isEmpty() ? "unnamed.cir" : subcircuitName + ".cir";
-            QString fileName = appController.saveSpice(this, subcircuitName, node.getSpiceNetlist(), false);
+            QString fileName = appController.saveSpice(this, subcircuitName, spiceNetlist, false);
             ui->spiceFileLabel->setText(fileName);
         }
     } catch (const std::exception &e) {
@@ -118,9 +119,11 @@ void MainWindow::updateLibrePCB()
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-        ConversionData node = appController.updateLibre(libreNotation, spiceNotation);
-        ui->notationLibreTextEdit->setPlainText(node.getLibreNetlist());
-        ui->netlistNameLabel->setText("Save name: " + node.getName());
+        QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
+        QString newLibreNotation = appController.updateLibre(libreNotation, oldSpiceNotation, spiceNotation);
+        ui->notationLibreTextEdit->setPlainText(newLibreNotation);
+        AppState state = generateNewState();
+        ui->netlistNameLabel->setText("Save name: " + state.getName());
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
@@ -134,29 +137,39 @@ void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
     ui->subcircuitSaveCheckbox->setEnabled(arg1);
 }
 
+AppState MainWindow::generateNewState()
+{
+    return storage.addElement(ui->notationLibreTextEdit->toPlainText(),
+                              ui->notationSpiceTextEdit->toPlainText(),
+                              ui->libreFileLabel->text(),
+                              ui->spiceFileLabel->text());
+}
+
 void MainWindow::nextNetlist()
 {
-    updateState(appController.nextSave());
+    updateState(storage.nextElement());
 }
 
 void MainWindow::previousNetlist()
 {
-    updateState(appController.previousSave());
+    updateState(storage.previousElement());
 }
 
 void MainWindow::lastNetlist()
 {
-    updateState(appController.lastSave());
+    updateState(storage.lastElement());
 }
 
-void MainWindow::updateState(ConversionData node)
+void MainWindow::updateState(AppState state)
 {
-    if (node.isEmpty()) {
+    if (state.isEmpty()) {
         return;
     }
-    ui->notationLibreTextEdit->setText(node.getLibreNetlist());
-    ui->notationSpiceTextEdit->setText(node.getSpiceNetlist());
-    ui->netlistNameLabel->setText("Save name: " + node.getName());
+    ui->libreFileLabel->setText(state.getLibreSourceFile());
+    ui->spiceFileLabel->setText(state.getSpiceSourceFile());
+    ui->notationLibreTextEdit->setText(state.getLibreNetlist());
+    ui->notationSpiceTextEdit->setText(state.getSpiceNetlist());
+    ui->netlistNameLabel->setText("Save name: " + state.getName());
 }
 
 void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
@@ -167,6 +180,9 @@ void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
                                                   ui->notationSpiceTextEdit->toPlainText(),
                                                   forcedFileDialog);
     ui->spiceFileLabel->setText(newFileName);
+    AppState state = storage.currentElement();
+    state.setSpiceSourceFile(newFileName);
+    storage.updateCurrentElement(state);
 }
 
 void MainWindow::saveSpice()
@@ -192,6 +208,9 @@ void MainWindow::saveLibreNetlist(bool forcedFileDialog)
                                                ui->notationLibreTextEdit->toPlainText(),
                                                forcedFileDialog);
     ui->libreFileLabel->setText(fileName);
+    AppState state = storage.currentElement();
+    state.setLibreSourceFile(fileName);
+    storage.updateCurrentElement(state);
 }
 
 void MainWindow::saveLibre()
