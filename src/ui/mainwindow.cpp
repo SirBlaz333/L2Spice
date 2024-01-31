@@ -1,9 +1,13 @@
 #include "mainwindow.h"
 #include "directorydialog.h"
+#include "qregularexpression.h"
+#include "src/utils/regexutils.h"
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
 #include <QDesktopServices>
+
+#include <src/app/appsettings.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -79,6 +83,41 @@ void showWarning(QString message) {
     warning.exec();
 }
 
+QString saveFile(QWidget *parent,
+                 QString fileName,
+                 QString data,
+                 QString fileExtensionFilter,
+                 QString path,
+                 bool forcedFileDialog)
+{
+    QString newFileName = FileManager::getSaveFileName(parent,
+                                                       fileName,
+                                                       path,
+                                                       fileExtensionFilter,
+                                                       forcedFileDialog);
+    bool fileDialogWasShown = forcedFileDialog || (fileName != newFileName);
+    if (!newFileName.isEmpty() && FileManager::confirmSaving(newFileName, fileDialogWasShown)) {
+        FileManager::save(newFileName, data);
+        return newFileName;
+    }
+    return fileName;
+}
+
+QString saveSpiceFile(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
+{
+    QString dir = AppSettings::getSpiceDir();
+    QRegularExpressionMatch match = RegexUtils::subcircuitRegex->match(data);
+    if (match.hasMatch()) {
+        dir = AppSettings::getSubcircuitDir();
+        QString name = match.captured(1);
+        fileName = dir + "/" + name + ".cir";
+    } else if (fileName.contains(AppSettings::getSubcircuitDir())) {
+        forcedFileDialog = true;
+        fileName = "";
+    }
+    return saveFile(parent, fileName, data, "Circuit File (*.cir)", dir, forcedFileDialog);
+}
+
 void MainWindow::convertToSpice()
 {
     try {
@@ -99,14 +138,14 @@ void MainWindow::convertToSpice()
             return;
         }
         ui->notationSpiceTextEdit->setPlainText(spiceNetlist);
-        AppState state = generateNewState();
-        ui->netlistNameLabel->setText("Save name: " + state.getName());
         bool subcircuitState = ui->subcircuitCheckBox->isChecked() && ui->subcircuitSaveCheckbox->isChecked();
         if (subcircuitState) {
             subcircuitName = subcircuitName.isEmpty() ? "unnamed.cir" : subcircuitName + ".cir";
-            QString fileName = appController.saveSpice(this, subcircuitName, spiceNetlist, false);
+            QString fileName = saveSpiceFile(this, subcircuitName, spiceNetlist, false);
             ui->spiceFileLabel->setText(fileName);
         }
+        AppState state = generateNewState();
+        ui->netlistNameLabel->setText("Save name: " + state.getName());
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
@@ -172,13 +211,15 @@ void MainWindow::updateState(AppState state)
     ui->netlistNameLabel->setText("Save name: " + state.getName());
 }
 
+
+
 void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
 {
     QString fileName = ui->spiceFileLabel->text();
-    QString newFileName = appController.saveSpice(this,
-                                                  fileName,
-                                                  ui->notationSpiceTextEdit->toPlainText(),
-                                                  forcedFileDialog);
+    QString newFileName = saveSpiceFile(this,
+                                    fileName,
+                                    ui->notationSpiceTextEdit->toPlainText(),
+                                    forcedFileDialog);
     ui->spiceFileLabel->setText(newFileName);
     AppState state = storage.currentElement();
     state.setSpiceSourceFile(newFileName);
@@ -203,15 +244,18 @@ void MainWindow::closeSpice()
 
 void MainWindow::saveLibreNetlist(bool forcedFileDialog)
 {
-    QString fileName = appController.saveLibre(this,
-                                               ui->libreFileLabel->text(),
-                                               ui->notationLibreTextEdit->toPlainText(),
-                                               forcedFileDialog);
+    QString fileName = saveFile(this,
+                                ui->libreFileLabel->text(),
+                                ui->notationLibreTextEdit->toPlainText(),
+                                "Libre PCB Circuit File (*.lp)",
+                                AppSettings::getLibreDir(),
+                                forcedFileDialog);
     ui->libreFileLabel->setText(fileName);
     AppState state = storage.currentElement();
     state.setLibreSourceFile(fileName);
     storage.updateCurrentElement(state);
 }
+
 
 void MainWindow::saveLibre()
 {
@@ -232,18 +276,20 @@ void MainWindow::openDirectoryDialog()
 
 void MainWindow::openLibre()
 {
-    QString libreFileName = appController.getOpenFileName(this);
+    QString fileExtenstionFilter = "Libre PCB Circuit File (*.lp)";
+    QString path = AppSettings::getLibreDir();
+    QString libreFileName = FileManager::getOpenFileName(this, path, fileExtenstionFilter);
     if (libreFileName.isEmpty()) {
         return;
     }
-    QString data = appController.loadFile(libreFileName);
+    QString data = FileManager::loadFile(libreFileName);
     ui->notationLibreTextEdit->setText(data);
     ui->libreFileLabel->setText(libreFileName);
 }
 
 void MainWindow::refreshLibre()
 {
-    QString data = appController.loadFile(ui->libreFileLabel->text());
+    QString data = FileManager::loadFile(ui->libreFileLabel->text());
     if (!data.isEmpty()) {
         ui->notationLibreTextEdit->setText(data);
     }
@@ -269,5 +315,5 @@ void MainWindow::openLibreDocumentation()
 
 void MainWindow::loadExample()
 {
-    ui->notationLibreTextEdit->setText(appController.loadFile("example.lp"));
+    ui->notationLibreTextEdit->setText(FileManager::loadFile("example.lp"));
 }

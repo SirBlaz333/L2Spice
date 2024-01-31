@@ -23,10 +23,6 @@ public:
     ~AppController();
     QString convertToSpice(QString libreNotation, ConversionParams &params);
     QString updateLibre(QString oldLibreNotation, QString oldSpiceNotation, QString newSpiceNotation);
-    QString saveSpice(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
-    QString saveLibre(QWidget* parent, QString fileName, QString data, bool forcedFileDialog = false);
-    QString getOpenFileName(QWidget *parent);
-    QString loadFile(QString fileName);
 };
 
 #endif // APPCONTROLLER_H
