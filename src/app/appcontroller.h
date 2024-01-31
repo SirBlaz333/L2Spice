@@ -17,8 +17,6 @@ private:
     LibreNetlistParser parser;
     SpiceNetlistProducer producer;
     LibreNetlistUpdater updater;
-    AppInternalStorage storage;
-    QString currentSource;
 
 public:
     AppController();

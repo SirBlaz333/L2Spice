@@ -5,7 +5,7 @@
 #include <iomanip>
 #include <src/circuit/circuit.h>
 
-Q_GLOBAL_STATIC(QString, META_LINE, "*Converted %1 from %2 by L2Spice for %3 simulator.\n\n");
+Q_GLOBAL_STATIC(QString, META_LINE, "*Converted %1 by L2Spice for %2 simulator.\n\n");
 
 AppController::AppController() {}
 
@@ -21,19 +21,17 @@ QString getTime()
     return QString::fromStdString(oss.str());
 }
 
-QString getMetaInfo(ConversionParams &params, QString source)
+QString getMetaInfo(ConversionParams &params)
 {
     QString simulator = params.getConvertorVersion() == 1 ? "JoSIM" : "JSIM";
-    QRegularExpressionMatch match = RegexUtils::projectPath->match(source);
-    QString project = match.captured(1);
-    return META_LINE->arg(getTime(), project, simulator);
+    return META_LINE->arg(getTime(), simulator);
 }
 
 QString AppController::convertToSpice(QString libreNotation, ConversionParams &params)
 {
     Circuit circuit = parser.parseLibreNotation(libreNotation);
     if (!circuit.isEmpty()) {
-        QString spiceNotation = getMetaInfo(params, currentSource) +
+        QString spiceNotation = getMetaInfo(params) +
                                 producer.produceSpiceNotationNetlist(circuit, params);
         return spiceNotation;
     }
@@ -84,8 +82,7 @@ QString AppController::getOpenFileName(QWidget *parent)
 {
     QString fileExtenstionFilter = "Libre PCB Circuit File (*.lp)";
     QString path = AppSettings::getLibreDir();
-    currentSource = FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
-    return currentSource;
+    return FileManager::getOpenFileName(parent, path, fileExtenstionFilter);
 }
 
 QString AppController::loadFile(QString fileName)
