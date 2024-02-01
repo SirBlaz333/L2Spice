@@ -16,6 +16,11 @@ LibreNetlistUpdater::LibreNetlistUpdater() {}
 
 LibreNetlistUpdater::~LibreNetlistUpdater() {}
 
+void LibreNetlistUpdater::setConvertorVersion(int version)
+{
+    convertorVersion = version;
+}
+
 QList<QString> split(QString::iterator iterator,
                      QString::iterator end,
                      std::function<bool(QChar)> test)
@@ -162,7 +167,10 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
         attributes.removeOne(attribute);
     }
     for (QString &attribute : attributes) {
-        textToUpdate = updateParameter(textToUpdate, &component, *EMPTY_STRING, attribute);
+        if((convertorVersion == 0 && JSIM_MODEL_ATTRIBUTES->contains(attribute)) ||
+            convertorVersion == 1) {
+            textToUpdate = updateParameter(textToUpdate, &component, *EMPTY_STRING, attribute);
+        }
     }
 
     return textToUpdate;

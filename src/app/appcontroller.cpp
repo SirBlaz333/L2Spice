@@ -31,6 +31,7 @@ QString AppController::convertToSpice(QString libreNotation, ConversionParams &p
     if (!circuit.isEmpty()) {
         QString spiceNotation = getMetaInfo(params) +
                                 producer.produceSpiceNotationNetlist(circuit, params);
+        updater.setConvertorVersion(params.getConvertorVersion());
         return spiceNotation;
     }
     return "";
