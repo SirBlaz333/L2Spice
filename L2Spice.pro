@@ -9,22 +9,20 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    src/app/appstate.cpp \
+    src/app/app_controller.cpp \
+    src/app/app_internal_storage.cpp \
+    src/app/app_settings.cpp \
+    src/app/app_state.cpp \
+    src/console/console_app.cpp \
     src/console/flag.cpp \
-    src/conversion/output/spiceprinter.cpp \
+    src/conversion/data/conversion_params.cpp \
+    src/conversion/libre_netlist_parser.cpp \
+    src/conversion/libre_netlist_updater.cpp \
+    src/conversion/output/spice_printer.cpp \
+    src/conversion/spice_netlist_producer.cpp \
+    src/file/file_manager.cpp \
     src/main.cpp \
-    src/app/appcontroller.cpp \
-    src/app/appsettings.cpp \
-    src/app/appinternalstorage.cpp \
-    src/console/consoleapplication.cpp \
-    src/conversion/librenetlistparser.cpp \
-    src/conversion/librenetlistupdater.cpp \
-    src/conversion/spicenetlistproducer.cpp \
-    src/conversion/data/conversionparams.cpp \
-    src/ui/directorydialog.cpp \
     src/ui/mainwindow.cpp \
-    src/ui/overflowinglabel.cpp \
-    src/file/filemanager.cpp \
     src/circuit/circuit.cpp \
     src/circuit/element/attribute.cpp \
     src/circuit/element/component.cpp \
@@ -34,27 +32,28 @@ SOURCES += \
     src/circuit/element/netclass.cpp \
     src/circuit/element/signal.cpp \
     src/circuit/element/variant.cpp \
-    src/utils/uuidgenerator.cpp \
-    src/utils/attributeutils.cpp \
-    src/utils/characterutils.cpp
+    src/ui/overflowing_label.cpp \
+    src/ui/preference_dialog.cpp \
+    src/utils/attribute_utils.cpp \
+    src/utils/character_utils.cpp \
+    src/utils/global_variables.cpp \
+    src/utils/uuid_generator.cpp
 
 HEADERS += \
-    src/app/appstate.h \
+    src/app/app_controller.h \
+    src/app/app_internal_storage.h \
+    src/app/app_settings.h \
+    src/app/app_state.h \
+    src/console/console_app.h \
     src/console/flag.h \
-    src/conversion/output/spiceprinter.h \
+    src/conversion/data/conversion_params.h \
+    src/conversion/libre_netlist_parser.h \
+    src/conversion/libre_netlist_updater.h \
+    src/conversion/output/spice_printer.h \
+    src/conversion/spice_netlist_producer.h \
+    src/file/file_manager.h \
     src/main.h \
-    src/app/appcontroller.h \
-    src/app/appsettings.h \
-    src/app/appinternalstorage.h \
-    src/console/consoleapplication.h \
-    src/conversion/librenetlistparser.h \
-    src/conversion/librenetlistupdater.h \
-    src/conversion/spicenetlistproducer.h \
-    src/conversion/data/conversionparams.h \
-    src/ui/directorydialog.h \
     src/ui/mainwindow.h \
-    src/ui/overflowinglabel.h \
-    src/file/filemanager.h \
     src/circuit/circuit.h \
     src/circuit/element/attribute.h \
     src/circuit/element/component.h \
@@ -64,10 +63,13 @@ HEADERS += \
     src/circuit/element/netclass.h \
     src/circuit/element/signal.h \
     src/circuit/element/variant.h \
-    src/utils/regexutils.h \
-    src/utils/uuidgenerator.h \
-    src/utils/attributeutils.h \
-    src/utils/characterutils.h
+    src/ui/overflowing_label.h \
+    src/ui/preference_dialog.h \
+    src/utils/attribute_utils.h \
+    src/utils/character_utils.h \
+    src/utils/global_variables.h \
+    src/utils/regex_utils.h \
+    src/utils/uuid_generator.h
 
 FORMS += \
     ui/directorydialog.ui \

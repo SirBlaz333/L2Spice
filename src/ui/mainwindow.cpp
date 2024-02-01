@@ -1,13 +1,14 @@
 #include "mainwindow.h"
-#include "directorydialog.h"
+#include "preference_dialog.h"
 #include "qregularexpression.h"
-#include "src/utils/regexutils.h"
+#include "src/utils/regex_utils.h"
+#include "src/utils/global_variables.h"
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
 #include <QDesktopServices>
 
-#include <src/app/appsettings.h>
+#include <src/app/app_settings.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -126,7 +127,8 @@ void MainWindow::convertToSpice()
         QString subcircuitName = ui->subcircuitNameLineEdit->text();
         bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
         bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
-        int converterVersion = ui->josimRadioButton->isChecked() ? 1 : 0;
+        int converterVersion = ui->josimRadioButton->isChecked() ? SIMULATOR_VERSION_JOSIM
+                                                                 : SIMULATOR_VERSION_JSIM;
         ConversionParams conversionParams(subcircuitStatus,
                                           subcircuitName,
                                           fileOutput,

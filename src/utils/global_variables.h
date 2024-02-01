@@ -1,0 +1,10 @@
+#ifndef GLOBAL_VARIABLES_H
+#define GLOBAL_VARIABLES_H
+
+#include <QSet>
+
+extern int SIMULATOR_VERSION_JSIM;
+extern int SIMULATOR_VERSION_JOSIM;
+extern QSet<QString> JSIM_MODEL_ATTRIBUTES;
+
+#endif // GLOBAL_VARIABLES_H

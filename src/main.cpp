@@ -1,4 +1,4 @@
-#include "src/app/appsettings.h"
+#include "src/app/app_settings.h"
 #include "src/ui/mainwindow.h"
 
 #include <QApplication>
@@ -6,7 +6,7 @@
 #include <QFile>
 #include <QSettings>
 
-#include <src/console/consoleapplication.h>
+#include <src/console/console_app.h>
 
 QString initStyles();
 void initSettings();

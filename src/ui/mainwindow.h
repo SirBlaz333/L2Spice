@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QSettings>
 
-#include <src/app/appcontroller.h>
+#include <src/app/app_controller.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
