@@ -14,13 +14,13 @@ Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
 Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
 Q_GLOBAL_STATIC(QString, CURRENT_WARNING,
     QString("\n*WARNING! There are multiple devices connected to the ammeter %1. The first "
-            "connected device was chosen. Specify the device name in the %1 params.\n%2\n"));
+            "connected device was chosen. Specify the device name in the %1 parameters.\n%2\n"));
 Q_GLOBAL_STATIC(QString, CURRENT_ERROR,
                 QString("\n*ERROR! Ammeter %1 was misplaced. Cannot display of output.\n\n"));
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
-                                   const QMap<QString, QSet<Component> > &netComponentsMap,
-                                   const ConversionParams &params)
+                           const QMap<QString, QSet<Component>> &netComponentsMap,
+                           const ConversionParams &params)
     : netLabelMap(netLabelMap)
     , netComponentsMap(netComponentsMap)
     , params(params)
