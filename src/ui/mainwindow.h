@@ -49,8 +49,10 @@ private:
     AppInternalStorage storage;
     AppHeader header;
     Ui::MainWindow *ui;
-    AppState generateNewState();
-    void updateState(AppState node);
+    ConversionParams getConversionParams();
+    void saveSubcircuitIfNeeded(QString subcircuit, ConversionParams params);
+    void saveAndUpdateState();
+    void changeState(AppState node);
     void saveSpiceNetlist(bool forcedFileDialog);
     void saveLibreNetlist(bool forcedFileDialog);
 };

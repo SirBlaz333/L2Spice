@@ -10,15 +10,15 @@
 #include <src/utils/regex_utils.h>
 
 Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
-Q_GLOBAL_STATIC(QString, LINE_SEPARATOR, QString("\n"));
-Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString(".SUBCKT %1 0 %2\n\n*circuit\n%3\n.ENDS\n"));
+Q_GLOBAL_STATIC(QString, LINE_SEPARATOR, QString("<br>"));
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString(".SUBCKT %1 0 %2<br><br>*circuit<br>%3<br>.ENDS<br>"));
 Q_GLOBAL_STATIC(int, ONE_CONNECTION, 1);
 Q_GLOBAL_STATIC(int, CONNECTION_ID_MULTIPLIER, 10);
 Q_GLOBAL_STATIC(QString, SUBCIRCUIT_VALUE, "{{SUBCIRCUIT}}");
 Q_GLOBAL_STATIC(QString, SUBCIRCUIT_NAME, "SUBCIRCUIT_NAME");
 Q_GLOBAL_STATIC(QString, GROUND, QString("GND"));
 Q_GLOBAL_STATIC(QString, GROUND_ID, QString("0"));
-Q_GLOBAL_STATIC(QString, END, QString("\n.end"));
+Q_GLOBAL_STATIC(QString, END, QString(".end"));
 
 SpiceNetlistProducer::SpiceNetlistProducer() {}
 
@@ -209,10 +209,10 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
             netlist += *LINE_SEPARATOR + printer.printOutputs(circuit.getOutputs());
         }
         if (!circuit.getTran().getName().isEmpty()) {
-            netlist += printer.print(circuit.getTran());
+            netlist += *LINE_SEPARATOR + printer.print(circuit.getTran());
         }
         if (!netlist.trimmed().isEmpty()) {
-            netlist += *END;
+            netlist += *LINE_SEPARATOR + *END;
         }
     }
     return netlist.trimmed();

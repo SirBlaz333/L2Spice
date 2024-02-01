@@ -125,36 +125,20 @@ void MainWindow::convertToSpice()
 {
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
-        bool subcircuitStatus = ui->subcircuitCheckBox->isChecked();
-        QString subcircuitName = ui->subcircuitNameLineEdit->text();
-        bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
-        bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
-        int converterVersion = ui->josimRadioButton->isChecked() ? SIMULATOR_VERSION_JOSIM
-                                                                 : SIMULATOR_VERSION_JSIM;
-        ConversionParams conversionParams(subcircuitStatus,
-                                          subcircuitName,
-                                          fileOutput,
-                                          consoleOutput,
-                                          converterVersion);
-        QString spiceNetlist = header.getHeader(conversionParams, ui->libreFileLabel->text()) +
-                               appController.convertToSpice(libreNotation, conversionParams);
+        ConversionParams params = getConversionParams();
+        QString spiceNetlist = appController.convertToSpice(libreNotation, params);
         if (spiceNetlist.isEmpty()) {
             showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
             return;
         }
-        ui->notationSpiceTextEdit->setPlainText(spiceNetlist);
-        bool subcircuitState = ui->subcircuitCheckBox->isChecked() && ui->subcircuitSaveCheckbox->isChecked();
-        if (subcircuitState) {
-            subcircuitName = subcircuitName.isEmpty() ? "unnamed.cir" : subcircuitName + ".cir";
-            QString fileName = saveSpiceFile(this, subcircuitName, spiceNetlist, false);
-            ui->spiceFileLabel->setText(fileName);
-        }
-        AppState state = generateNewState();
-        ui->netlistNameLabel->setText("Save name: " + state.getName());
+        spiceNetlist = header.getHeader(params, ui->libreFileLabel->text()) + spiceNetlist;
+        ui->notationSpiceTextEdit->setHtml(spiceNetlist);
+        saveSubcircuitIfNeeded(spiceNetlist, params);
+        saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
-        showError("Cannot convert: " + message + "\nLibrePCB circuit is incorrect");
+        showError("Cannot convert: " + message + "<br>LibrePCB circuit is incorrect");
     }
 }
 
@@ -166,13 +150,47 @@ void MainWindow::updateLibrePCB()
         QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
         QString newLibreNotation = appController.updateLibre(libreNotation, oldSpiceNotation, spiceNotation);
         ui->notationLibreTextEdit->setPlainText(newLibreNotation);
-        AppState state = generateNewState();
-        ui->netlistNameLabel->setText("Save name: " + state.getName());
+        saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
         qDebug() << message;
         showError("Cannot update: " + message);
     }
+}
+
+ConversionParams MainWindow::getConversionParams()
+{
+    bool subcircuitStatus = ui->subcircuitCheckBox->isChecked();
+    QString subcircuitName = ui->subcircuitNameLineEdit->text();
+    bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
+    bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
+    int converterVersion = ui->josimRadioButton->isChecked() ? SIMULATOR_VERSION_JOSIM
+                                                             : SIMULATOR_VERSION_JSIM;
+    return ConversionParams(subcircuitStatus,
+                            subcircuitName,
+                            fileOutput,
+                            consoleOutput,
+                            converterVersion);
+}
+
+void MainWindow::saveSubcircuitIfNeeded(QString subcircuit, ConversionParams params)
+{
+    QString subcircuitName = params.getSubcircuitName();
+    bool saveSubcircuit = ui->subcircuitCheckBox->isChecked()
+                          && ui->subcircuitSaveCheckbox->isChecked();
+    if (saveSubcircuit) {
+        subcircuitName = subcircuitName.isEmpty() ? "unnamed.cir" : subcircuitName + ".cir";
+        QString fileName = saveSpiceFile(this, subcircuitName, subcircuit, false);
+        ui->spiceFileLabel->setText(fileName);
+    }
+}
+
+void MainWindow::saveAndUpdateState() {
+    AppState state = storage.addElement(ui->notationLibreTextEdit->toPlainText(),
+                                        ui->notationSpiceTextEdit->toPlainText(),
+                                        ui->libreFileLabel->text(),
+                                        ui->spiceFileLabel->text());
+    ui->netlistNameLabel->setText("Save name: " + state.getName());
 }
 
 void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
@@ -181,30 +199,22 @@ void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
     ui->subcircuitSaveCheckbox->setEnabled(arg1);
 }
 
-AppState MainWindow::generateNewState()
-{
-    return storage.addElement(ui->notationLibreTextEdit->toPlainText(),
-                              ui->notationSpiceTextEdit->toPlainText(),
-                              ui->libreFileLabel->text(),
-                              ui->spiceFileLabel->text());
-}
-
 void MainWindow::nextNetlist()
 {
-    updateState(storage.nextElement());
+    changeState(storage.nextElement());
 }
 
 void MainWindow::previousNetlist()
 {
-    updateState(storage.previousElement());
+    changeState(storage.previousElement());
 }
 
 void MainWindow::lastNetlist()
 {
-    updateState(storage.lastElement());
+    changeState(storage.lastElement());
 }
 
-void MainWindow::updateState(AppState state)
+void MainWindow::changeState(AppState state)
 {
     if (state.isEmpty()) {
         return;
