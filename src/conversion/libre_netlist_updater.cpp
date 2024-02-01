@@ -201,7 +201,7 @@ QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString oldPara
     while (i < oldRows.size()) {
         QString oldRow = oldRows[i];
         QString newRow = newRows[i];
-        if (oldRow != newRow) {
+        if (!newRow.startsWith("*") && oldRow != newRow) {
             textToUpdate = update(textToUpdate, newRow.trimmed(), componentsMap);
         }
         i++;

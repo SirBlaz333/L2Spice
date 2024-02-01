@@ -3,20 +3,21 @@
 #include "src/utils/global_variables.h"
 
 Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
-Q_GLOBAL_STATIC(QString, MODEL, QString(".MODEL %1 %2"));
-Q_GLOBAL_STATIC(QString, TRAN, QString("\n.tran %1"));
-Q_GLOBAL_STATIC(QString, PROBE, QString(".PRINT %1 %2 0\n"));
-Q_GLOBAL_STATIC(QString, METER, QString(".PRINT %1 %2\n"));
-Q_GLOBAL_STATIC(QString, NODEV, QString(".PRINT NODEV %1 %2\n"));
-Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2\n"));
-Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
-Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1\n"));
+Q_GLOBAL_STATIC(QString, LINE_SEPARATOR, QString("<br>"));
 Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
+Q_GLOBAL_STATIC(QString, MODEL, QString(".MODEL %1 %2"));
+Q_GLOBAL_STATIC(QString, TRAN, QString(".tran %1"));
+Q_GLOBAL_STATIC(QString, PROBE, QString(".PRINT %1 %2 0"));
+Q_GLOBAL_STATIC(QString, METER, QString(".PRINT %1 %2"));
+Q_GLOBAL_STATIC(QString, NODEV, QString(".PRINT NODEV %1 %2"));
+Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2"));
+Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
+Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1"));
 Q_GLOBAL_STATIC(QString, CURRENT_WARNING,
-    QString("\n*WARNING! There are multiple devices connected to the ammeter %1. The first "
-            "connected device was chosen. Specify the device name in the %1 parameters.\n%2\n"));
+    QString("<br><b style=\"color:orange\">*WARNING! There are multiple devices connected to the ammeter %1. The first "
+            "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>"));
 Q_GLOBAL_STATIC(QString, CURRENT_ERROR,
-                QString("\n*ERROR! Ammeter %1 was misplaced. Cannot display of output.\n\n"));
+                QString("<br><b style=\"color:red\">*ERROR! Ammeter %1 was misplaced. Cannot display of output.</b><br>"));
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                            const QMap<QString, QSet<Component>> &netComponentsMap,
@@ -207,10 +208,10 @@ QString SpicePrinter::printOutputs(QList<Component> components)
     fileNames.sort();
     for (QString &fileName : fileNames) {
         if (!fileName.isEmpty() && params.getFileOutput()) {
-            result += FILE_OUTPUT->arg(fileName);
+            result += FILE_OUTPUT->arg(fileName) + *LINE_SEPARATOR;
         }
         for (Component &component : outputsMap.value(fileName)) {
-            result += printOutput(component);
+            result += printOutput(component) + *LINE_SEPARATOR;
         }
     }
     return result;

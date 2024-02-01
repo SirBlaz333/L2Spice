@@ -10,7 +10,7 @@
 
 Q_GLOBAL_STATIC(QString, UNKNOWN_NAME, "UNKNOWN");
 Q_GLOBAL_STATIC(QString, HEADER_LINE,
-                "*Converted %1 from the \"%2\" LibrePCB project by L2Spice for %3 simulator.\n\n");
+                "<header><b>*Converted %1 from the \"%2\" LibrePCB project by L2Spice for %3 simulator.</b><header><br><br>");
 
 AppHeader::AppHeader() {}
 
