@@ -5,6 +5,9 @@
 #include <QSettings>
 
 #include <src/app/app_controller.h>
+#include <src/app/app_internal_storage.h>
+
+#include <src/app/app_header.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -44,6 +47,7 @@ private slots:
 private:
     AppController appController;
     AppInternalStorage storage;
+    AppHeader header;
     Ui::MainWindow *ui;
     AppState generateNewState();
     void updateState(AppState node);

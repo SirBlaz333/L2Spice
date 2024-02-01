@@ -10,6 +10,8 @@
 
 #include <src/app/app_settings.h>
 
+#include <src/file/file_manager.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -134,7 +136,8 @@ void MainWindow::convertToSpice()
                                           fileOutput,
                                           consoleOutput,
                                           converterVersion);
-        QString spiceNetlist = appController.convertToSpice(libreNotation, conversionParams);
+        QString spiceNetlist = header.getHeader(conversionParams, ui->libreFileLabel->text()) +
+                               appController.convertToSpice(libreNotation, conversionParams);
         if (spiceNetlist.isEmpty()) {
             showWarning("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
             return;
