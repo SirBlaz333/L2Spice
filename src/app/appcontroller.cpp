@@ -21,7 +21,7 @@ QString getTime()
 
 QString getMetaInfo(ConversionParams &params)
 {
-    QString simulator = params.getConvertorVersion() == 1 ? "JoSIM" : "JSIM";
+    QString simulator = params.getSimulatorVersion() == 1 ? "JoSIM" : "JSIM";
     return META_LINE->arg(getTime(), simulator);
 }
 
@@ -31,7 +31,7 @@ QString AppController::convertToSpice(QString libreNotation, ConversionParams &p
     if (!circuit.isEmpty()) {
         QString spiceNotation = getMetaInfo(params) +
                                 producer.produceSpiceNotationNetlist(circuit, params);
-        updater.setConvertorVersion(params.getConvertorVersion());
+        updater.setSimulatorVersion(params.getSimulatorVersion());
         return spiceNotation;
     }
     return "";

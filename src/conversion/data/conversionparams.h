@@ -12,7 +12,7 @@ private:
     QString subcircuitName;
     bool fileOutput;
     bool consoleOutput;
-    int convertorVersion;
+    int simulatorVersion;
 public:
     ConversionParams(bool subcircuitStatus = false,
                      const QString &subcircuitName = QString(),
@@ -24,7 +24,7 @@ public:
     QString getSubcircuitName() const;
     bool getFileOutput() const;
     bool getConsoleOutput() const;
-    int getConvertorVersion() const;
+    int getSimulatorVersion() const;
 };
 
 #endif // CONVERSIONPARAMS_H

@@ -61,7 +61,7 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
 QString SpicePrinter::printModel(Component model)
 {
     QList<Attribute> attributes = model.getAttributeList();
-    if(params.getConvertorVersion() == *JSIM_VERSION) {
+    if(params.getSimulatorVersion() == *JSIM_VERSION) {
         auto condition = [](Attribute attribute) { return !JSIM_MODEL_ATTRIBUTES->contains(attribute.getName()); };
         attributes.erase(std::remove_if(attributes.begin(), attributes.end(), condition));
     }
@@ -134,7 +134,7 @@ QString SpicePrinter::printMeter(Component component)
         if (attribute.getName() == "PRINT_TYPE") {
             printType = attribute;
         }
-        if (attribute.getName() == "CURRENT_MODE" && params.getConvertorVersion() == 0) {
+        if (attribute.getName() == "CURRENT_MODE" && params.getSimulatorVersion() == 0) {
             mode = " " + attribute.getValue();
         }
     }

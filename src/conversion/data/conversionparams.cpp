@@ -23,9 +23,9 @@ bool ConversionParams::getConsoleOutput() const
     return consoleOutput;
 }
 
-int ConversionParams::getConvertorVersion() const
+int ConversionParams::getSimulatorVersion() const
 {
-    return convertorVersion;
+    return simulatorVersion;
 }
 
 ConversionParams::ConversionParams(bool subcircuitStatus,
@@ -37,5 +37,5 @@ ConversionParams::ConversionParams(bool subcircuitStatus,
     , subcircuitName(subcircuitName)
     , fileOutput(fileOutput)
     , consoleOutput(consoleOutput)
-    , convertorVersion(convertorVersion)
+    , simulatorVersion(convertorVersion)
 {}

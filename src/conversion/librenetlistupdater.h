@@ -7,7 +7,7 @@
 class LibreNetlistUpdater
 {
 private:
-    int convertorVersion = 1;
+    int simulatorVersion = 1;
     QString getNewUnit(QString param, QString attribute);
     QString getNewAttribute(QString attribute, QString number, QString unit);
     QMap<QString, QString> getComponents(QString textToUpdate);
@@ -22,7 +22,7 @@ private:
 public:
     LibreNetlistUpdater();
     ~LibreNetlistUpdater();
-    void setConvertorVersion(int version);
+    void setSimulatorVersion(int version);
     QString updateNetlist(QString textToUpdate, QString oldVersion, QString newVersion);
 };
 
