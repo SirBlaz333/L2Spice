@@ -34,7 +34,7 @@ SOURCES += \
     src/circuit/element/variant.cpp \
     src/ui/mainwindow.cpp \
     src/ui/overflowing_label.cpp \
-    src/ui/preference_dialog.cpp \
+    src/ui/preferences_tabs.cpp \
     src/utils/attribute_utils.cpp \
     src/utils/character_utils.cpp \
     src/utils/global_variables.cpp \
@@ -66,7 +66,7 @@ HEADERS += \
     src/circuit/element/variant.h \
     src/ui/mainwindow.h \
     src/ui/overflowing_label.h \
-    src/ui/preference_dialog.h \
+    src/ui/preferences_tabs.h \
     src/utils/attribute_utils.h \
     src/utils/character_utils.h \
     src/utils/global_variables.h \
@@ -74,8 +74,8 @@ HEADERS += \
     src/utils/uuid_generator.h
 
 FORMS += \
-    ui/directorydialog.ui \
-    ui/mainwindow.ui
+    ui/mainwindow.ui \
+    ui/preferences.ui
 
 RC_ICONS = resources/img/logo_small.ico
 

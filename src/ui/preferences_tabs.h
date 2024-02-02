@@ -1,5 +1,5 @@
-#ifndef PREFERENCE_DIALOG_H
-#define PREFERENCE_DIALOG_H
+#ifndef PREFERENCES_TABS_H
+#define PREFERENCES_TABS_H
 
 #include <QDialog>
 
@@ -7,13 +7,13 @@ namespace Ui {
 class DirectoryDialog;
 }
 
-class DirectoryDialog : public QDialog
+class PreferencesTabs : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit DirectoryDialog(QWidget *parent = nullptr);
-    ~DirectoryDialog();
+    explicit PreferencesTabs(QWidget *parent = nullptr);
+    ~PreferencesTabs();
 
 private slots:
     void onSpiceDirToolButtonClicked();
@@ -28,4 +28,4 @@ private:
     void close();
 };
 
-#endif // PREFERENCE_DIALOG_H
+#endif // PREFERENCES_TABS_H

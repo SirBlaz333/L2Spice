@@ -1,5 +1,4 @@
 QWidget {
-    background-color: #EEEEEE;
     color: black;
 }
 
@@ -103,7 +102,7 @@ QPushButton, QToolButton {
     line-height: 20px;
     vertical-align: middle;
     border: none;
-    background-color: #444444;
+    background-color: #333333;
     color: white;
 }
 
@@ -118,7 +117,9 @@ QPushButton:pressed, QToolButton:pressed {
 
 QMenuBar {
     font-size: 14px;
-    background-color: #D0D0D0;
+    font-weight: bold;
+    background-color: #333333;
+    color: white;
 }
 
 QMenuBar::item {
@@ -126,11 +127,12 @@ QMenuBar::item {
 }
 
 QMenuBar::item:selected {
-    background-color: #FFFFFF;
+    background-color: #555555;
 }
 
 QMenu {
-    background-color: #FFFFFF;
+    background-color: #333333;
+    color: white;
     margin: 0;
 }
 
@@ -140,7 +142,7 @@ QMenu::item {
 }
 
 QMenu::item:selected {
-    background-color: #E0E0E0;
+    background-color: #555555;
 }
 
 QCheckBox {
@@ -252,4 +254,82 @@ QRadioButton::indicator:checked:hover, QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator:checked:hover {
     image: url(:/img/grey_circle.png);
+}
+
+QDialog {
+    background-color: #DDDDDD;
+}
+
+QTabWidget::pane {
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+QTabBar::tab:selected {
+    background: #333333;
+    color: white;
+}
+
+QTabBar::tab:!selected {
+    background: white;
+}
+
+QTabBar::tab:!selected:hover {
+    background: #999;
+}
+
+QTabBar::tab:top:!selected {
+    margin-top: 3px;
+}
+
+QTabBar::tab:bottom:!selected {
+    margin-bottom: 3px;
+}
+
+QTabBar::tab:top, QTabBar::tab:bottom {
+    min-width: 8ex;
+    margin-right: -1px;
+    padding: 5px 10px 5px 10px;
+}
+
+QTabBar::tab:top:selected {
+    border-bottom-color: none;
+}
+
+QTabBar::tab:bottom:selected {
+    border-top-color: none;
+}
+
+QTabBar::tab:top:last, QTabBar::tab:bottom:last,
+QTabBar::tab:top:only-one, QTabBar::tab:bottom:only-one {
+    margin-right: 0;
+}
+
+QTabBar::tab:left:!selected {
+    margin-right: 3px;
+}
+
+QTabBar::tab:right:!selected {
+    margin-left: 3px;
+}
+
+QTabBar::tab:left, QTabBar::tab:right {
+    min-height: 8ex;
+    margin-bottom: -1px;
+    padding: 10px 5px 10px 5px;
+}
+
+QTabBar::tab:left:selected {
+    border-left-color: none;
+}
+
+QTabBar::tab:right:selected {
+    border-right-color: none;
+}
+
+QTabBar::tab:left:last, QTabBar::tab:right:last,
+QTabBar::tab:left:only-one, QTabBar::tab:right:only-one {
+    margin-bottom: 0;
 }

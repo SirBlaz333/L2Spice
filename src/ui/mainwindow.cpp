@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "preference_dialog.h"
+#include "preferences_tabs.h"
 #include "qregularexpression.h"
 #include "src/utils/regex_utils.h"
 #include "src/utils/global_variables.h"
@@ -284,7 +284,7 @@ void MainWindow::saveLibreAs()
 
 void MainWindow::openDirectoryDialog()
 {
-    DirectoryDialog dialog;
+    PreferencesTabs dialog;
     dialog.setModal(true);
     dialog.exec();
 }
