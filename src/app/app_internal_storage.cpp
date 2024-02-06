@@ -1,4 +1,5 @@
 #include "app_internal_storage.h"
+#include "app_settings.h"
 
 AppState AppInternalStorage::addElement(QString libreNetlist,
                                         QString spiceNetlist,
@@ -8,7 +9,7 @@ AppState AppInternalStorage::addElement(QString libreNetlist,
     QString name = "Netlist" + QString::number(counter++);
     AppState node(name, libreNetlist, spiceNetlist, libreSourceFile, spiceSourceFile);
     storage.push_back(node);
-    if (storage.size() > 5) {
+    if (storage.size() > AppSettings::getHistorySize()) {
         storage.pop_front();
     }
     currentElementId = storage.size() - 1;

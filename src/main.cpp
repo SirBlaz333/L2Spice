@@ -9,7 +9,7 @@
 #include <src/console/console_app.h>
 
 QString initStyles();
-void initSettings();
+void initDefaultSettings();
 
 int main(int argc, char *argv[])
 {
@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     a.setStyleSheet(initStyles());
-    initSettings();
+    initDefaultSettings();
     w.show();
     return a.exec();
 }
@@ -36,17 +36,7 @@ QString initStyles()
     return "";
 }
 
-void initSettings()
+void initDefaultSettings()
 {
-    QDir dir;
-    QString path = AppSettings::getSubcircuitDir();
-    dir.setPath(path);
-    if (dir.exists()) {
-        return;
-    }
-    dir.setPath(QDir::currentPath() + "/subcircuit/");
-    if (!dir.exists()) {
-        dir.mkpath(".");
-    }
-    AppSettings::setSubcircuitDir(dir.absolutePath());
+    AppSettings::init();
 }

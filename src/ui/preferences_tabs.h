@@ -19,11 +19,16 @@ private slots:
     void onSpiceDirToolButtonClicked();
     void onLibreDirToolButtonClicked();
     void onSubcircuitDirToolButtonClicked();
+    void onJosimToolButtonClicked();
+    void onJsimToolButtonClicked();
     void onOkButtonClicked();
     void onCancelButtonClicked();
+    void onDefaultSettingsClicked();
+    void onIncludeHeaderStateChanged(int state);
 
 private:
     Ui::DirectoryDialog *ui;
+    void init();
     void apply();
     void close();
 };

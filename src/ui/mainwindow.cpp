@@ -186,8 +186,8 @@ void MainWindow::saveSubcircuitIfNeeded(QString subcircuit, ConversionParams par
 }
 
 void MainWindow::saveAndUpdateState() {
-    AppState state = storage.addElement(ui->notationLibreTextEdit->toPlainText(),
-                                        ui->notationSpiceTextEdit->toPlainText(),
+    AppState state = storage.addElement(ui->notationLibreTextEdit->toHtml(),
+                                        ui->notationSpiceTextEdit->toHtml(),
                                         ui->libreFileLabel->text(),
                                         ui->spiceFileLabel->text());
     ui->netlistNameLabel->setText("Save name: " + state.getName());

@@ -1,6 +1,7 @@
 #include "app_header.h"
-#include "src/utils/regex_utils.h"
+#include "app_settings.h"
 #include "src/utils/global_variables.h"
+#include "src/utils/regex_utils.h"
 
 #include <iomanip>
 #include <chrono>
@@ -9,8 +10,7 @@
 #include <src/conversion/data/conversion_params.h>
 
 Q_GLOBAL_STATIC(QString, UNKNOWN_NAME, "UNKNOWN");
-Q_GLOBAL_STATIC(QString, HEADER_LINE,
-                "<header><b>*Converted %1 from the \"%2\" LibrePCB project by L2Spice for %3 simulator.</b><header><br><br>");
+Q_GLOBAL_STATIC(QString, HEADER_LINE, "<header><b>*%1</b><header><br><br>");
 
 AppHeader::AppHeader() {}
 
@@ -27,9 +27,16 @@ QString getTime()
 
 QString AppHeader::getHeader(ConversionParams params, QString sourceFile)
 {
+    if (!AppSettings::includeHeader() || AppSettings::getHeaderPattern().isEmpty()) {
+        return "";
+    }
     QString simulator = params.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM ? "JoSIM" : "JSIM";
     QString project = RegexUtils::projectPath->match(sourceFile).captured(1);
     project = project.isEmpty() ? *UNKNOWN_NAME : project;
-    return HEADER_LINE->arg(getTime(), project, simulator);
+    QString headerPattern = HEADER_LINE->arg(AppSettings::getHeaderPattern());
+    headerPattern.replace("%1", getTime());
+    headerPattern.replace("%2", project);
+    headerPattern.replace("%3", simulator);
+    return headerPattern;
 }
 
