@@ -1,6 +1,5 @@
 #include "uuid_generator.h"
 
-#include <bits/random.h>
 #include <random>
 #include <sstream>
 

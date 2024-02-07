@@ -4,13 +4,13 @@
 #include <iostream>
 #include <vector>
 
-Q_GLOBAL_STATIC(Flag, HELP_FLAG, Flag("-h", "--help"));
-Q_GLOBAL_STATIC(Flag, INPUT_FLAG, Flag("-i", "--input"));
-Q_GLOBAL_STATIC(Flag, OUTPUT_FLAG, Flag("-o", "--output"));
-Q_GLOBAL_STATIC(Flag, SUBCIRCUIT_FLAG, Flag("-s", "--subcircuit"));
-Q_GLOBAL_STATIC(Flag, WITHOUT_FILE_FLAG, Flag("-wf", "--without-file"));
-Q_GLOBAL_STATIC(Flag, WITHOUT_CONSOLE_FLAG, Flag("-wc", "--without-console"));
-Q_GLOBAL_STATIC(Flag, JSIM_FLAG, Flag("-j", "--jsim"));
+const Flag HELP_FLAG = Flag("-h", "--help");
+const Flag INPUT_FLAG = Flag("-i", "--input");
+const Flag OUTPUT_FLAG = Flag("-o", "--output");
+const Flag SUBCIRCUIT_FLAG = Flag("-s", "--subcircuit");
+const Flag WITHOUT_FILE_FLAG = Flag("-wf", "--without-file");
+const Flag WITHOUT_CONSOLE_FLAG = Flag("-wc", "--without-console");
+const Flag JSIM_FLAG = Flag("-j", "--jsim");
 
 ConsoleApplication::ConsoleApplication(int argc, char **argv)
     : argc(argc)
@@ -19,10 +19,10 @@ ConsoleApplication::ConsoleApplication(int argc, char **argv)
 
 ConsoleApplication::~ConsoleApplication() {}
 
-std::string get_option(const std::vector<std::string> &args, const Flag *flag)
+std::string get_option(const std::vector<std::string> &args, const Flag flag)
 {
     for (auto it = args.begin(), end = args.end(); it != end; ++it) {
-        if (*it == flag->getFlag() || *it == flag->getAlias()) {
+        if (*it == flag.getFlag() || *it == flag.getAlias()) {
             if (it + 1 != end) {
                 return *(it + 1);
             }
@@ -31,10 +31,10 @@ std::string get_option(const std::vector<std::string> &args, const Flag *flag)
     return "";
 }
 
-bool has_option(const std::vector<std::string> &args, const Flag *flag)
+bool has_option(const std::vector<std::string> &args, const Flag flag)
 {
     for (auto it = args.begin(), end = args.end(); it != end; ++it) {
-        if (*it == flag->getFlag() || *it == flag->getAlias()) {
+        if (*it == flag.getFlag() || *it == flag.getAlias()) {
             return true;
         }
     }

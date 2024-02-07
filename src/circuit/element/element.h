@@ -26,11 +26,11 @@ public:
     }
 };
 
-inline size_t qHash(const Element &element, size_t seed) noexcept
+inline size_t qHash(const Element &elements, size_t seed) noexcept
 {
     QtPrivate::QHashCombine hash;
-    seed = hash(seed, element.getName());
-    seed = hash(seed, element.getUuid());
+    seed = hash(seed, elements.getName());
+    seed = hash(seed, elements.getUuid());
     return seed;
 }
 

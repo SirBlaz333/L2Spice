@@ -1,9 +1,7 @@
 #include "component.h"
 
-typedef QMap<QString, QString> specialComponentsMap;
-Q_GLOBAL_STATIC(specialComponentsMap,
-                specialComponents,
-                {{"{{MODEL/JJ}}", "model"}, {"{{TRAN}}", "tran"}, {"{{PROBE}}", "probe"}, {"{{METER}}", "meter"}});
+const QMap<QString, QString> specialComponents =
+    {{"{{MODEL/JJ}}", "model"}, {"{{TRAN}}", "tran"}, {"{{PROBE}}", "probe"}, {"{{METER}}", "meter"}};
 
 QString Component::getLibComponent() const
 {
@@ -51,8 +49,8 @@ void Component::setChildProperty(const QString &propertyName, const QString &pro
     } else if (propertyName == "lib_variant") {
         libVariant = property;
     } else if (propertyName == "value") {
-        if (specialComponents->contains(property)) {
-            elementType = specialComponents->value(property);
+        if (specialComponents.contains(property)) {
+            elementType = specialComponents.value(property);
         }
         value = property;
     } else if (propertyName == "lock_assembly") {

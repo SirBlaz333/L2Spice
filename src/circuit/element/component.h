@@ -5,6 +5,8 @@
 #include "device.h"
 #include "signal.h"
 
+#include <qhashfunctions.h>
+
 #include <QList>
 #include <QMap>
 
@@ -23,7 +25,7 @@ private:
 
 public:
     Component();
-    ~Component();
+    virtual ~Component();
 
     QString getLibComponent() const;
     QString getLibVariant() const;
@@ -35,5 +37,24 @@ public:
     const Device getDevice() const;
     void setProperty(const QString &propertyName, const Element* property);
 };
+
+
+//for Qt 5
+inline uint qHash(const Component &component, uint seed) noexcept
+{
+    QtPrivate::QHashCombine hash;
+    seed = hash(seed, component.getName());
+    seed = hash(seed, component.getUuid());
+    return seed;
+}
+
+//for Qt 6
+inline size_t qHash(const Component &component, size_t seed) noexcept
+{
+    QtPrivate::QHashCombine hash;
+    seed = hash(seed, component.getName());
+    seed = hash(seed, component.getUuid());
+    return seed;
+}
 
 #endif // COMPONENT_H

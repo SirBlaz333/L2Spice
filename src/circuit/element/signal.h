@@ -12,7 +12,7 @@ private:
 
 public:
     Signal();
-    ~Signal();
+    virtual ~Signal();
     const Net getNet() const;
 
 };

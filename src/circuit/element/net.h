@@ -11,7 +11,7 @@ private:
     void setChildProperty(const QString &propertyName, const QString &property);
 public:
     Net();
-    ~Net();
+    virtual ~Net();
 
     bool getAutoMode() const;
     const NetClass getNetclass() const;

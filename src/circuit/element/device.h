@@ -13,7 +13,7 @@ private:
 
 public:
     Device();
-    ~Device();
+    virtual ~Device();
     const Variant *getVariant() const;
 
 };

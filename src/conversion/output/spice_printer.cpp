@@ -2,22 +2,23 @@
 #include "src/utils/attribute_utils.h"
 #include "src/utils/global_variables.h"
 
-Q_GLOBAL_STATIC(QString, EMPTY_STRING, QString());
-Q_GLOBAL_STATIC(QString, LINE_SEPARATOR, QString("<br>"));
-Q_GLOBAL_STATIC(QString, WORD_SEPARATOR, QString(" "));
-Q_GLOBAL_STATIC(QString, MODEL, QString(".MODEL %1 %2"));
-Q_GLOBAL_STATIC(QString, TRAN, QString(".tran %1"));
-Q_GLOBAL_STATIC(QString, PROBE, QString(".PRINT %1 %2 0"));
-Q_GLOBAL_STATIC(QString, METER, QString(".PRINT %1 %2"));
-Q_GLOBAL_STATIC(QString, NODEV, QString(".PRINT NODEV %1 %2"));
-Q_GLOBAL_STATIC(QString, NODEP, QString(".PRINT NODEP %1 %2"));
-Q_GLOBAL_STATIC(QString, SUBCIRCUIT, QString("X%1 %2"));
-Q_GLOBAL_STATIC(QString, FILE_OUTPUT, QString(".FILE %1"));
-Q_GLOBAL_STATIC(QString, CURRENT_WARNING,
-    QString("<br><b style=\"color:orange\">*WARNING! There are multiple devices connected to the ammeter %1. The first "
-            "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>"));
-Q_GLOBAL_STATIC(QString, CURRENT_ERROR,
-                QString("<br><b style=\"color:red\">*ERROR! Ammeter %1 was misplaced. Cannot display of output.</b><br>"));
+const QString EMPTY_STRING = QString();
+const QString LINE_SEPARATOR = QString("<br>");
+const QString WORD_SEPARATOR = QString(" ");
+const QString MODEL = QString(".MODEL %1 %2");
+const QString TRAN = QString(".tran %1");
+const QString PROBE = QString(".PRINT %1 %2 0");
+const QString METER = QString(".PRINT %1 %2");
+const QString NODEV = QString(".PRINT NODEV %1 %2");
+const QString NODEP = QString(".PRINT NODEP %1 %2");
+const QString SUBCIRCUIT = QString("X%1 %2");
+const QString FILE_OUTPUT = QString(".FILE %1");
+const QString CURRENT_WARNING = QString(
+    "<br><b style=\"color:orange\">WARNING! There are multiple devices connected to the ammeter "
+    "%1. The first "
+    "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>");
+const QString CURRENT_ERROR = QString("<br><b style=\"color:red\">ERROR! Ammeter %1 was misplaced. "
+                                      "Cannot display of output.</b><br>");
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                            const QMap<QString, QSet<Component>> &netComponentsMap,
@@ -36,18 +37,18 @@ QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
 
 QString SpicePrinter::printComponent(Component component, QString parentUUID)
 {
-    QString result = component.getName() + *WORD_SEPARATOR;
+    QString result = component.getName() + WORD_SEPARATOR;
     QList<Attribute> list = component.getAttributeList();
     if (component.getValue() == "{{SUBCIRCUIT}}") {
-        result = SUBCIRCUIT->arg(list.first().getValue().toUpper(), result);
+        result = SUBCIRCUIT.arg(list.first().getValue().toUpper(), result);
         component.removeAttribute(list.first());
     }
     if (!parentUUID.isEmpty()) {
-        result += writeSignal(parentUUID, netLabelMap) + *WORD_SEPARATOR;
+        result += writeSignal(parentUUID, netLabelMap) + WORD_SEPARATOR;
     }
     for (Signal &signal : component.getSignalList()) {
         if (signal.getNet().getUuid() != parentUUID) {
-            result += writeSignal(signal.getNet().getUuid(), netLabelMap) + *WORD_SEPARATOR;
+            result += writeSignal(signal.getNet().getUuid(), netLabelMap) + WORD_SEPARATOR;
         }
     }
     if (component.getValue() == "VCC") {
@@ -64,7 +65,7 @@ QString SpicePrinter::printModel(Component model)
         auto condition = [](Attribute attribute) { return !JSIM_MODEL_ATTRIBUTES.contains(attribute.getName()); };
         attributes.erase(std::remove_if(attributes.begin(), attributes.end(), condition));
     }
-    return MODEL->arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
+    return MODEL.arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
 }
 
 QString printTran(Component tran)
@@ -75,7 +76,7 @@ QString printTran(Component tran)
             break;
         }
     }
-    return TRAN->arg(attributeUtils::writeAttributes(tran.getAttributeList()));
+    return TRAN.arg(attributeUtils::writeAttributes(tran.getAttributeList()));
 }
 
 QString SpicePrinter::print(Component component, QString parentUUID)
@@ -90,7 +91,7 @@ QString SpicePrinter::print(Component component, QString parentUUID)
     if (elementType == "tran") {
         return printTran(component);
     }
-    return *EMPTY_STRING;
+    return EMPTY_STRING;
 }
 
 QString SpicePrinter::printProbe(Component component) {
@@ -101,11 +102,11 @@ QString SpicePrinter::printProbe(Component component) {
         }
     }
     QString signal = writeSignal(component.getSignalList().constFirst().getNet().getUuid(), netLabelMap);
-    return PROBE->arg(printType.getValue(), signal);
+    return PROBE.arg(printType.getValue(), signal);
 }
 
 
-QString* getNodevMode(Attribute printType)
+QString getNodevMode(Attribute printType)
 {
     if (printType.getValue() == "PHASE") {
         return NODEP;
@@ -114,7 +115,7 @@ QString* getNodevMode(Attribute printType)
 }
 
 QString printNodev(Attribute printType, QString firstSignal, QString secondSignal) {
-    return getNodevMode(printType)->arg(firstSignal, secondSignal);
+    return getNodevMode(printType).arg(firstSignal, secondSignal);
 }
 
 QString SpicePrinter::printMeter(Component component)
@@ -147,13 +148,13 @@ QString SpicePrinter::printMeter(Component component)
 
     if (intersection.empty()) {
         if (printType.getValue() == "DEVI") {
-            return CURRENT_ERROR->arg(component.getName());
+            return CURRENT_ERROR.arg(component.getName());
         }
         return printNodev(printType, netLabelMap[firstUuid], netLabelMap[secondUuid]);
     }
 
     if (device.getName().isEmpty() && intersection.size() == 1) {
-        return METER->arg(printType.getValue(), intersection.first().getName() + mode);
+        return METER.arg(printType.getValue(), intersection.first().getName() + mode);
     }
 
     auto condition = [&device](const Component &component) {
@@ -162,12 +163,12 @@ QString SpicePrinter::printMeter(Component component)
     bool deviceMatchesComponent = std::any_of(intersection.begin(), intersection.end(), condition);
 
     if (deviceMatchesComponent) {
-        return METER->arg(printType.getValue(), device.getValue() + mode);
+        return METER.arg(printType.getValue(), device.getValue() + mode);
     }
 
     if (printType.getValue() == "DEVI") {
-        QString firstDevice = METER->arg(printType.getValue(), intersection.first().getName() + mode);
-        return CURRENT_WARNING->arg(component.getName(), firstDevice);
+        QString firstDevice = METER.arg(printType.getValue(), intersection.first().getName() + mode);
+        return CURRENT_WARNING.arg(component.getName(), firstDevice);
     }
 
     return printNodev(printType, netLabelMap[firstUuid], netLabelMap[secondUuid]);
@@ -180,17 +181,17 @@ QString SpicePrinter::printOutput(Component component) {
     if (component.getElementType() == "meter") {
         return printMeter(component);
     }
-    return *EMPTY_STRING;
+    return EMPTY_STRING;
 }
 
 QString SpicePrinter::printOutputs(QList<Component> components)
 {
     if (!params.getConsoleOutput() && !params.getFileOutput()) {
-        return *EMPTY_STRING;
+        return EMPTY_STRING;
     }
     QMap<QString, QList<Component>> outputsMap;
     for (Component &component : components) {
-        QString fileName = *EMPTY_STRING;
+        QString fileName = EMPTY_STRING;
         for (Attribute &attribute : component.getAttributeList()) {
             if (attribute.getName() == "FILENAME") {
                 fileName = attribute.getValue();
@@ -201,17 +202,17 @@ QString SpicePrinter::printOutputs(QList<Component> components)
         outputsMap.insert(fileName, assignedComponents);
     }
     if (!params.getConsoleOutput()) {
-        outputsMap.remove(*EMPTY_STRING);
+        outputsMap.remove(EMPTY_STRING);
     }
     QString result;
     QList<QString> fileNames = outputsMap.keys();
     fileNames.sort();
     for (QString &fileName : fileNames) {
         if (!fileName.isEmpty() && params.getFileOutput()) {
-            result += FILE_OUTPUT->arg(fileName) + *LINE_SEPARATOR;
+            result += FILE_OUTPUT.arg(fileName) + LINE_SEPARATOR;
         }
-        for (Component &component : outputsMap.value(fileName)) {
-            result += printOutput(component) + *LINE_SEPARATOR;
+        for (const Component &component : outputsMap.value(fileName)) {
+            result += printOutput(component) + LINE_SEPARATOR;
         }
     }
     return result;

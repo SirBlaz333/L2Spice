@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <QSettings>
+#include <QTextStream>
 #include <qmessagebox.h>
 
 QString FileManager::getOpenFileName(QWidget *parent, QString path, QString filter)

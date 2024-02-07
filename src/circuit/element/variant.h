@@ -11,7 +11,7 @@ private:
 
 public:
     Variant();
-    ~Variant();
+    virtual ~Variant();
     QString getDescription() const;
 
 };

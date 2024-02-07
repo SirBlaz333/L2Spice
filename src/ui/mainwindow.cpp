@@ -12,26 +12,23 @@
 
 #include <src/file/file_manager.h>
 
-Q_GLOBAL_STATIC(QString, EMPTY, QString());
-Q_GLOBAL_STATIC(QUrl, USER_MANUAL_URL, QUrl::fromLocalFile("user_manual.pdf"));
-Q_GLOBAL_STATIC(QUrl, LIBRE_PCB_URL, QUrl("https://librepcb.org/docs/"));
-Q_GLOBAL_STATIC(QString, CIRCUIT_EXAMPLE, QString("example.lp"));
-Q_GLOBAL_STATIC(QString, LIBRE_PCB_EXTENSION, QString("Libre PCB Circuit File (*.lp)"));
-Q_GLOBAL_STATIC(QString, SPICE_EXTENSION, QString("Circuit File (*.cir)"));
-Q_GLOBAL_STATIC(QString, CONVERSION_ERROR_EMPTY_NETLIST,
-                QString("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect."));
-Q_GLOBAL_STATIC(QString, CONVERSION_EXCEPTION, QString("Cannot convert: %1<br>LibrePCB circuit is incorrect"));
-Q_GLOBAL_STATIC(QString, UPDATE_EXCEPTION, QString("Cannot update: %1"));
-Q_GLOBAL_STATIC(QString, SAVE_NAME, QString("Save name: %1"));
-Q_GLOBAL_STATIC(QString, SIMULATOR_EXECUTION_COMMAND, QString("%1 %2 > console_output.txt 2>&1"));
-Q_GLOBAL_STATIC(QString, SIMULATOR_PATH_IS_EMPTY,
-                QString("Cannot simulate the circuit. Please specify simulator path!"));
-Q_GLOBAL_STATIC(QString, CIRCUIT_IS_EMPTY, QString("Cannot simulate the circuit. The circuit is empty!"));
-Q_GLOBAL_STATIC(QString, CIRCUIT_IS_NOT_SAVED,
-                QString("Cannot simulate the circuit. Please save the circuit first!"));
-Q_GLOBAL_STATIC(QString, SIMULATION_IS_EXECUTED,
-                QString("Simulation was executed. The results of the simulation are in the same directory "
-                        "with circuit file. The console output is written into console_output.txt file."))
+const QString EMPTY = QString();
+const QUrl USER_MANUAL_URL = QUrl::fromLocalFile("user_manual.pdf");
+const QUrl LIBRE_PCB_URL = QUrl("https://librepcb.org/docs/");
+const QString CIRCUIT_EXAMPLE = QString("example.lp");
+const QString LIBRE_PCB_EXTENSION = QString("Libre PCB Circuit File (*.lp)");
+const QString SPICE_EXTENSION = QString("Circuit File (*.cir)");
+const QString CONVERSION_ERROR_EMPTY_NETLIST =                 QString("Cannot convert to SPICE netlist. Either the given LibrePCB netlist is empty or incorrect.");
+const QString CONVERSION_EXCEPTION = QString("Cannot convert: %1<br>LibrePCB circuit is incorrect");
+const QString UPDATE_EXCEPTION = QString("Cannot update: %1");
+const QString SAVE_NAME = QString("Save name: %1");
+const QString SIMULATOR_EXECUTION_COMMAND = QString("%1 %2 > console_output.txt 2>&1");
+const QString SIMULATOR_PATH_IS_EMPTY = QString("Cannot simulate the circuit. Please specify simulator path!");
+const QString CIRCUIT_IS_EMPTY = QString("Cannot simulate the circuit. The circuit is empty!");
+const QString CIRCUIT_IS_NOT_SAVED = QString("Cannot simulate the circuit. Please save the circuit first!");
+const QString SIMULATION_IS_EXECUTED = QString(
+    "Simulation was executed. The results of the simulation are in the same directory "
+    "with circuit file. The console output is written into console_output.txt file.");
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -137,16 +134,16 @@ QString saveFile(QWidget *parent,
 QString saveSpiceFile(QWidget *parent, QString fileName, QString data, bool forcedFileDialog)
 {
     QString dir = AppSettings::getSpiceDir();
-    QRegularExpressionMatch match = RegexUtils::subcircuitRegex->match(data);
+    QRegularExpressionMatch match = RegexUtils::subcircuitRegex.match(data);
     if (match.hasMatch()) {
         dir = AppSettings::getSubcircuitDir();
         QString name = match.captured(1);
         fileName = dir + "/" + name + ".cir";
     } else if (fileName.contains(AppSettings::getSubcircuitDir())) {
         forcedFileDialog = true;
-        fileName = *EMPTY;
+        fileName = EMPTY;
     }
-    return saveFile(parent, fileName, data, *SPICE_EXTENSION, dir, forcedFileDialog);
+    return saveFile(parent, fileName, data, SPICE_EXTENSION, dir, forcedFileDialog);
 }
 
 void MainWindow::convertToSpice()
@@ -156,7 +153,7 @@ void MainWindow::convertToSpice()
         ConversionParams params = getConversionParams();
         QString spiceNetlist = appController.convertToSpice(libreNotation, params);
         if (spiceNetlist.isEmpty()) {
-            showWarning(*CONVERSION_ERROR_EMPTY_NETLIST);
+            showWarning(CONVERSION_ERROR_EMPTY_NETLIST);
             return;
         }
         spiceNetlist = header.getHeader(params, ui->libreFileLabel->text()) + spiceNetlist;
@@ -165,8 +162,7 @@ void MainWindow::convertToSpice()
         saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
-        qDebug() << message;
-        showError(CONVERSION_EXCEPTION->arg(message));
+        showError(CONVERSION_EXCEPTION.arg(message));
     }
 }
 
@@ -181,8 +177,7 @@ void MainWindow::updateLibrePCB()
         saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
-        qDebug() << message;
-        showError(UPDATE_EXCEPTION->arg(message));
+        showError(UPDATE_EXCEPTION.arg(message));
     }
 }
 
@@ -219,7 +214,7 @@ void MainWindow::saveAndUpdateState() {
                                          ui->notationSpiceTextEdit->toHtml(),
                                          ui->libreFileLabel->text(),
                                          ui->spiceFileLabel->text());
-    ui->netlistNameLabel->setText(SAVE_NAME->arg(state.getName()));
+    ui->netlistNameLabel->setText(SAVE_NAME.arg(state.getName()));
 }
 
 void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
@@ -252,7 +247,7 @@ void MainWindow::changeState(AppState state)
     ui->spiceFileLabel->setText(state.getSpiceSourceFile());
     ui->notationLibreTextEdit->setText(state.getLibreNetlist());
     ui->notationSpiceTextEdit->setText(state.getSpiceNetlist());
-    ui->netlistNameLabel->setText(SAVE_NAME->arg(state.getName()));
+    ui->netlistNameLabel->setText(SAVE_NAME.arg(state.getName()));
 }
 
 
@@ -280,15 +275,15 @@ void MainWindow::saveSpiceAs()
 
 void MainWindow::closeSpice()
 {
-    ui->notationSpiceTextEdit->setText(*EMPTY);
-    ui->spiceFileLabel->setText(*EMPTY);
+    ui->notationSpiceTextEdit->setText(EMPTY);
+    ui->spiceFileLabel->setText(EMPTY);
 }
 
 void MainWindow::saveLibreNetlist(bool forcedFileDialog)
 {
     QString fileName = ui->libreFileLabel->text();
     QString data = ui->notationLibreTextEdit->toPlainText();
-    fileName = saveFile(this, fileName, data, *LIBRE_PCB_EXTENSION, AppSettings::getLibreDir(), forcedFileDialog);
+    fileName = saveFile(this, fileName, data, LIBRE_PCB_EXTENSION, AppSettings::getLibreDir(), forcedFileDialog);
     ui->libreFileLabel->setText(fileName);
     AppState state = storage->currentElement();
     state.setLibreSourceFile(fileName);
@@ -315,7 +310,7 @@ void MainWindow::openDirectoryDialog()
 void MainWindow::openLibre()
 {
     QString path = AppSettings::getLibreDir();
-    QString libreFileName = FileManager::getOpenFileName(this, path, *LIBRE_PCB_EXTENSION);
+    QString libreFileName = FileManager::getOpenFileName(this, path, LIBRE_PCB_EXTENSION);
     if (libreFileName.isEmpty()) {
         return;
     }
@@ -334,23 +329,23 @@ void MainWindow::refreshLibre()
 
 void MainWindow::closeLibre()
 {
-    ui->notationLibreTextEdit->setText(*EMPTY);
-    ui->libreFileLabel->setText(*EMPTY);
+    ui->notationLibreTextEdit->setText(EMPTY);
+    ui->libreFileLabel->setText(EMPTY);
 }
 
 void MainWindow::openUserManual()
 {
-    QDesktopServices::openUrl(*USER_MANUAL_URL);
+    QDesktopServices::openUrl(USER_MANUAL_URL);
 }
 
 void MainWindow::openLibreDocumentation()
 {
-    QDesktopServices::openUrl(*LIBRE_PCB_URL);
+    QDesktopServices::openUrl(LIBRE_PCB_URL);
 }
 
 void MainWindow::loadExample()
 {
-    ui->notationLibreTextEdit->setText(FileManager::loadFile(*CIRCUIT_EXAMPLE));
+    ui->notationLibreTextEdit->setText(FileManager::loadFile(CIRCUIT_EXAMPLE));
 }
 
 void MainWindow::simulate()
@@ -359,12 +354,12 @@ void MainWindow::simulate()
                             ? AppSettings::getJosimExecutablePath()
                             : AppSettings::getJsimExecutablePath();
     if (simulator.isEmpty()) {
-        showWarning(*SIMULATOR_PATH_IS_EMPTY);
+        showWarning(SIMULATOR_PATH_IS_EMPTY);
         return;
     }
     QString data = ui->notationSpiceTextEdit->toPlainText();
     if (data.isEmpty()) {
-        showWarning(*CIRCUIT_IS_EMPTY);
+        showWarning(CIRCUIT_IS_EMPTY);
         return;
     }
     QString fileName = ui->spiceFileLabel->text();
@@ -372,11 +367,11 @@ void MainWindow::simulate()
         fileName = saveSpiceFile(this, fileName, data, true);
     }
     if (fileName.isEmpty()) {
-        showWarning(*CIRCUIT_IS_NOT_SAVED);
+        showWarning(CIRCUIT_IS_NOT_SAVED);
         return;
     }
     ui->spiceFileLabel->setText(fileName);
-    std::string command = SIMULATOR_EXECUTION_COMMAND->arg(simulator, fileName).toStdString();
+    std::string command = SIMULATOR_EXECUTION_COMMAND.arg(simulator, fileName).toStdString();
     system(command.c_str());
-    showInfo(*SIMULATION_IS_EXECUTED);
+    showInfo(SIMULATION_IS_EXECUTED);
 }

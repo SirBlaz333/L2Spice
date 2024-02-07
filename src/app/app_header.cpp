@@ -9,8 +9,8 @@
 
 #include <src/conversion/data/conversion_params.h>
 
-Q_GLOBAL_STATIC(QString, UNKNOWN_NAME, "UNKNOWN");
-Q_GLOBAL_STATIC(QString, HEADER_LINE, "<header><b>*%1</b><header><br><br>");
+const QString UNKNOWN_NAME = "UNKNOWN";
+const QString HEADER_LINE = "<header><b>*%1</b><header><br><br>";
 
 AppHeader::AppHeader() {}
 
@@ -31,9 +31,9 @@ QString AppHeader::getHeader(ConversionParams params, QString sourceFile)
         return "";
     }
     QString simulator = params.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM ? "JoSIM" : "JSIM";
-    QString project = RegexUtils::projectPath->match(sourceFile).captured(1);
-    project = project.isEmpty() ? *UNKNOWN_NAME : project;
-    QString headerPattern = HEADER_LINE->arg(AppSettings::getHeaderPattern());
+    QString project = RegexUtils::projectPath.match(sourceFile).captured(1);
+    project = project.isEmpty() ? UNKNOWN_NAME : project;
+    QString headerPattern = HEADER_LINE.arg(AppSettings::getHeaderPattern());
     headerPattern.replace("%1", getTime());
     headerPattern.replace("%2", project);
     headerPattern.replace("%3", simulator);

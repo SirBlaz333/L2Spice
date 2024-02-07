@@ -7,7 +7,7 @@ class NetClass : public Element
 {
 public:
     NetClass();
-    ~NetClass();
+    virtual ~NetClass();
 };
 
 #endif // NETCLASS_H

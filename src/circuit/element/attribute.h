@@ -14,7 +14,7 @@ private:
 
 public:
     Attribute();
-    ~Attribute();
+    virtual ~Attribute();
 
     QString getType() const;
     QString getUnit() const;
