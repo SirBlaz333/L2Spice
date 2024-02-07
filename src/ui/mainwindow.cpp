@@ -54,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->clearLibreButton->setProperty("class", "netlistStateButton");
     ui->saveSpiceButton->setProperty("class", "netlistStateButton");
     ui->clearSpiceButton->setProperty("class", "netlistStateButton");
+    ui->simulateButton->setProperty("class", "netlistStateButton");
     ui->convertToSpiceButton->setProperty("class", "conversionButton");
     ui->convertToLibreButton->setProperty("class", "conversionButton");
     ui->subcircuitFrame->setProperty("class", "conversionParameter");

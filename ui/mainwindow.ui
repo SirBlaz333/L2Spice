@@ -876,8 +876,24 @@
           </item>
           <item>
            <widget class="QPushButton" name="simulateButton">
+            <property name="minimumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
             <property name="text">
-             <string>Simulate</string>
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resources/resources.qrc">
+              <normaloff>:/img/play-button.png</normaloff>:/img/play-button.png</iconset>
             </property>
            </widget>
           </item>

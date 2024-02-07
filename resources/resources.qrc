@@ -12,5 +12,6 @@
         <file>img/logo_small.ico</file>
         <file>img/circle.png</file>
         <file>img/grey_circle.png</file>
+        <file>img/play-button.png</file>
     </qresource>
 </RCC>
