@@ -8,8 +8,6 @@
 class ConversionParams
 {
 private:
-    const QString UNNAMED = "UNNAMED";
-
     bool subcircuitStatus;
     QString subcircuitName;
     bool fileOutput;
@@ -21,6 +19,8 @@ public:
                      bool fileOutput = true,
                      bool consoleOutput = true,
                      int simulatorVersion = SIMULATOR_VERSION_JOSIM);
+    ConversionParams(const ConversionParams &params) = default;
+    ConversionParams &operator=(const ConversionParams &params) = default;
 
     bool getSubcircuitStatus() const;
     QString getSubcircuitName() const;

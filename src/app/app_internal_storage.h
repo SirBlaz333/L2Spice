@@ -8,6 +8,7 @@
 class AppInternalStorage
 {
     int counter = 0;
+    int maxSize;
     int currentElementId;
     QList<AppState> storage;
 public:
@@ -18,7 +19,7 @@ public:
     AppState previousElement();
     AppState currentElement();
     void updateCurrentElement(AppState newState);
-    AppInternalStorage();
+    AppInternalStorage(const int &maxSize);
     ~AppInternalStorage();
 };
 

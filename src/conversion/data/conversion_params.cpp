@@ -1,5 +1,7 @@
 #include "conversion_params.h"
 
+Q_GLOBAL_STATIC(QString, UNNAMED, "UNNAMED");
+
 bool ConversionParams::getSubcircuitStatus() const
 {
     return subcircuitStatus;
@@ -8,7 +10,7 @@ bool ConversionParams::getSubcircuitStatus() const
 QString ConversionParams::getSubcircuitName() const
 {
     if (subcircuitName.isEmpty()) {
-        return UNNAMED;
+        return *UNNAMED;
     }
     return subcircuitName;
 }

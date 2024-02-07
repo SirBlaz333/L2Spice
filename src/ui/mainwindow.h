@@ -43,12 +43,14 @@ private slots:
     void openUserManual();
     void openLibreDocumentation();
     void loadExample();
+    void simulate();
 
 private:
     AppController appController;
-    AppInternalStorage storage;
+    AppInternalStorage* storage;
     AppHeader header;
     Ui::MainWindow *ui;
+    ConversionParams lastParams;
     ConversionParams getConversionParams();
     void saveSubcircuitIfNeeded(QString subcircuit, ConversionParams params);
     void saveAndUpdateState();

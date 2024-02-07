@@ -12,6 +12,9 @@
 
 #include <src/file/file_manager.h>
 
+Q_GLOBAL_STATIC(QString, LIBRE_PCB_EXTENSION, "Libre PCB Circuit File (*.lp)");
+Q_GLOBAL_STATIC(QString, SIMULATOR_EXECUTION_COMMAND, "%1 %2 > console_output.txt 2>&1")
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -58,6 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionUserManual, &QAction::triggered, this, &MainWindow::openUserManual);
     connect(ui->actionLibrePCBDocumenation, &QAction::triggered, this, &MainWindow::openLibreDocumentation);
     connect(ui->actionLoadExample, &QAction::triggered, this, &MainWindow::loadExample);
+    connect(ui->simulateButton, &QPushButton::clicked, this, &MainWindow::simulate);
+    storage = new AppInternalStorage(AppSettings::getHistorySize());
 }
 
 MainWindow::~MainWindow()
@@ -65,25 +70,29 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void showMessage(QString message, QMessageBox::Icon icon, QString title)
+{
+    QMessageBox messageBox;
+    messageBox.setIcon(icon);
+    messageBox.setWindowTitle(title);
+    messageBox.setText(message);
+    messageBox.setMinimumWidth(150);
+    messageBox.addButton(QMessageBox::Ok);
+    messageBox.exec();
+}
+
+void showInfo(QString message)
+{
+    showMessage(message, QMessageBox::Information, "Info");
+}
+
 void showError(QString message)
 {
-    QMessageBox errorMessage;
-    errorMessage.setIcon(QMessageBox::Critical);
-    errorMessage.setWindowTitle("Error");
-    errorMessage.setText(message);
-    errorMessage.setMinimumWidth(150);
-    errorMessage.addButton(QMessageBox::Ok);
-    errorMessage.exec();
+    showMessage(message, QMessageBox::Critical, "Error");
 }
 
 void showWarning(QString message) {
-    QMessageBox warning;
-    warning.setIcon(QMessageBox::Warning);
-    warning.setWindowTitle("Warning");
-    warning.setText(message);
-    warning.setMinimumWidth(150);
-    warning.addButton(QMessageBox::Ok);
-    warning.exec();
+    showMessage(message, QMessageBox::Warning, "Warning");
 }
 
 QString saveFile(QWidget *parent,
@@ -98,7 +107,7 @@ QString saveFile(QWidget *parent,
                                                        path,
                                                        fileExtensionFilter,
                                                        forcedFileDialog);
-    bool fileDialogWasShown = forcedFileDialog || (fileName != newFileName);
+    bool fileDialogWasShown = forcedFileDialog || fileName.isEmpty();
     if (!newFileName.isEmpty() && FileManager::confirmSaving(newFileName, fileDialogWasShown)) {
         FileManager::save(newFileName, data);
         return newFileName;
@@ -147,7 +156,7 @@ void MainWindow::updateLibrePCB()
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-        QString oldSpiceNotation = storage.lastElement().getSpiceNetlist();
+        QString oldSpiceNotation = storage->lastElement().getSpiceNetlist();
         QString newLibreNotation = appController.updateLibre(libreNotation, oldSpiceNotation, spiceNotation);
         ui->notationLibreTextEdit->setPlainText(newLibreNotation);
         saveAndUpdateState();
@@ -166,11 +175,12 @@ ConversionParams MainWindow::getConversionParams()
     bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
     int converterVersion = ui->josimRadioButton->isChecked() ? SIMULATOR_VERSION_JOSIM
                                                              : SIMULATOR_VERSION_JSIM;
-    return ConversionParams(subcircuitStatus,
-                            subcircuitName,
-                            fileOutput,
-                            consoleOutput,
-                            converterVersion);
+    lastParams = ConversionParams(subcircuitStatus,
+                                  subcircuitName,
+                                  fileOutput,
+                                  consoleOutput,
+                                  converterVersion);
+    return lastParams;
 }
 
 void MainWindow::saveSubcircuitIfNeeded(QString subcircuit, ConversionParams params)
@@ -186,7 +196,7 @@ void MainWindow::saveSubcircuitIfNeeded(QString subcircuit, ConversionParams par
 }
 
 void MainWindow::saveAndUpdateState() {
-    AppState state = storage.addElement(ui->notationLibreTextEdit->toHtml(),
+    AppState state = storage->addElement(ui->notationLibreTextEdit->toHtml(),
                                         ui->notationSpiceTextEdit->toHtml(),
                                         ui->libreFileLabel->text(),
                                         ui->spiceFileLabel->text());
@@ -201,17 +211,17 @@ void MainWindow::subcircuitCheckBoxStateChanged(int arg1)
 
 void MainWindow::nextNetlist()
 {
-    changeState(storage.nextElement());
+    changeState(storage->nextElement());
 }
 
 void MainWindow::previousNetlist()
 {
-    changeState(storage.previousElement());
+    changeState(storage->previousElement());
 }
 
 void MainWindow::lastNetlist()
 {
-    changeState(storage.lastElement());
+    changeState(storage->lastElement());
 }
 
 void MainWindow::changeState(AppState state)
@@ -236,9 +246,9 @@ void MainWindow::saveSpiceNetlist(bool forcedFileDialog)
                                     ui->notationSpiceTextEdit->toPlainText(),
                                     forcedFileDialog);
     ui->spiceFileLabel->setText(newFileName);
-    AppState state = storage.currentElement();
+    AppState state = storage->currentElement();
     state.setSpiceSourceFile(newFileName);
-    storage.updateCurrentElement(state);
+    storage->updateCurrentElement(state);
 }
 
 void MainWindow::saveSpice()
@@ -262,15 +272,14 @@ void MainWindow::saveLibreNetlist(bool forcedFileDialog)
     QString fileName = saveFile(this,
                                 ui->libreFileLabel->text(),
                                 ui->notationLibreTextEdit->toPlainText(),
-                                "Libre PCB Circuit File (*.lp)",
+                                *LIBRE_PCB_EXTENSION,
                                 AppSettings::getLibreDir(),
                                 forcedFileDialog);
     ui->libreFileLabel->setText(fileName);
-    AppState state = storage.currentElement();
+    AppState state = storage->currentElement();
     state.setLibreSourceFile(fileName);
-    storage.updateCurrentElement(state);
+    storage->updateCurrentElement(state);
 }
-
 
 void MainWindow::saveLibre()
 {
@@ -291,9 +300,8 @@ void MainWindow::openDirectoryDialog()
 
 void MainWindow::openLibre()
 {
-    QString fileExtenstionFilter = "Libre PCB Circuit File (*.lp)";
     QString path = AppSettings::getLibreDir();
-    QString libreFileName = FileManager::getOpenFileName(this, path, fileExtenstionFilter);
+    QString libreFileName = FileManager::getOpenFileName(this, path, *LIBRE_PCB_EXTENSION);
     if (libreFileName.isEmpty()) {
         return;
     }
@@ -331,4 +339,32 @@ void MainWindow::openLibreDocumentation()
 void MainWindow::loadExample()
 {
     ui->notationLibreTextEdit->setText(FileManager::loadFile("example.lp"));
+}
+
+void MainWindow::simulate()
+{
+    QString simulator = lastParams.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM
+                            ? AppSettings::getJosimExecutablePath()
+                            : AppSettings::getJsimExecutablePath();
+    if (simulator.isEmpty()) {
+        showWarning("Cannot simulate the circuit. Please specify simulator path!");
+        return;
+    }
+    QString data = ui->notationSpiceTextEdit->toPlainText();
+    if (data.isEmpty()) {
+        showWarning("Cannot simulate the circuit. The circuit is empry!");
+        return;
+    }
+    QString fileName = ui->spiceFileLabel->text();
+    if (fileName.isEmpty()) {
+        fileName = saveSpiceFile(this, fileName, data, true);
+    }
+    if (fileName.isEmpty()) {
+        showWarning("Cannot simulate the circuit. Please save the circuit first!");
+        return;
+    }
+    ui->spiceFileLabel->setText(fileName);
+    std::string command = SIMULATOR_EXECUTION_COMMAND->arg(simulator, fileName).toStdString();
+    system(command.c_str());
+    showInfo("Simulation was executed. The results of the simulation are in the same directory with circuit file. The console output is written into console_output.txt file.");
 }
