@@ -983,9 +983,9 @@
    </widget>
    <widget class="QMenu" name="preferencedEdit">
     <property name="title">
-     <string>Preferences</string>
+     <string>Settings</string>
     </property>
-    <addaction name="actionOpenDirDialog"/>
+    <addaction name="actionOpenPreferncesDialog"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -1042,9 +1042,12 @@
     <string>Save SPICE Subcircuit</string>
    </property>
   </action>
-  <action name="actionOpenDirDialog">
+  <action name="actionOpenPreferncesDialog">
    <property name="text">
-    <string>Default Directories</string>
+    <string>Preferences</string>
+   </property>
+   <property name="shortcut">
+    <string>F8</string>
    </property>
   </action>
   <action name="actionOpenLibreNetlist">
@@ -1085,7 +1088,7 @@
   <customwidget>
    <class>OverflowingLabel</class>
    <extends>QFrame</extends>
-   <header>src/ui/overflowinglabel.h</header>
+   <header>src/ui/overflowing_label.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionNextNetlist, &QAction::triggered, this, &MainWindow::nextNetlist);
     connect(ui->actionPreviousNetlist, &QAction::triggered, this, &MainWindow::previousNetlist);
     connect(ui->actionLastNetlist, &QAction::triggered, this, &MainWindow::lastNetlist);
-    connect(ui->actionOpenDirDialog, &QAction::triggered, this, &MainWindow::openDirectoryDialog);
+    connect(ui->actionOpenPreferncesDialog, &QAction::triggered, this, &MainWindow::openDirectoryDialog);
     connect(ui->actionSave, &QAction::triggered, this, &MainWindow::saveSpice);
     connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::saveSpiceAs);
     connect(ui->saveSpiceButton, &QPushButton::clicked, this, &MainWindow::saveSpice);
