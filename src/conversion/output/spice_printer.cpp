@@ -64,12 +64,23 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
     return result;
 }
 
+void eraseUnwantedAttributes(QList<Attribute> *attributes, QSet<QString> allowedAttributes)
+{
+    QMutableListIterator<Attribute> it(*attributes);
+    while (it.hasNext()) {
+        if (!allowedAttributes.contains(it.next().getName())) {
+            it.remove();
+        }
+    }
+}
+
 QString SpicePrinter::printModel(Component model)
 {
     QList<Attribute> attributes = model.getAttributeList();
-    if(params.getSimulatorVersion() == SIMULATOR_VERSION_JSIM) {
-        auto condition = [](Attribute attribute) { return !JSIM_MODEL_ATTRIBUTES.contains(attribute.getName()); };
-        attributes.erase(std::remove_if(attributes.begin(), attributes.end(), condition));
+    if (params.getSimulatorVersion() == SIMULATOR_VERSION_JSIM) {
+        eraseUnwantedAttributes(&attributes, JSIM_MODEL_ATTRIBUTES);
+    } else if (params.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM) {
+        eraseUnwantedAttributes(&attributes, JOSIM_MODEL_ATTRIBUTES);
     }
     return MODEL.arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
 }
