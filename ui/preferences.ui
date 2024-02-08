@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>797</width>
-    <height>570</height>
+    <width>720</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,6 +58,9 @@
        <height>576</height>
       </size>
      </property>
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAlwaysOff</enum>
+     </property>
      <property name="widgetResizable">
       <bool>true</bool>
      </property>
@@ -66,7 +69,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>756</width>
+        <width>685</width>
         <height>658</height>
        </rect>
       </property>
@@ -324,6 +327,241 @@
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="simulatorsHeader" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Simulators executables</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="lineWidth">
+             <number>3</number>
+            </property>
+            <property name="midLineWidth">
+             <number>3</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="josimWidget" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="josimPathLabel">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>JoSIM executable path:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="josimPath">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>800</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="josimToolButton">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="jsimWidget" native="true">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="leftMargin">
+           <number>11</number>
+          </property>
+          <property name="topMargin">
+           <number>11</number>
+          </property>
+          <property name="rightMargin">
+           <number>11</number>
+          </property>
+          <property name="bottomMargin">
+           <number>11</number>
+          </property>
+          <item>
+           <spacer name="horizontalSpacer_6">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="jsimPathLabel">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>JSIM executable path:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="jsimPath">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>800</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="jsimToolButton">
+            <property name="minimumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>30</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -649,241 +887,6 @@
           </item>
           <item>
            <widget class="QToolButton" name="subcircuitDirToolButton">
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="simulatorsHeader" native="true">
-         <layout class="QHBoxLayout" name="horizontalLayout_11">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Simulators executables</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="Line" name="line_2">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Plain</enum>
-            </property>
-            <property name="lineWidth">
-             <number>3</number>
-            </property>
-            <property name="midLineWidth">
-             <number>3</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="josimWidget" native="true">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>50</height>
-          </size>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <item>
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="josimPathLabel">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>JoSIM executable path:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="josimPath">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>800</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="josimToolButton">
-            <property name="minimumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>30</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>...</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QWidget" name="jsimWidget" native="true">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>50</height>
-          </size>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_6">
-          <property name="leftMargin">
-           <number>11</number>
-          </property>
-          <property name="topMargin">
-           <number>11</number>
-          </property>
-          <property name="rightMargin">
-           <number>11</number>
-          </property>
-          <property name="bottomMargin">
-           <number>11</number>
-          </property>
-          <item>
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Fixed</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="jsimPathLabel">
-            <property name="minimumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>170</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>JSIM executable path:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="jsimPath">
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>800</width>
-              <height>30</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QToolButton" name="jsimToolButton">
             <property name="minimumSize">
              <size>
               <width>30</width>

@@ -74,6 +74,13 @@ QString FileManager::getPath(QWidget *parent, QString path)
     return directory.isEmpty() ? path : directory;
 }
 
+QString FileManager::getFile(QWidget *parent, QString path)
+{
+    QString currentPath = QFile(path).exists() ? path : QDir::currentPath();
+    QString directory = QFileDialog::getOpenFileName(parent, "Select file", currentPath);
+    return directory.isEmpty() ? path : directory;
+}
+
 FileManager::FileManager() {}
 
 FileManager::~FileManager() {}

@@ -26,6 +26,8 @@ PreferencesTabs::PreferencesTabs(QWidget *parent)
     connect(ui->cancelButton, &QPushButton::clicked, this, &PreferencesTabs::onCancelButtonClicked);
     connect(ui->defaultSettingsButton, &QPushButton::clicked, this, &PreferencesTabs::onDefaultSettingsClicked);
     connect(ui->includeHeaderCheckbox, &QCheckBox::stateChanged, this, &PreferencesTabs::onIncludeHeaderStateChanged);
+    connect(ui->josimToolButton, &QPushButton::clicked, this, &PreferencesTabs::onJosimToolButtonClicked);
+    connect(ui->jsimToolButton, &QPushButton::clicked, this, &PreferencesTabs::onJsimToolButtonClicked);
     init();
 }
 
@@ -71,16 +73,16 @@ void PreferencesTabs::onSubcircuitDirToolButtonClicked() {
     ui->subcircuitDirLineEdit->setText(newPath);
 }
 
-void PreferencesTabs::onJosimToolButtonClicked() {
+void PreferencesTabs::onJsimToolButtonClicked() {
     QString path = ui->jsimPath->text();
-    QString newPath = FileManager::getPath(this, path);
+    QString newPath = FileManager::getFile(this, path);
     ui->jsimPath->setText(newPath);
 }
 
-void PreferencesTabs::onJsimToolButtonClicked()
+void PreferencesTabs::onJosimToolButtonClicked()
 {
     QString path = ui->josimPath->text();
-    QString newPath = FileManager::getPath(this, path);
+    QString newPath = FileManager::getFile(this, path);
     ui->josimPath->setText(newPath);
 }
 
