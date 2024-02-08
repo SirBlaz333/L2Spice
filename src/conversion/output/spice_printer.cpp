@@ -18,7 +18,7 @@ const QString CURRENT_WARNING = QString(
     "%1. The first "
     "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>");
 const QString CURRENT_ERROR = QString("<br><b style=\"color:red\">ERROR! Ammeter %1 was misplaced. "
-                                      "Cannot display of output.</b><br>");
+                                      "Cannot display the output.</b><br>");
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                            const QMap<QString, QSet<Component>> &netComponentsMap,
