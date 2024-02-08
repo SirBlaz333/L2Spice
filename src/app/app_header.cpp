@@ -3,6 +3,7 @@
 #include "src/utils/global_variables.h"
 #include "src/utils/regex_utils.h"
 
+#include <sstream>
 #include <iomanip>
 #include <chrono>
 #include <QString>

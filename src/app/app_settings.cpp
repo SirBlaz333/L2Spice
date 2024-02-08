@@ -12,7 +12,8 @@ const QString JSIM_PATH = "jsimPath";
 const QString LIBRE_DIR = "libreDir";
 const QString SPICE_DIR = "spiceDir";
 const QString SUBCIRCUIT_DIR = "subcircuitDir";
-QSettings AppSettings::settings = QSettings("USMB", "L2Spice");
+
+static QSettings settings("USMB", "L2Spice");
 
 QString initSubcircuitDir()
 {

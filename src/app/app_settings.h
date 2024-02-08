@@ -5,8 +5,6 @@
 
 class AppSettings
 {
-private:
-    static QSettings settings;
 public:
     static void init();
     static void defaultSettings();
