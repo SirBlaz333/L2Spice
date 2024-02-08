@@ -15,10 +15,10 @@ const QString NODEP = QString(".PRINT NODEP %1 %2");
 const QString SUBCIRCUIT = QString("X%1 %2");
 const QString FILE_OUTPUT = QString(".FILE %1");
 const QString CURRENT_WARNING = QString(
-    "<br><b style=\"color:orange\">WARNING! There are multiple devices connected to the ammeter "
+    "<br><b style=\"color:orange\">*WARNING! There are multiple devices connected to the ammeter "
     "%1. The first "
     "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>");
-const QString CURRENT_ERROR = QString("<br><b style=\"color:red\">ERROR! Ammeter %1 was misplaced. "
+const QString CURRENT_ERROR = QString("<br><b style=\"color:red\">*ERROR! Ammeter %1 was misplaced. "
                                       "Cannot display the output.</b><br>");
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
