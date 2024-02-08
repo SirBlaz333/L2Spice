@@ -6,8 +6,8 @@
 namespace RegexUtils {
     const QRegularExpression componentRegex = QRegularExpression(R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpression nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");
-    const QRegularExpression paramRegex = QRegularExpression(R"((\d*)(\w*))");
-    const QRegularExpression attributeRegex = QRegularExpression(R"(\(attribute \"(\w+)\" \(type \w+\) (\(unit (\w+)\)) (\(value \"([\d\w]*)\"\))\))");
+    const QRegularExpression paramRegex = QRegularExpression(R"((\d*[\.,]?\d*)(\w*))");
+    const QRegularExpression attributeRegex = QRegularExpression(R"(\(attribute \"(\w+)\" \(type \w+\) (\(unit (\w+)\)) (\(value \"(.*)\"\))\))");
     const QRegularExpression signalRegex = QRegularExpression(R"(\(signal .+? \(net .+?\)\))");
     const QRegularExpression sourceTypesRegex = QRegularExpression(R"(DC|PWL|PULSE|SIN|CUS|NOISE|EXP|jj)", QRegularExpression::CaseInsensitiveOption);
     const QRegularExpression subcircuitRegex = QRegularExpression(R"(\.SUBCKT (\w+) .+?\.ENDS\n)", QRegularExpression::DotMatchesEverythingOption);
