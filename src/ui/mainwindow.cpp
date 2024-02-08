@@ -166,12 +166,18 @@ void MainWindow::convertToSpice()
     }
 }
 
+QString convertHtmlToPlain(QString htmlText) {
+    QTextDocument htmlDoc;
+    htmlDoc.setHtml(htmlText);
+    return htmlDoc.toPlainText();
+}
+
 void MainWindow::updateLibrePCB()
 {
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-        QString oldSpiceNotation = storage->lastElement().getSpiceNetlist();
+        QString oldSpiceNotation = convertHtmlToPlain(storage->lastElement().getSpiceNetlist());
         QString newLibreNotation = appController.updateLibre(libreNotation, oldSpiceNotation, spiceNotation);
         ui->notationLibreTextEdit->setPlainText(newLibreNotation);
         saveAndUpdateState();
