@@ -58,7 +58,7 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
         }
     }
     if (component.getValue() == "VCC") {
-        result += "0 ";
+        result += "0 2.5m";
     }
     result += attributeUtils::writeAttributes(component.getAttributeList(), component.getValue());
     return result;
