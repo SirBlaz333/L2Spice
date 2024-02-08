@@ -16,6 +16,7 @@ namespace RegexUtils {
     const QRegularExpression specialDeclaration = QRegularExpression(R"(\.\w+)");
     const QRegularExpression paramWithName = QRegularExpression(R"((\w+)=(\w+))");
     const QRegularExpression projectPath = QRegularExpression(R"(.+[\\|/](\w+)[\\|/]circuit[\\|/]circuit\.lp)");
+    const QRegularExpression jjNameRegex = QRegularExpression(R"(JJ([a-zA-Z0-9_]+))");
 };
 
 #endif // REGEX_UTILS_H

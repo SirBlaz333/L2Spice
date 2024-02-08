@@ -1,6 +1,7 @@
 #include "spice_printer.h"
 #include "src/utils/attribute_utils.h"
 #include "src/utils/global_variables.h"
+#include "src/utils/regex_utils.h"
 
 const QString EMPTY_STRING = QString();
 const QString LINE_SEPARATOR = QString("<br>");
@@ -35,9 +36,14 @@ QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
     return uuid.isEmpty() || netLabelMap.isEmpty() ? "_ " : netLabelMap[uuid];
 }
 
+QString getSpiceName(QString name) {
+    QRegularExpressionMatch match = RegexUtils::jjNameRegex.match(name);
+    return match.hasMatch() ? "B" + match.captured(1) : name;
+}
+
 QString SpicePrinter::printComponent(Component component, QString parentUUID)
 {
-    QString result = component.getName() + WORD_SEPARATOR;
+    QString result = getSpiceName(component.getName()) + WORD_SEPARATOR;
     QList<Attribute> list = component.getAttributeList();
     if (component.getValue() == "{{SUBCIRCUIT}}") {
         result = SUBCIRCUIT.arg(list.first().getValue().toUpper(), result);
