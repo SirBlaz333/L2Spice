@@ -28,7 +28,7 @@ const QString CIRCUIT_IS_EMPTY = QString("Cannot simulate the circuit. The circu
 const QString CIRCUIT_IS_NOT_SAVED = QString("Cannot simulate the circuit. Please save the circuit first!");
 const QString SIMULATION_IS_EXECUTED = QString(
     "Simulation was executed. The results of the simulation are in the same directory "
-    "with circuit file. The console output is written into console_output.txt file.");
+    "as the circuit file. The console output is written into console_output.txt file.");
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
