@@ -146,6 +146,12 @@ QString saveSpiceFile(QWidget *parent, QString fileName, QString data, bool forc
     return saveFile(parent, fileName, data, SPICE_EXTENSION, dir, forcedFileDialog);
 }
 
+QString convertHtmlToPlain(QString htmlText) {
+    QTextDocument htmlDoc;
+    htmlDoc.setHtml(htmlText);
+    return htmlDoc.toPlainText();
+}
+
 void MainWindow::convertToSpice()
 {
     try {
@@ -156,20 +162,17 @@ void MainWindow::convertToSpice()
             showWarning(CONVERSION_ERROR_EMPTY_NETLIST);
             return;
         }
-        spiceNetlist = header.getHeader(params, ui->libreFileLabel->text()) + spiceNetlist;
+        if (params.getSubcircuitStatus()) {
+            saveSubcircuitIfNeeded(convertHtmlToPlain(spiceNetlist), params);
+        } else {
+            spiceNetlist = header.getHeader(params, ui->libreFileLabel->text()) + spiceNetlist;
+        }
         ui->notationSpiceTextEdit->setHtml(spiceNetlist);
-        saveSubcircuitIfNeeded(spiceNetlist, params);
         saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
         showError(CONVERSION_EXCEPTION.arg(message));
     }
-}
-
-QString convertHtmlToPlain(QString htmlText) {
-    QTextDocument htmlDoc;
-    htmlDoc.setHtml(htmlText);
-    return htmlDoc.toPlainText();
 }
 
 void MainWindow::updateLibrePCB()

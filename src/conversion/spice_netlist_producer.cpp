@@ -102,8 +102,9 @@ void writeSubcircuit(QMap<QString, QString> *subcircuits, QString subcircuitName
     if ((*subcircuits).contains(subcircuitName)) {
         return;
     }
-    QString subcircuit = FileManager::loadFile(AppSettings::getSubcircuitDir() + subcircuitName
-                                               + ".cir");
+    QString subcircuitFile = AppSettings::getSubcircuitDir() + "/" + subcircuitName + ".cir";
+    QString subcircuit = FileManager::loadFile(subcircuitFile);
+    subcircuit.replace("\n", LINE_SEPARATOR);
     (*subcircuits)[subcircuitName] = subcircuit;
     QRegularExpressionMatchIterator it = RegexUtils::subcircuitIdentifierRegex.globalMatch(subcircuit);
     while (it.hasNext()) {
@@ -134,7 +135,7 @@ QString getAllSubcircuits(QSet<QString> usedComponents, QList<Component> compone
     QString result;
     for (const auto &subcircuit : subcircuits) {
         if (!subcircuit.isEmpty()) {
-            result += subcircuit + LINE_SEPARATOR;
+            result += subcircuit + LINE_SEPARATOR + LINE_SEPARATOR;
         }
     }
     return result;

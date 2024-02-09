@@ -12,7 +12,7 @@ const QString PROBE = QString(".PRINT %1 %2 0");
 const QString METER = QString(".PRINT %1 %2");
 const QString NODEV = QString(".PRINT NODEV %1 %2");
 const QString NODEP = QString(".PRINT NODEP %1 %2");
-const QString SUBCIRCUIT = QString("X%1 %2");
+const QString SUBCIRCUIT = QString("X%1 %2 0 ");
 const QString FILE_OUTPUT = QString(".FILE %1");
 const QString CURRENT_WARNING = QString(
     "<br><b style=\"color:orange\">*WARNING! There are multiple devices connected to the ammeter "
@@ -46,7 +46,8 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
     QString result = getSpiceName(component.getName()) + WORD_SEPARATOR;
     QList<Attribute> list = component.getAttributeList();
     if (component.getValue() == "{{SUBCIRCUIT}}") {
-        result = SUBCIRCUIT.arg(list.first().getValue().toUpper(), result);
+        QString subcircuit = list.first().getValue().toUpper();
+        result = SUBCIRCUIT.arg(component.getName(), subcircuit);
         component.removeAttribute(list.first());
     }
     if (!parentUUID.isEmpty()) {
