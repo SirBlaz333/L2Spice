@@ -3,6 +3,8 @@
 #include "src/utils/global_variables.h"
 #include "src/utils/regex_utils.h"
 
+#include <src/app/app_settings.h>
+
 const QString EMPTY_STRING = QString();
 const QString LINE_SEPARATOR = QString("<br>");
 const QString WORD_SEPARATOR = QString(" ");
@@ -59,7 +61,7 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
         }
     }
     if (component.getValue() == "VCC") {
-        result += "0 2.5m";
+        result += "0 " + AppSettings::getVCCValue();
     }
     result += attributeUtils::writeAttributes(component.getAttributeList(), component.getValue());
     return result;

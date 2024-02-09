@@ -6,6 +6,7 @@ const QString HEADER = "header";
 const QString HISTORY_SIZE = "historySize";
 const int DEFAULT_HISTORY_SIZE = 10;
 const QString HEADER_PATTERN = "headerPattern";
+const QString DEFAULT_VCC_VALUE = "2.5m";
 const QString DEFAULT_HEADER_PATTERN = "Converted %1 from the \"%2\" LibrePCB project by L2Spice for %3 simulator.";
 const QString JOSIM_PATH = "josimPath";
 const QString JSIM_PATH = "jsimPath";
@@ -36,18 +37,22 @@ void AppSettings::init()
     if (getHistorySize() == 0) {
         setHistorySize(DEFAULT_HISTORY_SIZE);
     }
+    if (getVCCValue().isEmpty()) {
+        setVCCValue(DEFAULT_VCC_VALUE);
+    }
 }
 
 void AppSettings::defaultSettings()
 {
     AppSettings::setHistorySize(DEFAULT_HISTORY_SIZE);
     AppSettings::setIncludeHeader(true);
+    AppSettings::setHeaderPattern("");
+    AppSettings::setVCCValue("2.5m");
     AppSettings::setSpiceDir("");
     AppSettings::setLibreDir("");
     AppSettings::setSubcircuitDir(initSubcircuitDir());
     AppSettings::setJosimExecutablePath("");
     AppSettings::setJsimExecutablePath("");
-    AppSettings::setHeaderPattern("");
     AppSettings::init();
 }
 
@@ -59,6 +64,11 @@ bool AppSettings::includeHeader()
 int AppSettings::getHistorySize()
 {
     return settings.value(HISTORY_SIZE).toInt();
+}
+
+QString AppSettings::getVCCValue()
+{
+    return settings.value(DEFAULT_VCC_VALUE).toString();
 }
 
 QString AppSettings::getHeaderPattern()
@@ -104,6 +114,11 @@ void AppSettings::setHistorySize(int size)
 void AppSettings::setHeaderPattern(QString headerPattern)
 {
     settings.setValue(HEADER_PATTERN, headerPattern);
+}
+
+void AppSettings::setVCCValue(QString value)
+{
+    settings.setValue(DEFAULT_VCC_VALUE, value);
 }
 
 void AppSettings::setSpiceDir(QString dir)

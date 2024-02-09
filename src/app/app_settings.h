@@ -11,6 +11,7 @@ public:
     static bool includeHeader();
     static int getHistorySize();
     static QString getHeaderPattern();
+    static QString getVCCValue();
     static QString getSpiceDir();
     static QString getLibreDir();
     static QString getSubcircuitDir();
@@ -19,6 +20,7 @@ public:
     static void setIncludeHeader(bool include);
     static void setHistorySize(int size);
     static void setHeaderPattern(QString headerPattern);
+    static void setVCCValue(QString value);
     static void setSpiceDir(QString dir);
     static void setLibreDir(QString dir);
     static void setSubcircuitDir(QString dir);

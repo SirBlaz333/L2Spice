@@ -7,7 +7,7 @@
 #include <src/app/app_settings.h>
 #include <src/file/file_manager.h>
 
-QString loadDirectory(QString name);
+const QRegularExpressionValidator* createVccValidator();
 
 PreferencesTabs::PreferencesTabs(QWidget *parent)
     : QDialog(parent)
@@ -19,6 +19,8 @@ PreferencesTabs::PreferencesTabs(QWidget *parent)
     ui->okButton->setProperty("class", "dialogButton");
     ui->cancelButton->setProperty("class", "dialogButton");
     ui->defaultSettingsButton->setProperty("class", "dialogButton");
+    ui->vccLineEdit->setValidator(createVccValidator());
+    ui->vccLineEdit->setAlignment(Qt::AlignCenter);
     connect(ui->spiceDirToolButton, &QPushButton::clicked, this, &PreferencesTabs::onSpiceDirToolButtonClicked);
     connect(ui->libreDirToolButton, &QPushButton::clicked, this, &PreferencesTabs::onLibreDirToolButtonClicked);
     connect(ui->subcircuitDirToolButton, &QPushButton::clicked, this, &PreferencesTabs::onSubcircuitDirToolButtonClicked);
@@ -31,6 +33,13 @@ PreferencesTabs::PreferencesTabs(QWidget *parent)
     init();
 }
 
+const QRegularExpressionValidator *createVccValidator()
+{
+    const QString regex = R"(\d*\.{0,1}\d*([pnumkx]|meg))";
+    const QRegularExpressionValidator* validator = new QRegularExpressionValidator(QRegularExpression(regex));
+    return validator;
+}
+
 PreferencesTabs::~PreferencesTabs()
 {
     delete ui;
@@ -41,6 +50,7 @@ void PreferencesTabs::apply()
     AppSettings::setIncludeHeader(ui->includeHeaderCheckbox->isChecked());
     AppSettings::setHeaderPattern(ui->headerPattern->text());
     AppSettings::setHistorySize(ui->historySpinBox->value());
+    AppSettings::setVCCValue(ui->vccLineEdit->text());
     AppSettings::setSpiceDir(ui->spiceDirLineEdit->text());
     AppSettings::setLibreDir(ui->libreDirLineEdit->text());
     AppSettings::setSubcircuitDir(ui->subcircuitDirLineEdit->text());
@@ -119,4 +129,5 @@ void PreferencesTabs::init()
     ui->josimPath->setText(AppSettings::getJosimExecutablePath());
     ui->jsimPath->setText(AppSettings::getJsimExecutablePath());
     ui->headerPattern->setEnabled(AppSettings::includeHeader());
+    ui->vccLineEdit->setText(AppSettings::getVCCValue());
 }
