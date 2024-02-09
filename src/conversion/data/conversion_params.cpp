@@ -1,6 +1,6 @@
 #include "conversion_params.h"
 
-const QString UNNAMED = "UNNAMED";
+const QString UNNAMED = "unnamed";
 
 bool ConversionParams::getSubcircuitStatus() const
 {
