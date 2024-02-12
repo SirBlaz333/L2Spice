@@ -17,7 +17,6 @@ class ConsoleApplication
 
 public:
     ConsoleApplication(int argc, char **argv);
-    ~ConsoleApplication();
     int exec();
 };
 

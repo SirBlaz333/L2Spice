@@ -31,7 +31,7 @@ QString AppHeader::getHeader(ConversionParams params, QString sourceFile)
     if (!AppSettings::includeHeader() || AppSettings::getHeaderPattern().isEmpty()) {
         return "";
     }
-    QString simulator = params.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM ? "JoSIM" : "JSIM";
+    QString simulator = params.getSimulatorVersion() == GlobalVariables::SIMULATOR_VERSION_JOSIM ? "JoSIM" : "JSIM";
     QString project = RegexUtils::projectPath.match(sourceFile).captured(1);
     project = project.isEmpty() ? UNKNOWN_NAME : project;
     QString headerPattern = HEADER_LINE.arg(AppSettings::getHeaderPattern());

@@ -1,8 +1,9 @@
 #include "global_variables.h"
 
-int SIMULATOR_VERSION_JSIM = 0;
-int SIMULATOR_VERSION_JOSIM = 1;
-QSet<QString> JSIM_MODEL_ATTRIBUTES
+const std::string GlobalVariables::VERSION = "1.0.0";
+const int GlobalVariables::SIMULATOR_VERSION_JSIM = 0;
+const int GlobalVariables::SIMULATOR_VERSION_JOSIM = 1;
+const QSet<QString> GlobalVariables::JSIM_MODEL_ATTRIBUTES
     = {"RTYPE", "CCT", "VG", "DELV", "ICON", "R0", "RN", "CAP", "ICRIT"};
-QSet<QString> JOSIM_MODEL_ATTRIBUTES
+const QSet<QString> GlobalVariables::JOSIM_MODEL_ATTRIBUTES
     = {"RTYPE", "VG", "DELV", "R0", "RN", "CAP", "ICRIT", "T", "TC", "D", "ICFCT", "PHI", "CPR"};

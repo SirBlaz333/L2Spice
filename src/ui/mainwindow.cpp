@@ -171,8 +171,8 @@ ConversionParams MainWindow::getConversionParams()
     QString subcircuitName = ui->subcircuitNameLineEdit->text();
     bool fileOutput = ui->writeOutputInFilesCheckbox->isChecked();
     bool consoleOutput = ui->writeOutputOnConsoleCheckbox->isChecked();
-    int converterVersion = ui->josimRadioButton->isChecked() ? SIMULATOR_VERSION_JOSIM
-                                                             : SIMULATOR_VERSION_JSIM;
+    int converterVersion = ui->josimRadioButton->isChecked() ? GlobalVariables::SIMULATOR_VERSION_JOSIM
+                                                             : GlobalVariables::SIMULATOR_VERSION_JSIM;
     lastParams = ConversionParams(subcircuitStatus,
                                   subcircuitName,
                                   fileOutput,
@@ -334,7 +334,7 @@ void MainWindow::loadExample()
 
 void MainWindow::simulate()
 {
-    QString simulator = lastParams.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM
+    QString simulator = lastParams.getSimulatorVersion() == GlobalVariables::SIMULATOR_VERSION_JOSIM
                             ? AppSettings::getJosimExecutablePath()
                             : AppSettings::getJsimExecutablePath();
     if (simulator.isEmpty()) {

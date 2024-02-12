@@ -166,8 +166,10 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
         attributes.removeOne(attribute);
     }
     for (QString &attribute : attributes) {
-        if((simulatorVersion == SIMULATOR_VERSION_JSIM && JSIM_MODEL_ATTRIBUTES.contains(attribute)) ||
-            (simulatorVersion == SIMULATOR_VERSION_JOSIM && JOSIM_MODEL_ATTRIBUTES.contains(attribute))) {
+        if( (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JSIM
+                && GlobalVariables::JSIM_MODEL_ATTRIBUTES.contains(attribute)) ||
+            (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JOSIM
+                && GlobalVariables::JOSIM_MODEL_ATTRIBUTES.contains(attribute))) {
             textToUpdate = updateParameter(textToUpdate, &component, EMPTY_STRING, attribute);
         }
     }

@@ -9,7 +9,7 @@
 class LibreNetlistUpdater
 {
 private:
-    int simulatorVersion = SIMULATOR_VERSION_JSIM;
+    int simulatorVersion = GlobalVariables::SIMULATOR_VERSION_JSIM;
     QString getNewUnit(QString param, QString attribute);
     QString getNewAttribute(QString attribute, QString number, QString unit);
     QMap<QString, QString> getComponents(QString textToUpdate);

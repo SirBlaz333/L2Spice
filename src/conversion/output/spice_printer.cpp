@@ -80,10 +80,10 @@ void eraseUnwantedAttributes(QList<Attribute> *attributes, QSet<QString> allowed
 QString SpicePrinter::printModel(Component model)
 {
     QList<Attribute> attributes = model.getAttributeList();
-    if (params.getSimulatorVersion() == SIMULATOR_VERSION_JSIM) {
-        eraseUnwantedAttributes(&attributes, JSIM_MODEL_ATTRIBUTES);
-    } else if (params.getSimulatorVersion() == SIMULATOR_VERSION_JOSIM) {
-        eraseUnwantedAttributes(&attributes, JOSIM_MODEL_ATTRIBUTES);
+    if (params.getSimulatorVersion() == GlobalVariables::SIMULATOR_VERSION_JSIM) {
+        eraseUnwantedAttributes(&attributes, GlobalVariables::JSIM_MODEL_ATTRIBUTES);
+    } else if (params.getSimulatorVersion() == GlobalVariables::SIMULATOR_VERSION_JOSIM) {
+        eraseUnwantedAttributes(&attributes, GlobalVariables::JOSIM_MODEL_ATTRIBUTES);
     }
     return MODEL.arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
 }

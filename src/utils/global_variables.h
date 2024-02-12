@@ -3,9 +3,14 @@
 
 #include <QSet>
 
-extern int SIMULATOR_VERSION_JSIM;
-extern int SIMULATOR_VERSION_JOSIM;
-extern QSet<QString> JSIM_MODEL_ATTRIBUTES;
-extern QSet<QString> JOSIM_MODEL_ATTRIBUTES;
+class GlobalVariables
+{
+public:
+    const static std::string VERSION;
+    const static int SIMULATOR_VERSION_JSIM;
+    const static int SIMULATOR_VERSION_JOSIM;
+    const static QSet<QString> JSIM_MODEL_ATTRIBUTES;
+    const static QSet<QString> JOSIM_MODEL_ATTRIBUTES;
+};
 
 #endif // GLOBAL_VARIABLES_H

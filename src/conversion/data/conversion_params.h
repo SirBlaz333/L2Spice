@@ -18,7 +18,7 @@ public:
                      const QString &subcircuitName = QString(),
                      bool fileOutput = true,
                      bool consoleOutput = true,
-                     int simulatorVersion = SIMULATOR_VERSION_JOSIM);
+                     int simulatorVersion = GlobalVariables::SIMULATOR_VERSION_JOSIM);
     ConversionParams(const ConversionParams &params) = default;
     ConversionParams &operator=(const ConversionParams &params) = default;
 
