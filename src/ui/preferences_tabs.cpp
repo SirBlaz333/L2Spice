@@ -1,4 +1,5 @@
 #include "preferences_tabs.h"
+#include "notification_manager.h"
 #include "ui_preferences.h"
 
 #include <QFileDialog>
@@ -6,6 +7,10 @@
 
 #include <src/app/app_settings.h>
 #include <src/file/file_manager.h>
+
+const QString CHANGES_MESSAGE = "Changes have been made to a setting (History size) that requires "
+                                "a program restart to take effect. Please "
+                                "restart the program for the changes to be applied.";
 
 const QRegularExpressionValidator* createVccValidator();
 
@@ -63,6 +68,17 @@ void PreferencesTabs::close()
     QWidget::close();
 }
 
+void PreferencesTabs::notifyRestartRequired()
+{
+    bool restartRequired = false;
+    if (ui->historySpinBox->value() != AppSettings::getHistorySize()) {
+        restartRequired = true;
+    }
+    if (restartRequired) {
+        NotificationManager::showInfo(CHANGES_MESSAGE, "Restart required");
+    }
+}
+
 void PreferencesTabs::onSpiceDirToolButtonClicked()
 {
     QString path = ui->spiceDirLineEdit->text();
@@ -98,6 +114,7 @@ void PreferencesTabs::onJosimToolButtonClicked()
 
 void PreferencesTabs::onOkButtonClicked()
 {
+    notifyRestartRequired();
     apply();
     close();
 }

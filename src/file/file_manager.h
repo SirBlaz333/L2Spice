@@ -19,8 +19,6 @@ public:
     static bool confirmSaving(QString fileName, bool fileDialogWasShown = false);
     static QString getPath(QWidget *parent = nullptr, QString path = QString());
     static QString getFile(QWidget *parent = nullptr, QString path = QString());
-    FileManager();
-    ~FileManager();
 };
 
 #endif // FILE_MANAGER_H

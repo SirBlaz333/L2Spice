@@ -33,6 +33,7 @@ SOURCES += \
     src/circuit/element/signal.cpp \
     src/circuit/element/variant.cpp \
     src/ui/mainwindow.cpp \
+    src/ui/notification_manager.cpp \
     src/ui/overflowing_label.cpp \
     src/ui/preferences_tabs.cpp \
     src/utils/attribute_utils.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     src/circuit/element/signal.h \
     src/circuit/element/variant.h \
     src/ui/mainwindow.h \
+    src/ui/notification_manager.h \
     src/ui/overflowing_label.h \
     src/ui/preferences_tabs.h \
     src/utils/attribute_utils.h \

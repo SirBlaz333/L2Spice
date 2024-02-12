@@ -1,15 +1,14 @@
 #include "mainwindow.h"
+#include "notification_manager.h"
 #include "preferences_tabs.h"
 #include "qregularexpression.h"
-#include "src/utils/regex_utils.h"
 #include "src/utils/global_variables.h"
+#include "src/utils/regex_utils.h"
 #include "ui_mainwindow.h"
 
-#include <QMessageBox>
 #include <QDesktopServices>
 
 #include <src/app/app_settings.h>
-
 #include <src/file/file_manager.h>
 
 const QString EMPTY = QString();
@@ -86,30 +85,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void showMessage(QString message, QMessageBox::Icon icon, QString title)
-{
-    QMessageBox messageBox;
-    messageBox.setIcon(icon);
-    messageBox.setWindowTitle(title);
-    messageBox.setText(message);
-    messageBox.setMinimumWidth(150);
-    messageBox.addButton(QMessageBox::Ok);
-    messageBox.exec();
-}
-
-void showInfo(QString message)
-{
-    showMessage(message, QMessageBox::Information, "Info");
-}
-
-void showError(QString message)
-{
-    showMessage(message, QMessageBox::Critical, "Error");
-}
-
-void showWarning(QString message) {
-    showMessage(message, QMessageBox::Warning, "Warning");
-}
 
 QString saveFile(QWidget *parent,
                  QString fileName,
@@ -159,7 +134,7 @@ void MainWindow::convertToSpice()
         ConversionParams params = getConversionParams();
         QString spiceNetlist = appController.convertToSpice(libreNotation, params);
         if (spiceNetlist.isEmpty()) {
-            showWarning(CONVERSION_ERROR_EMPTY_NETLIST);
+            NotificationManager::showWarning(CONVERSION_ERROR_EMPTY_NETLIST);
             return;
         }
         if (params.getSubcircuitStatus()) {
@@ -171,7 +146,7 @@ void MainWindow::convertToSpice()
         saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
-        showError(CONVERSION_EXCEPTION.arg(message));
+        NotificationManager::showError(CONVERSION_EXCEPTION.arg(message));
     }
 }
 
@@ -186,7 +161,7 @@ void MainWindow::updateLibrePCB()
         saveAndUpdateState();
     } catch (const std::exception &e) {
         QString message = e.what();
-        showError(UPDATE_EXCEPTION.arg(message));
+        NotificationManager::showError(UPDATE_EXCEPTION.arg(message));
     }
 }
 
@@ -363,12 +338,12 @@ void MainWindow::simulate()
                             ? AppSettings::getJosimExecutablePath()
                             : AppSettings::getJsimExecutablePath();
     if (simulator.isEmpty()) {
-        showWarning(SIMULATOR_PATH_IS_EMPTY);
+        NotificationManager::showWarning(SIMULATOR_PATH_IS_EMPTY);
         return;
     }
     QString data = ui->notationSpiceTextEdit->toPlainText();
     if (data.isEmpty()) {
-        showWarning(CIRCUIT_IS_EMPTY);
+        NotificationManager::showWarning(CIRCUIT_IS_EMPTY);
         return;
     }
     QString fileName = ui->spiceFileLabel->text();
@@ -376,11 +351,11 @@ void MainWindow::simulate()
         fileName = saveSpiceFile(this, fileName, data, true);
     }
     if (fileName.isEmpty()) {
-        showWarning(CIRCUIT_IS_NOT_SAVED);
+        NotificationManager::showWarning(CIRCUIT_IS_NOT_SAVED);
         return;
     }
     ui->spiceFileLabel->setText(fileName);
     std::string command = SIMULATOR_EXECUTION_COMMAND.arg(simulator, fileName).toStdString();
     system(command.c_str());
-    showInfo(SIMULATION_IS_EXECUTED);
+    NotificationManager::showInfo(SIMULATION_IS_EXECUTED);
 }

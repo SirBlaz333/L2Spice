@@ -31,6 +31,7 @@ private:
     void init();
     void apply();
     void close();
+    void notifyRestartRequired();
 };
 
 #endif // PREFERENCES_TABS_H

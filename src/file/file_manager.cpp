@@ -3,7 +3,11 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QTextStream>
-#include <qmessagebox.h>
+
+#include <src/ui/notification_manager.h>
+
+const QString CONFIRMATION_QUESTION = "The file already exists. Do you want to override it?";
+const QString CONFIRMATION_TITLE = "File Exists";
 
 QString FileManager::getOpenFileName(QWidget *parent, QString path, QString filter)
 {
@@ -52,14 +56,7 @@ bool FileManager::save(QString fileName, QString data)
 bool FileManager::confirmSaving(QString fileName, bool fileDialogWasShown)
 {
     if (!fileDialogWasShown && QFile::exists(fileName)) {
-        QMessageBox::StandardButton reply =
-            QMessageBox::question(nullptr,
-                                  "File Exists",
-                                  "The file already exists. Do you want to override it?",
-                                  QMessageBox::Yes | QMessageBox::No);
-        if (reply == QMessageBox::No) {
-            return false;
-        }
+        return NotificationManager::showQuestion(CONFIRMATION_QUESTION, CONFIRMATION_TITLE);
     }
     return true;
 }
@@ -80,7 +77,3 @@ QString FileManager::getFile(QWidget *parent, QString path)
     QString directory = QFileDialog::getOpenFileName(parent, "Select file", currentPath);
     return directory.isEmpty() ? path : directory;
 }
-
-FileManager::FileManager() {}
-
-FileManager::~FileManager() {}
