@@ -13,5 +13,7 @@
         <file>img/circle.png</file>
         <file>img/grey_circle.png</file>
         <file>img/play-button.png</file>
+        <file>img/arrow-down.png</file>
+        <file>img/arrow-up.png</file>
     </qresource>
 </RCC>

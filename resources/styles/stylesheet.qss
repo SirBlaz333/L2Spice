@@ -192,7 +192,6 @@ QLineEdit {
     border: none;
     font-size: 12px;
     padding: 3px;
-    border: 2px solid black;
     border-radius: 5px;
 }
 
@@ -258,4 +257,43 @@ QRadioButton::indicator:checked:hover {
 
 QDialog {
     background-color: #DDDDDD;
+}
+
+QScrollArea {
+    border: none;
+}
+
+QSpinBox {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+QSpinBox::up-button, QSpinBox::down-button {
+    height: 14px;
+    width: 24px;
+    border: none;
+    background: white;
+}
+
+QSpinBox::up-button:hover, QSpinBox::down-button:hover {
+    background: #CCCCCC;
+}
+
+QSpinBox::up-button:pressed, QSpinBox::down-button:pressed {
+    background: #AABBCC;
+}
+
+QSpinBox::up-arrow {
+    image: url(:/img/arrow-up.png);
+    width: 12px;
+    height: 12px;
+}
+
+QSpinBox::down-arrow {
+    image: url(:/img/arrow-down.png);
+    width: 12px;
+    height: 12px;
 }

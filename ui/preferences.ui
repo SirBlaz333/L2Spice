@@ -70,7 +70,7 @@
         <x>0</x>
         <y>0</y>
         <width>685</width>
-        <height>717</height>
+        <height>719</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -211,13 +211,38 @@
           </item>
           <item>
            <widget class="QLabel" name="headerPatternLabel">
+            <property name="minimumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>170</width>
+              <height>30</height>
+             </size>
+            </property>
             <property name="text">
              <string>Header pettern: </string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="headerPattern"/>
+           <widget class="QLineEdit" name="headerPattern">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>800</width>
+              <height>30</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
