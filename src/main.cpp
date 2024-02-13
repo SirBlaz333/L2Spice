@@ -38,5 +38,5 @@ QString initStyles()
 
 void initDefaultSettings()
 {
-    AppSettings::init();
+    AppSettings::loadSettings();
 }

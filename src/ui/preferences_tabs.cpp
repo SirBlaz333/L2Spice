@@ -61,6 +61,7 @@ void PreferencesTabs::apply()
     AppSettings::setSubcircuitDir(ui->subcircuitDirLineEdit->text());
     AppSettings::setJosimExecutablePath(ui->josimPath->text());
     AppSettings::setJsimExecutablePath(ui->jsimPath->text());
+    AppSettings::saveSettings();
 }
 
 void PreferencesTabs::close()

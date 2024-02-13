@@ -1,12 +1,18 @@
 #ifndef APP_SETTINGS_H
 #define APP_SETTINGS_H
 
-#include <QSettings>
+#include <QMap>
+#include <QString>
 
 class AppSettings
 {
+private:
+    static QMap<QString, QString> settings;
+    static QMap<QString, QString> model;
+
 public:
-    static void init();
+    static void loadSettings();
+    static void saveSettings();
     static void defaultSettings();
     static bool includeHeader();
     static int getHistorySize();
