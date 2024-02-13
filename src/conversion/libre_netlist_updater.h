@@ -13,7 +13,7 @@ private:
     QString getNewUnit(QString param, QString attribute);
     QString getNewAttribute(QString attribute, QString number, QString unit);
     QMap<QString, QString> getComponents(QString textToUpdate);
-    QString updateParameter(QString textToUpdate,
+    QString updateAttribute(QString textToUpdate,
                             QString *component,
                             QString param,
                             QString attribute);
@@ -25,7 +25,7 @@ public:
     LibreNetlistUpdater();
     ~LibreNetlistUpdater();
     void setSimulatorVersion(int version);
-    QString updateNetlist(QString textToUpdate, QString oldVersion, QString newVersion);
+    QString updateNetlist(QString textToUpdate, QString newVersion);
 };
 
 #endif // LIBRE_NETLIST_UPDATER_H

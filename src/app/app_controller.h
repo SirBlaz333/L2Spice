@@ -17,7 +17,7 @@ public:
     AppController();
     ~AppController();
     QString convertToSpice(QString libreNotation, ConversionParams &params);
-    QString updateLibre(QString oldLibreNotation, QString oldSpiceNotation, QString newSpiceNotation);
+    QString updateLibre(QString oldLibreNotation, QString newSpiceNotation);
 };
 
 #endif // APP_CONTROLLER_H

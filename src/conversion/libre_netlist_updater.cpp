@@ -69,7 +69,10 @@ QString getAttribute(QList<QString> attributes, QString desiredName)
             return match.captured(0);
         }
     }
-    return "";
+    if (!attributes.isEmpty()) {
+        return attributes.first();
+    }
+    return EMPTY_STRING;
 }
 
 std::string findTextByPattern(const std::string &text, const std::string &pattern)
@@ -121,7 +124,7 @@ QMap<QString, QString> LibreNetlistUpdater::getComponents(QString textToUpdate)
     return map;
 }
 
-QString LibreNetlistUpdater::updateParameter(QString textToUpdate,
+QString LibreNetlistUpdater::updateAttribute(QString textToUpdate,
                                              QString *component,
                                              QString param,
                                              QString attribute)
@@ -135,16 +138,38 @@ QString LibreNetlistUpdater::updateParameter(QString textToUpdate,
     return textToUpdate.replace(oldComponent, *component);
 }
 
+QString getLibrePCBName(QString name)
+{
+    QRegularExpressionMatch match = RegexUtils::jjSpiceNameRegex.match(name);
+    if (match.hasMatch()) {
+        return "JJ" + match.captured(1);
+    }
+    return name;
+}
+
+bool isValidAttribute(int simulatorVersion, QString attribute)
+{
+    return (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JSIM
+            && GlobalVariables::JSIM_MODEL_ATTRIBUTES.contains(attribute))
+           || (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JOSIM
+               && GlobalVariables::JOSIM_MODEL_ATTRIBUTES.contains(attribute));
+}
+
 QString LibreNetlistUpdater::update(QString textToUpdate,
                                     QString params,
                                     QMap<QString, QString> componentsMap)
 {
     QList<QString> paramList = splitParams(params.begin(), params.end());
-    //remove the element if it is .MODEL, .PRINT, etc.
-    if (RegexUtils::specialDeclaration.match(paramList.first()).hasMatch()) {
+    //return base text if it starts with "." and not a model
+    //remove the parameter if it is ".MODEL"
+    QRegularExpressionMatch match = RegexUtils::specialDeclaration.match(paramList.first());
+    if (match.hasMatch()) {
+        if (match.captured(1) != "MODEL") {
+            return textToUpdate;
+        }
         paramList.pop_front();
     }
-    QString name = paramList.first();
+    QString name = getLibrePCBName(paramList.first());
     //remove the name;
     paramList.pop_front();
     QString component = componentsMap[name];
@@ -158,19 +183,18 @@ QString LibreNetlistUpdater::update(QString textToUpdate,
     }
     QList<QString> attributes = findAllMatches(RegexUtils::attributeRegex, component);
     for (int i = 0; i < paramList.size(); i++) {
-        QRegularExpressionMatch match = RegexUtils::paramWithName.match(paramList[i]);
-        QString value = match.hasMatch() ? match.captured(2) : paramList[i];
-        QString attribute = match.hasMatch() ? getAttribute(attributes, match.captured(1))
-                                             : attributes.first();
-        textToUpdate = updateParameter(textToUpdate, &component, value, attribute);
-        attributes.removeOne(attribute);
+        QString param = paramList[i];
+        QRegularExpressionMatch match = RegexUtils::paramWithName.match(param);
+        QString value = match.hasMatch() ? match.captured(2) : param;
+        QString attribute = getAttribute(attributes, match.captured(1));
+        if(!attribute.isEmpty()) {
+            textToUpdate = updateAttribute(textToUpdate, &component, value, attribute);
+            attributes.removeOne(attribute);
+        }
     }
     for (QString &attribute : attributes) {
-        if( (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JSIM
-                && GlobalVariables::JSIM_MODEL_ATTRIBUTES.contains(attribute)) ||
-            (simulatorVersion == GlobalVariables::SIMULATOR_VERSION_JOSIM
-                && GlobalVariables::JOSIM_MODEL_ATTRIBUTES.contains(attribute))) {
-            textToUpdate = updateParameter(textToUpdate, &component, EMPTY_STRING, attribute);
+        if(isValidAttribute(simulatorVersion, attribute)) {
+            textToUpdate = updateAttribute(textToUpdate, &component, EMPTY_STRING, attribute);
         }
     }
 
@@ -189,24 +213,22 @@ QString LibreNetlistUpdater::removeSubcircuitImports(QString param)
     return param;
 }
 
-QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString oldParams, QString newParams)
+bool canUpdate(QString row) {
+    return !RegexUtils::comment.match(row).hasMatch()
+           && !row.startsWith("VCC")
+           && !row.startsWith("X");
+}
+
+QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString newParams)
 {
     newParams = removeSubcircuitImports(newParams);
-    oldParams = removeSubcircuitImports(oldParams);
-    QList<QString> oldRows = splitRows(oldParams.begin(), oldParams.end());
-    QList<QString> newRows = splitRows(newParams.begin(), newParams.end());
+    QList<QString> rows = splitRows(newParams.begin(), newParams.end());
     QMap<QString, QString> componentsMap = getComponents(textToUpdate);
-    if (oldRows.size() != newRows.size()) {
-        return EMPTY_STRING;
-    }
-    int i = 0;
-    while (i < oldRows.size()) {
-        QString oldRow = oldRows[i];
-        QString newRow = newRows[i];
-        if (!newRow.startsWith("*") && oldRow != newRow) {
-            textToUpdate = update(textToUpdate, newRow.trimmed(), componentsMap);
+    for (QString row : rows) {
+        row = row.trimmed();
+        if (canUpdate(row)) {
+            textToUpdate = update(textToUpdate, row, componentsMap);
         }
-        i++;
     }
     return textToUpdate;
 }

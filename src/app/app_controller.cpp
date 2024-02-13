@@ -17,11 +17,8 @@ QString AppController::convertToSpice(QString libreNotation, ConversionParams &p
     return "";
 }
 
-QString AppController::updateLibre(QString oldLibreNotation, QString oldSpiceNotation, QString newSpiceNotation)
+QString AppController::updateLibre(QString oldLibreNotation, QString newSpiceNotation)
 {
-    QString newLibreNotation = updater.updateNetlist(oldLibreNotation,
-                                                     oldSpiceNotation,
-                                                     newSpiceNotation);
+    QString newLibreNotation = updater.updateNetlist(oldLibreNotation, newSpiceNotation);
     return newLibreNotation;
 }
-

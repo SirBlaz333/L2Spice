@@ -2,6 +2,7 @@
 #include "src/console/flag.h"
 #include "src/utils/global_variables.h"
 #include <iostream>
+#include <qfileinfo.h>
 #include <vector>
 
 const Flag HELP_FLAG = Flag("-h", "--help");
@@ -40,6 +41,20 @@ bool has_option(const std::vector<std::string> &args, const Flag flag)
     return false;
 }
 
+ConversionParams getConversionParams(std::vector<std::string> args) {
+    bool subcircuitStatus = has_option(args, SUBCIRCUIT_FLAG);
+    QString subcircuitName = QString::fromStdString(get_option(args, SUBCIRCUIT_FLAG));
+    bool fileOutput = !has_option(args, WITHOUT_FILE_FLAG);
+    bool consoleOutput = !has_option(args, WITHOUT_CONSOLE_FLAG);
+    int converterVersion = has_option(args, JSIM_FLAG) ? GlobalVariables::SIMULATOR_VERSION_JSIM
+                                                       : GlobalVariables::SIMULATOR_VERSION_JOSIM;
+    return ConversionParams(subcircuitStatus,
+                            subcircuitName,
+                            fileOutput,
+                            consoleOutput,
+                            converterVersion);
+}
+
 int ConsoleApplication::exec()
 {
     const std::vector<std::string> args(argv + 1, argv + argc);
@@ -59,23 +74,24 @@ int ConsoleApplication::exec()
     if (!hasInput || !hasOutput) {
         throw std::runtime_error("Input and output files must be provided!");
     }
+
     QString inputFileName = QString::fromStdString(get_option(args, INPUT_FLAG));
     QString outputFileName = QString::fromStdString(get_option(args, OUTPUT_FLAG));
-    QString input = fileManager.loadFile(inputFileName);
-    bool subcircuitStatus = has_option(args, SUBCIRCUIT_FLAG);
-    QString subcircuitName = QString::fromStdString(get_option(args, SUBCIRCUIT_FLAG));
-    bool fileOutput = !has_option(args, WITHOUT_FILE_FLAG);
-    bool consoleOutput = !has_option(args, WITHOUT_CONSOLE_FLAG);
-    int converterVersion = has_option(args, JSIM_FLAG) ? GlobalVariables::SIMULATOR_VERSION_JSIM
-                                                       : GlobalVariables::SIMULATOR_VERSION_JOSIM;
-    ConversionParams conversionParams(subcircuitStatus,
-                                      subcircuitName,
-                                      fileOutput,
-                                      consoleOutput,
-                                      converterVersion);
-    QString spiceNetlist = appHeader.getHeader(conversionParams, inputFileName) +
-                           appController.convertToSpice(input, conversionParams);
-    fileManager.save(outputFileName, spiceNetlist);
+    QString result;
+    if(QFileInfo(inputFileName).suffix() == "lp") {
+        QString input = FileManager::loadFile(inputFileName);
+        ConversionParams conversionParams = getConversionParams(args);
+        result = appController.convertToSpice(input, conversionParams);
+    }
+    if(QFileInfo(inputFileName).suffix() == "cir" && QFileInfo(outputFileName).suffix() == "lp") {
+        QString newSpice = FileManager::loadFile(inputFileName);
+        QString oldLibre = FileManager::loadFile(outputFileName);
+        result = appController.updateLibre(oldLibre, newSpice);
+    }
+    if (!FileManager::save(outputFileName, result)) {
+        std::cout << "Cannot save the output file";
+        return 1;
+    }
     std::cout << "Converted successfully!";
     return 0;
 }

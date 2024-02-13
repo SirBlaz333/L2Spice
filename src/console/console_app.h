@@ -9,7 +9,6 @@ class ConsoleApplication
 {
     AppController appController;
     AppHeader appHeader;
-    FileManager fileManager;
     int argc;
     char **argv;
     bool showHelp;

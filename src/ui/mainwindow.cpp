@@ -155,8 +155,7 @@ void MainWindow::updateLibrePCB()
     try {
         QString libreNotation = ui->notationLibreTextEdit->toPlainText();
         QString spiceNotation = ui->notationSpiceTextEdit->toPlainText();
-        QString oldSpiceNotation = convertHtmlToPlain(storage->lastElement().getSpiceNetlist());
-        QString newLibreNotation = appController.updateLibre(libreNotation, oldSpiceNotation, spiceNotation);
+        QString newLibreNotation = appController.updateLibre(libreNotation, spiceNotation);
         ui->notationLibreTextEdit->setPlainText(newLibreNotation);
         saveAndUpdateState();
     } catch (const std::exception &e) {
