@@ -46,13 +46,9 @@ void AppSettings::defaultSettings()
 {
     AppSettings::setHistorySize(DEFAULT_HISTORY_SIZE);
     AppSettings::setIncludeHeader(true);
-    AppSettings::setHeaderPattern("");
+    AppSettings::setHeaderPattern(DEFAULT_HEADER_PATTERN);
     AppSettings::setVCCValue("2.5m");
-    AppSettings::setSpiceDir("");
-    AppSettings::setLibreDir("");
     AppSettings::setSubcircuitDir(initSubcircuitDir());
-    AppSettings::setJosimExecutablePath("");
-    AppSettings::setJsimExecutablePath("");
     AppSettings::init();
 }
 
