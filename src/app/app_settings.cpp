@@ -38,7 +38,7 @@ void AppSettings::loadSettings()
     }
 
     QString fileModel = FileManager::loadFile(QDir::currentPath() + "/settings/model.txt");
-    it = RegexUtils::settingRegex.globalMatch(fileSettings);
+    it = RegexUtils::settingRegex.globalMatch(fileModel);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
         model.insert(match.captured(1), match.captured(2));
@@ -57,12 +57,6 @@ void AppSettings::saveSettings()
         data += key + "=" + settings[key] + "\n";
     }
     FileManager::save(QDir::currentPath() + "/settings/settings.txt", data);
-
-    data = QString();
-    for (QString key : model.keys()) {
-        data += key + "=" + model[key] + "\n";
-    }
-    FileManager::save(QDir::currentPath() + "/settings/model.txt", data);
 }
 
 void AppSettings::defaultSettings()
@@ -163,4 +157,9 @@ void AppSettings::setJosimExecutablePath(QString path)
 void AppSettings::setJsimExecutablePath(QString path)
 {
     settings.insert(JSIM_PATH, path);
+}
+
+QMap<QString, QString> AppSettings::getDefaultModel()
+{
+    return model;
 }

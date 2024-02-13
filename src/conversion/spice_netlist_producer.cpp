@@ -19,6 +19,8 @@ const QString SUBCIRCUIT_NAME = "SUBCIRCUIT_NAME";
 const QString GROUND = QString("GND");
 const QString GROUND_ID = QString("0");
 const QString END = QString(".end");
+const QString DEFAULT_MODEL = QString(".MODEL %1 jj(%2)");
+const QString MODEL_NAME = QString("name");
 
 SpiceNetlistProducer::SpiceNetlistProducer() {}
 
@@ -178,6 +180,30 @@ QString getFirstComponentUuid(QMap<QString, QString> netNumberMap)
     return EMPTY_STRING;
 }
 
+QSet<QString> findAllUsedModel(QString netlist)
+{
+    QSet<QString> usedModels;
+    QRegularExpressionMatchIterator it = RegexUtils::jjSpiceRow.globalMatch(netlist);
+    while (it.hasNext()) {
+        usedModels.insert(it.next().captured(1));
+    }
+    return usedModels;
+}
+
+Component createFakeModel()
+{
+    Component modelComponent;
+    modelComponent.setProperty("value", "{{MODEL/JJ}}");
+    QMap<QString, QString> model = AppSettings::getDefaultModel();
+    for (QString &key : model.keys()) {
+        QSharedPointer<Element> attribute = QSharedPointer<Attribute>::create();
+        attribute->setProperty("name", key);
+        attribute->setProperty("value", model[key]);
+        modelComponent.setProperty("attribute", attribute.get());
+    }
+    return modelComponent;
+}
+
 QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit,
                                                           const ConversionParams &params)
 {
@@ -192,10 +218,17 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
                                       printer,
                                       netComponentsMap,
                                       &usedComponents);
-    if (!circuit.getModels().empty()) {
+    QSet<QString> usedModels = findAllUsedModel(netlist);
+    if (!usedModels.empty()) {
         netlist += LINE_SEPARATOR;
         for (Component &model : circuit.getModels()) {
             netlist += printer.print(model) + LINE_SEPARATOR;
+            usedModels.remove(model.getName());
+        }
+        Component fakeModel = createFakeModel();
+        for (QString modelName : usedModels) {
+            fakeModel.setProperty(MODEL_NAME, modelName);
+            netlist += printer.print(fakeModel) + LINE_SEPARATOR;
         }
     }
     if (params.getSubcircuitStatus()) {

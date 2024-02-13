@@ -32,6 +32,7 @@ public:
     static void setSubcircuitDir(QString dir);
     static void setJosimExecutablePath(QString path);
     static void setJsimExecutablePath(QString path);
+    static QMap<QString, QString> getDefaultModel();
 };
 
 #endif // APP_SETTINGS_H

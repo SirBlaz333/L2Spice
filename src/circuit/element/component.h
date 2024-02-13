@@ -35,7 +35,8 @@ public:
     bool removeAttribute(Attribute attribute);
     QList<Signal> getSignalList() const;
     const Device getDevice() const;
-    void setProperty(const QString &propertyName, const Element* property);
+    void setProperty(const QString &propertyName, const QString &property);
+    void setProperty(const QString &propertyName, const Element *property);
 };
 
 

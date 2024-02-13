@@ -42,6 +42,11 @@ const Device Component::getDevice() const
     return *device;
 }
 
+void Component::setProperty(const QString &propertyName, const QString &property)
+{
+    Element::setProperty(propertyName, property);
+}
+
 void Component::setChildProperty(const QString &propertyName, const QString &property)
 {
     if (propertyName == "lib_component") {

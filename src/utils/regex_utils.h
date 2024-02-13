@@ -19,6 +19,7 @@ namespace RegexUtils {
     const QRegularExpression projectPath = QRegularExpression(R"(.+[\\|/](\w+)[\\|/]circuit[\\|/]circuit\.lp)");
     const QRegularExpression jjNameRegex = QRegularExpression(R"(JJ([a-zA-Z0-9_]+))");
     const QRegularExpression jjSpiceNameRegex = QRegularExpression(R"(B([a-zA-Z0-9_]+))");
+    const QRegularExpression jjSpiceRow = QRegularExpression(R"(<br>\s*B[a-zA-Z0-9_]+ \d+ \d+ ([a-zA-Z0-9_]+)\s*)");
     const QRegularExpression settingRegex = QRegularExpression(R"((\w+)=(.+))");
 };
 
