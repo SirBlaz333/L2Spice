@@ -83,20 +83,20 @@ void PreferencesTabs::notifyRestartRequired()
 void PreferencesTabs::onSpiceDirToolButtonClicked()
 {
     QString path = ui->spiceDirLineEdit->text();
-    QString newPath = FileManager::getPath(this, path);
+    QString newPath = FileManager::getDir(this, path);
     ui->spiceDirLineEdit->setText(newPath);
 }
 
 void PreferencesTabs::onLibreDirToolButtonClicked()
 {
     QString path = ui->libreDirLineEdit->text();
-    QString newPath = FileManager::getPath(this, path);
+    QString newPath = FileManager::getDir(this, path);
     ui->libreDirLineEdit->setText(newPath);
 }
 
 void PreferencesTabs::onSubcircuitDirToolButtonClicked() {
     QString path = ui->subcircuitDirLineEdit->text();
-    QString newPath = FileManager::getPath(this, path);
+    QString newPath = FileManager::getDir(this, path);
     ui->subcircuitDirLineEdit->setText(newPath);
 }
 

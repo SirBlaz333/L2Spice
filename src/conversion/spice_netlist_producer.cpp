@@ -22,10 +22,6 @@ const QString END = QString(".end");
 const QString DEFAULT_MODEL = QString(".MODEL %1 jj(%2)");
 const QString MODEL_NAME = QString("name");
 
-SpiceNetlistProducer::SpiceNetlistProducer() {}
-
-SpiceNetlistProducer::~SpiceNetlistProducer() {}
-
 QString SpiceNetlistProducer::writeComponents(QString parentSignalUuid,
                                               Component component,
                                               SpicePrinter printer,

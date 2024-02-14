@@ -6,6 +6,9 @@
 #include <src/circuit/circuit.h>
 #include <src/circuit/element/element.h>
 
+/**
+ * LibreNetlistParser is used to parse the LibrePCB circuit.
+ */
 class LibreNetlistParser
 {
 private:
@@ -21,7 +24,11 @@ private:
     void parseElement(QString parentUuid, QString::iterator last);
 public:
     LibreNetlistParser();
-    ~LibreNetlistParser();
+    /**
+     * Parses the LibrePCB circuit provided as a QString and creates an instances of Circuit class.
+     * @param input - LibrePCB circuit.
+     * @return an instances of Circuit.
+     */
     Circuit parseLibreNotation(QString input);
 };
 

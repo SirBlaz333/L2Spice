@@ -31,8 +31,6 @@ SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
     , params(params)
 {}
 
-SpicePrinter::~SpicePrinter() {}
-
 QString writeSignal(QString uuid, QMap<QString, QString> netLabelMap)
 {
     return uuid.isEmpty() || netLabelMap.isEmpty() ? "_ " : netLabelMap[uuid];

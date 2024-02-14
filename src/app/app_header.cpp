@@ -13,9 +13,6 @@
 const QString UNKNOWN_NAME = "UNKNOWN";
 const QString HEADER_LINE = "<header><b>*%1</b><header><br><br>";
 
-AppHeader::AppHeader() {}
-
-
 QString getTime()
 {
     auto currentTime = std::chrono::system_clock::now();

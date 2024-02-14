@@ -61,7 +61,7 @@ bool FileManager::confirmSaving(QString fileName, bool fileDialogWasShown)
     return true;
 }
 
-QString FileManager::getPath(QWidget *parent, QString path)
+QString FileManager::getDir(QWidget *parent, QString path)
 {
     path = QDir(path).exists() ? path : QDir::currentPath();
     QString directory = QFileDialog::getExistingDirectory(parent,

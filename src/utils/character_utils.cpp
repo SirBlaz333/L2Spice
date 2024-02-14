@@ -6,13 +6,13 @@ namespace characterUtils {
     {
         return c.isLetterOrNumber() || c == '-' || c == '_';
     }
-
-    bool isLeftParanthesis(QChar c)
+    
+    bool isOpenParanthesis(QChar c)
     {
         return c == '(';
     }
-
-    bool isRightParanthesis(QChar c)
+    
+    bool isCloseParanthesis(QChar c)
     {
         return c == ')';
     }

@@ -39,10 +39,10 @@ void LibreNetlistParser::parseComponent(QString parentUuid,
 {
     while (currentCharacter < last) {
         currentCharacter++;
-        if (characterUtils::isLeftParanthesis(*currentCharacter)) {
+        if (characterUtils::isOpenParanthesis(*currentCharacter)) {
             parseElement(parentUuid, last); // parse element in ();
         }
-        if (characterUtils::isRightParanthesis(*currentCharacter)) {
+        if (characterUtils::isCloseParanthesis(*currentCharacter)) {
             return; // return, because it is the end of the element;
         }
     }
@@ -68,7 +68,7 @@ void LibreNetlistParser::parseElement(QString parentUuid,
         }
     }
     // if it as property, then there is gonna be ')' afterwards.
-    else if (characterUtils::isRightParanthesis(*currentCharacter)) {
+    else if (characterUtils::isCloseParanthesis(*currentCharacter)) {
         // get the parent element from the storage using uuid
         Element *parent = elementMap[parentUuid].get();
         //if an element with current uuid is already in the storage, just add it to the parent.
@@ -109,8 +109,6 @@ LibreNetlistParser::LibreNetlistParser()
     elementFactory["device"] = []() { return QSharedPointer<Device>::create(); };
 }
 
-LibreNetlistParser::~LibreNetlistParser() {}
-
 Circuit LibreNetlistParser::parseLibreNotation(QString input)
 {
     elementMap = QMap<QString, QSharedPointer<Element>>();
@@ -119,7 +117,7 @@ Circuit LibreNetlistParser::parseLibreNotation(QString input)
     currentCharacter++;
     // check if the first character is '(' and the format is "librepcb_circuit".
     // TODO: if it is not right now or something will went wrong later, we need to show some message to the user.
-    if (characterUtils::isLeftParanthesis(front) && nextWord() == "librepcb_circuit") {
+    if (characterUtils::isOpenParanthesis(front) && nextWord() == "librepcb_circuit") {
         elementMap["none"] = QSharedPointer<Net>::create();
         parseComponents(input.end());
     }

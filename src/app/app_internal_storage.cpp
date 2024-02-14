@@ -42,5 +42,3 @@ void AppInternalStorage::updateCurrentElement(AppState newState)
 }
 
 AppInternalStorage::AppInternalStorage(const int &maxSize) : maxSize(maxSize) {}
-
-AppInternalStorage::~AppInternalStorage() {}

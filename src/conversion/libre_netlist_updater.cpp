@@ -11,10 +11,6 @@
 const QString EMPTY_STRING = "";
 const QString DEFAULT_UNIT = "none";
 
-LibreNetlistUpdater::LibreNetlistUpdater() {}
-
-LibreNetlistUpdater::~LibreNetlistUpdater() {}
-
 void LibreNetlistUpdater::setSimulatorVersion(int version)
 {
     simulatorVersion = version;
@@ -219,16 +215,16 @@ bool canUpdate(QString row) {
            && !row.startsWith("X");
 }
 
-QString LibreNetlistUpdater::updateNetlist(QString textToUpdate, QString newParams)
+QString LibreNetlistUpdater::updateNetlist(QString libreNetlist, QString spiceNetlist)
 {
-    newParams = removeSubcircuitImports(newParams);
-    QList<QString> rows = splitRows(newParams.begin(), newParams.end());
-    QMap<QString, QString> componentsMap = getComponents(textToUpdate);
+    spiceNetlist = removeSubcircuitImports(spiceNetlist);
+    QList<QString> rows = splitRows(spiceNetlist.begin(), spiceNetlist.end());
+    QMap<QString, QString> componentsMap = getComponents(libreNetlist);
     for (QString row : rows) {
         row = row.trimmed();
         if (canUpdate(row)) {
-            textToUpdate = update(textToUpdate, row, componentsMap);
+            libreNetlist = update(libreNetlist, row, componentsMap);
         }
     }
-    return textToUpdate;
+    return libreNetlist;
 }

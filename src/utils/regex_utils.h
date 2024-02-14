@@ -2,7 +2,9 @@
 #define REGEX_UTILS_H
 
 #include <QRegularExpression>
-
+/**
+ * RegexUtils is used to store different regular expressions across the whole application.
+ */
 namespace RegexUtils {
     const QRegularExpression componentRegex = QRegularExpression(R"(\(component.+?\n\s\))", QRegularExpression::DotMatchesEverythingOption);
     const QRegularExpression nameRegex = QRegularExpression(R"(\(name \"(.+?)\"\))");

@@ -3,6 +3,9 @@
 
 #include <QSet>
 
+/**
+ * GlobalVariables is used to declare global variables used across the whole application.
+ */
 class GlobalVariables
 {
 public:

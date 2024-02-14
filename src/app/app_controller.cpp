@@ -2,13 +2,9 @@
 
 #include <src/circuit/circuit.h>
 
-AppController::AppController() {}
-
-AppController::~AppController() {}
-
-QString AppController::convertToSpice(QString libreNotation, ConversionParams &params)
+QString AppController::convertToSpice(QString libreNetlist, ConversionParams &params)
 {
-    Circuit circuit = parser.parseLibreNotation(libreNotation);
+    Circuit circuit = parser.parseLibreNotation(libreNetlist);
     if (!circuit.isEmpty()) {
         QString spiceNotation = producer.produceSpiceNotationNetlist(circuit, params);
         updater.setSimulatorVersion(params.getSimulatorVersion());
@@ -17,8 +13,8 @@ QString AppController::convertToSpice(QString libreNotation, ConversionParams &p
     return "";
 }
 
-QString AppController::updateLibre(QString oldLibreNotation, QString newSpiceNotation)
+QString AppController::updateLibre(QString libreNetlist, QString spiceNetlist)
 {
-    QString newLibreNotation = updater.updateNetlist(oldLibreNotation, newSpiceNotation);
+    QString newLibreNotation = updater.updateNetlist(libreNetlist, spiceNetlist);
     return newLibreNotation;
 }

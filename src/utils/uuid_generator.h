@@ -3,7 +3,14 @@
 
 #include <QString>
 
+/**
+ * UUID generator is used to generate a random UUID
+ */
 namespace uuidGenerator {
+/**
+ * Generate random UUID
+ * @return UUID
+ */
 QString generateUUID();
 }
 

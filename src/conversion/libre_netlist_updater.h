@@ -5,7 +5,9 @@
 
 #include <QString>
 
-
+/**
+ * LibreNetlistUpdatar is used to update the LibrePCB circuit from the SPICE netlist.
+ */
 class LibreNetlistUpdater
 {
 private:
@@ -22,10 +24,20 @@ private:
                    QMap<QString, QString> componentsMap);
     QString removeSubcircuitImports(QString param);
 public:
-    LibreNetlistUpdater();
-    ~LibreNetlistUpdater();
+    /**
+     * Sets the current simulator version.
+     * @param version - new simulator version.
+     */
     void setSimulatorVersion(int version);
-    QString updateNetlist(QString textToUpdate, QString newVersion);
+
+    /**
+     * Updates the LibrePCB circuit using values from the SPICE netlits.
+     *
+     * @param libreNetlist - old LibrePCB circuit.
+     * @param spiceNetlist - new SPICE netlist.
+     * @return updated version of LibrePCB circuit.
+     */
+    QString updateNetlist(QString libreNetlist, QString spiceNetlist);
 };
 
 #endif // LIBRE_NETLIST_UPDATER_H

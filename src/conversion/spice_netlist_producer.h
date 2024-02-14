@@ -5,6 +5,9 @@
 #include <src/conversion/data/conversion_params.h>
 #include <src/circuit/circuit.h>
 
+/**
+ * SpiceNetlistProducer is used to produce a SPICE netlist from the Circuit object and with given params.
+ */
 class SpiceNetlistProducer
 {
 private:
@@ -15,8 +18,13 @@ private:
                             QSet<QString> *usedComponents);
 
 public:
-    SpiceNetlistProducer();
-    ~SpiceNetlistProducer();
+    /**
+     * Creates a SPICE netlist.
+     *
+     * @param circuit - instance of the Circuit class.
+     * @param params - instance of the ConversionParams class.
+     * @return SPICE netlist.
+     */
     QString produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params);
 };
 
