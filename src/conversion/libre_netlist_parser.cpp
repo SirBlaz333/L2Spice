@@ -4,11 +4,11 @@
 
 QString LibreNetlistParser::nextWord()
 {
-    if (characterUtils::isQuotes(*currentCharacter)) {
+    if (CharacterUtils::isQuotes(*currentCharacter)) {
         return nextDataInQuotes();
     }
     QString result;
-    while (characterUtils::isWordComponent(*currentCharacter)) {
+    while (CharacterUtils::isWordComponent(*currentCharacter)) {
         result += *currentCharacter;
         currentCharacter++;
     }
@@ -19,7 +19,7 @@ QString LibreNetlistParser::nextDataInQuotes()
 {
     QString result;
     currentCharacter++; //skip the opening quote.
-    while (!characterUtils::isQuotes(*currentCharacter)) {
+    while (!CharacterUtils::isQuotes(*currentCharacter)) {
         result += *currentCharacter;
         currentCharacter++;
     }
@@ -39,10 +39,10 @@ void LibreNetlistParser::parseComponent(QString parentUuid,
 {
     while (currentCharacter < last) {
         currentCharacter++;
-        if (characterUtils::isOpenParanthesis(*currentCharacter)) {
+        if (CharacterUtils::isOpenParanthesis(*currentCharacter)) {
             parseElement(parentUuid, last); // parse element in ();
         }
-        if (characterUtils::isCloseParanthesis(*currentCharacter)) {
+        if (CharacterUtils::isCloseParanthesis(*currentCharacter)) {
             return; // return, because it is the end of the element;
         }
     }
@@ -56,7 +56,7 @@ void LibreNetlistParser::parseElement(QString parentUuid,
     currentCharacter++;
     QString value = nextWord(); // get either uuid/property or attribute name.
     // if it is an element, then there is gonna be a whitespace character afterwards.
-    if (characterUtils::isWhitespaceCharacter(*currentCharacter)) {
+    if (CharacterUtils::isWhitespaceCharacter(*currentCharacter)) {
         // create new element based on its name and uuid (name for attribute).
         Element *element = createNewElement(name, value);
         parseComponent(element->getUuid(), last); //parse the nested properties or elements.
@@ -68,7 +68,7 @@ void LibreNetlistParser::parseElement(QString parentUuid,
         }
     }
     // if it as property, then there is gonna be ')' afterwards.
-    else if (characterUtils::isCloseParanthesis(*currentCharacter)) {
+    else if (CharacterUtils::isCloseParanthesis(*currentCharacter)) {
         // get the parent element from the storage using uuid
         Element *parent = elementMap[parentUuid].get();
         //if an element with current uuid is already in the storage, just add it to the parent.
@@ -89,7 +89,7 @@ Element* LibreNetlistParser::createNewElement(QString name, QString uuid)
     // if it is an attribute, we need to create uuid ourselves and set the name to the attribute
     if (element->getElementType() == "attribute") {
         QString name = uuid;
-        uuid = uuidGenerator::generateUUID();
+        uuid = UUIDGenerator::generateUUID();
         element->setProperty("name", name);
     }
     element->setProperty("uuid", uuid);
@@ -117,7 +117,7 @@ Circuit LibreNetlistParser::parseLibreNotation(QString input)
     currentCharacter++;
     // check if the first character is '(' and the format is "librepcb_circuit".
     // TODO: if it is not right now or something will went wrong later, we need to show some message to the user.
-    if (characterUtils::isOpenParanthesis(front) && nextWord() == "librepcb_circuit") {
+    if (CharacterUtils::isOpenParanthesis(front) && nextWord() == "librepcb_circuit") {
         elementMap["none"] = QSharedPointer<Net>::create();
         parseComponents(input.end());
     }

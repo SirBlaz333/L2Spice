@@ -6,7 +6,7 @@
 
 #include <src/circuit/element/component.h>
 
-namespace attributeUtils {
+namespace AttributeUtils {
 /**
  * @param unit - physical unit with prefix.
  * @return short version of prefix.

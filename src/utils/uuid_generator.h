@@ -6,7 +6,7 @@
 /**
  * UUID generator is used to generate a random UUID
  */
-namespace uuidGenerator {
+namespace UUIDGenerator {
 /**
  * Generate random UUID
  * @return UUID

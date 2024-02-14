@@ -8,7 +8,7 @@ const QMap<QString, QString> prefixes =
 const QString EMPTY_STRING = QString();
 const int SOURCE_GROUP = 1;
 
-QString attributeUtils::getUnitShortPrefix(QString unit)
+QString AttributeUtils::getUnitShortPrefix(QString unit)
 {
     for (const auto &key : prefixes.keys()) {
         if (unit.contains(key)) {
@@ -18,7 +18,7 @@ QString attributeUtils::getUnitShortPrefix(QString unit)
     return EMPTY_STRING;
 }
 
-QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
+QString AttributeUtils::getFullUnitPrefix(QString shortPrefix)
 {
     for (const auto &key : prefixes.keys()) {
         if (shortPrefix == prefixes.value(key)) {
@@ -31,7 +31,7 @@ QString attributeUtils::getFullUnitPrefix(QString shortPrefix)
 QString writeAttribute(Attribute attribute, bool includeName)
 {
     QString result = includeName ? attribute.getName() + "=" : EMPTY_STRING;
-    return result + attribute.getValue() + attributeUtils::getUnitShortPrefix(attribute.getUnit()) + " ";
+    return result + attribute.getValue() + AttributeUtils::getUnitShortPrefix(attribute.getUnit()) + " ";
 }
 
 QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iterator end, bool includeName)
@@ -49,7 +49,7 @@ QString writeAttributes(QList<Attribute>::iterator begin, QList<Attribute>::iter
     return result;
 }
 
-QString attributeUtils::writeAttributes(QList<Attribute> attributes, QString value, bool includeName)
+QString AttributeUtils::writeAttributes(QList<Attribute> attributes, QString value, bool includeName)
 {
     QList<Attribute>::iterator begin = attributes.begin();
     QList<Attribute>::iterator end = attributes.end();
@@ -58,7 +58,7 @@ QString attributeUtils::writeAttributes(QList<Attribute> attributes, QString val
     return sourceType == EMPTY_STRING ? attributesLine : sourceType.toLower() + "(" + attributesLine + ")";
 }
 
-QString attributeUtils::getUnitWithoutPrefix(QString unit)
+QString AttributeUtils::getUnitWithoutPrefix(QString unit)
 {
     for (const auto &key : prefixes.keys()) {
         if (unit.contains(key)) {
@@ -68,7 +68,7 @@ QString attributeUtils::getUnitWithoutPrefix(QString unit)
     return unit;
 }
 
-QString attributeUtils::getSourceType(QString value)
+QString AttributeUtils::getSourceType(QString value)
 {
     QRegularExpressionMatch match = RegexUtils::sourceTypeRegex.match(value);
     if (match.hasMatch()) {

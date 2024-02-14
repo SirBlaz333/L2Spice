@@ -8,7 +8,7 @@ static std::mt19937 generator(randomDevice());
 static std::uniform_int_distribution<> distribution(0, 15);
 static std::uniform_int_distribution<> distribution2(8, 11);
 
-namespace uuidGenerator {
+namespace UUIDGenerator {
 
     QString generateUUID()
     {

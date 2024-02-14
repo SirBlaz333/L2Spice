@@ -92,8 +92,8 @@ QString LibreNetlistUpdater::getNewUnit(QString param, QString attribute)
         return unit;
     }
     QString unitPrefixSymbol = getSubString(RegexUtils::paramRegex, param, 2);
-    QString unitFullPrefix = attributeUtils::getFullUnitPrefix(unitPrefixSymbol);
-    QString unitWithoutPrefix = attributeUtils::getUnitWithoutPrefix(unit);
+    QString unitFullPrefix = AttributeUtils::getFullUnitPrefix(unitPrefixSymbol);
+    QString unitWithoutPrefix = AttributeUtils::getUnitWithoutPrefix(unit);
     return unitFullPrefix + unitWithoutPrefix;
 }
 

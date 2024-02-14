@@ -1,6 +1,6 @@
 #include "character_utils.h"
 
-namespace characterUtils {
+namespace CharacterUtils {
 
     bool isWordComponent(QChar c)
     {

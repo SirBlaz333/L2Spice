@@ -61,7 +61,7 @@ QString SpicePrinter::printComponent(Component component, QString parentUUID)
     if (component.getValue() == "VCC") {
         result += "0 " + AppSettings::getVCCValue();
     }
-    result += attributeUtils::writeAttributes(component.getAttributeList(), component.getValue());
+    result += AttributeUtils::writeAttributes(component.getAttributeList(), component.getValue());
     return result;
 }
 
@@ -83,7 +83,7 @@ QString SpicePrinter::printModel(Component model)
     } else if (params.getSimulatorVersion() == GlobalVariables::SIMULATOR_VERSION_JOSIM) {
         eraseUnwantedAttributes(&attributes, GlobalVariables::JOSIM_MODEL_ATTRIBUTES);
     }
-    return MODEL.arg(model.getName(), attributeUtils::writeAttributes(attributes, model.getValue(), true));
+    return MODEL.arg(model.getName(), AttributeUtils::writeAttributes(attributes, model.getValue(), true));
 }
 
 QString printTran(Component tran)
@@ -94,7 +94,7 @@ QString printTran(Component tran)
             break;
         }
     }
-    return TRAN.arg(attributeUtils::writeAttributes(tran.getAttributeList()));
+    return TRAN.arg(AttributeUtils::writeAttributes(tran.getAttributeList()));
 }
 
 QString SpicePrinter::print(Component component, QString parentUUID)

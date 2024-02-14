@@ -5,7 +5,7 @@
 /**
  * Character utils is used to what group does the character belong
  */
-namespace characterUtils {
+namespace CharacterUtils {
 /**
  * @brief Checks whether the charatecter is a word component.
  * In our case whether it is a letter, number, dash or undescore.
