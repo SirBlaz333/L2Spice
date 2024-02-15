@@ -11,7 +11,7 @@ class AppSettings
 {
 private:
     static QMap<QString, QString> settings;
-    static QMap<QString, QString> model;
+    static QList<QPair<QString, QString>> model;
 
 public:
     /**
@@ -75,9 +75,9 @@ public:
     static QString getJsimExecutablePath();
 
     /**
-     * @return map that contains default model parameters.
+     * @return list of pairs that contains default model parameters.
      */
-    static QMap<QString, QString> getDefaultModel();
+    static QList<QPair<QString, QString>> getDefaultModel();
 
     /**
      * Sets new value to the "include header" parameter.

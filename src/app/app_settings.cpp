@@ -17,7 +17,7 @@ const QString SPICE_DIR = "SPICE_DIR";
 const QString SUBCIRCUIT_DIR = "SUBCIRCUIT_DIR";
 
 QMap<QString, QString> AppSettings::settings = QMap<QString, QString>();
-QMap<QString, QString> AppSettings::model = QMap<QString, QString>();
+QList<QPair<QString, QString>> AppSettings::model = QList<QPair<QString, QString>>();
 
 QString initSubcircuitDir()
 {
@@ -41,7 +41,8 @@ void AppSettings::loadSettings()
     it = RegexUtils::settingRegex.globalMatch(fileModel);
     while (it.hasNext()) {
         QRegularExpressionMatch match = it.next();
-        model.insert(match.captured(1), match.captured(2));
+        std::pair pair(match.captured(1), match.captured(2));
+        model.append(pair);
     }
 
     QDir dir(getSubcircuitDir());
@@ -159,7 +160,7 @@ void AppSettings::setJsimExecutablePath(QString path)
     settings.insert(JSIM_PATH, path);
 }
 
-QMap<QString, QString> AppSettings::getDefaultModel()
+QList<QPair<QString, QString>> AppSettings::getDefaultModel()
 {
     return model;
 }

@@ -190,11 +190,11 @@ Component createFakeModel()
 {
     Component modelComponent;
     modelComponent.setProperty("value", "{{MODEL/JJ}}");
-    QMap<QString, QString> model = AppSettings::getDefaultModel();
-    for (QString &key : model.keys()) {
+    QList<QPair<QString, QString>> model = AppSettings::getDefaultModel();
+    for (QPair<QString, QString> &pair : model) {
         QSharedPointer<Element> attribute = QSharedPointer<Attribute>::create();
-        attribute->setProperty("name", key);
-        attribute->setProperty("value", model[key]);
+        attribute->setProperty("name", pair.first);
+        attribute->setProperty("value", pair.second);
         modelComponent.setProperty("attribute", attribute.get());
     }
     return modelComponent;
