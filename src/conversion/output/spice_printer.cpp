@@ -22,6 +22,7 @@ const QString CURRENT_WARNING = QString(
     "connected device was chosen. Specify the device name in the %1 parameters.<br>%2</b><br>");
 const QString CURRENT_ERROR = QString("<br><b style=\"color:red\">*ERROR! Ammeter %1 was misplaced. "
                                       "Cannot display the output.</b><br>");
+const QString TEXT_TEMPLATE = QString("*%1<br>");
 
 SpicePrinter::SpicePrinter(const QMap<QString, QString> &netLabelMap,
                            const QMap<QString, QSet<Component>> &netComponentsMap,
@@ -200,6 +201,21 @@ QString SpicePrinter::printOutput(Component component) {
         return printMeter(component);
     }
     return EMPTY_STRING;
+}
+
+
+QString SpicePrinter::printTexts(QList<Component> components)
+{
+    QString result;
+    for (Component &component : components) {
+        for (Attribute &attribute : component.getAttributeList()) {
+            QString text = attribute.getValue();
+            if (!text.isEmpty()) {
+                result.append(TEXT_TEMPLATE.arg(text));
+            }
+        }
+    }
+    return result + LINE_SEPARATOR;
 }
 
 QString SpicePrinter::printOutputs(QList<Component> components)

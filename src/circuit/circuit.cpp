@@ -1,6 +1,6 @@
 #include "circuit.h"
 
-Circuit::Circuit(){}
+Circuit::Circuit() {}
 
 Circuit::~Circuit() {}
 
@@ -44,6 +44,11 @@ void Circuit::addElement(const Element *element)
         outputs.append(*component);
         return;
     }
+    if (element->getElementType() == "text") {
+        const Component *component = dynamic_cast<const Component *>(element);
+        texts.append(*component);
+        return;
+    }
 }
 
 const Variant Circuit::getVariant() const
@@ -82,4 +87,9 @@ QList<Component> Circuit::getModels() const
 QList<Component> Circuit::getOutputs() const
 {
     return outputs;
+}
+
+QList<Component> Circuit::getTexts() const
+{
+    return texts;
 }

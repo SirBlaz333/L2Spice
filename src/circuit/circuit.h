@@ -18,6 +18,7 @@ private:
     QList<Component> components;
     QList<Component> models;
     QList<Component> outputs;
+    QList<Component> texts;
 
 public:
     Circuit();
@@ -30,6 +31,7 @@ public:
     QList<Component> getComponents() const;
     QList<Component> getModels() const;
     QList<Component> getOutputs() const;
+    QList<Component> getTexts() const;
     void addElement(const Element *element);
 };
 

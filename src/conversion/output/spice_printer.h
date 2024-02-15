@@ -51,6 +51,14 @@ public:
      * return a string representation of the given list of the SPICE outputs.
      */
     QString printOutputs(QList<Component> components);
+
+    /**
+     * Creates a string representation for the texts.
+     *
+     * @param components - the list of the components.
+     * return a string representation of the given list of the texts.
+     */
+    QString printTexts(QList<Component> components);
 };
 
 #endif // SPICE_PRINTER_H

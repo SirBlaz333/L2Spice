@@ -214,6 +214,10 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
                                       printer,
                                       netComponentsMap,
                                       &usedComponents);
+    if (!circuit.getTexts().empty()) {
+        netlist = printer.printTexts(circuit.getTexts()) + netlist;
+    }
+
     QSet<QString> usedModels = findAllUsedModel(netlist);
     if (!usedModels.empty()) {
         netlist += LINE_SEPARATOR;
@@ -222,7 +226,7 @@ QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit
             usedModels.remove(model.getName());
         }
         Component fakeModel = createFakeModel();
-        for (QString modelName : usedModels) {
+        for (const QString &modelName : usedModels) {
             fakeModel.setProperty(MODEL_NAME, modelName);
             netlist += printer.print(fakeModel) + LINE_SEPARATOR;
         }

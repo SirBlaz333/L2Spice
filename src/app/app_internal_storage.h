@@ -18,7 +18,7 @@ class AppInternalStorage
     QList<AppState> storage;
 public:
     /**
-     * Adds the new element in the storage.
+     * Adds the new element to the storage.
      *
      * @param librePCBNetlist - LibrePCB circuit.
      * @param spiceNetlist - SPICE netlist.

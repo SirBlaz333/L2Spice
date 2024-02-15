@@ -1,7 +1,10 @@
 #include "component.h"
 
-const QMap<QString, QString> specialComponents =
-    {{"{{MODEL/JJ}}", "model"}, {"{{TRAN}}", "tran"}, {"{{PROBE}}", "probe"}, {"{{METER}}", "meter"}};
+const QMap<QString, QString> specialComponents = {{"{{MODEL/JJ}}", "model"},
+                                                  {"{{TRAN}}", "tran"},
+                                                  {"{{PROBE}}", "probe"},
+                                                  {"{{METER}}", "meter"},
+                                                  {"{{TEXT}}", "text"}};
 
 QString Component::getLibComponent() const
 {

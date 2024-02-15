@@ -19,7 +19,7 @@ private:
 
 public:
     /**
-     * Creates LibrePCB circuit into the SPICE netlist.
+     * Creates the SPICE netlist from the LibrePCB circuit.
      *
      * @param libreNetlist - LibrePCB circuit.
      * @param params - instance of ConversionParams class, that contains desired parameters for the conversion.
