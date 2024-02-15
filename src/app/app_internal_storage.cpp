@@ -33,12 +33,14 @@ AppState AppInternalStorage::previousElement()
 
 AppState AppInternalStorage::currentElement()
 {
-    return storage[currentElementId];
+    return storage.isEmpty() ? AppState() : storage[currentElementId];
 }
 
 void AppInternalStorage::updateCurrentElement(AppState newState)
 {
-    storage[currentElementId] = newState;
+    if(!storage.isEmpty()) {
+        storage[currentElementId] = newState;
+    }
 }
 
 AppInternalStorage::AppInternalStorage(const int &maxSize) : maxSize(maxSize) {}
