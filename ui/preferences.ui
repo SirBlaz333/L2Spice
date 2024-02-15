@@ -224,7 +224,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Header pettern: </string>
+             <string>Header template: </string>
             </property>
            </widget>
           </item>
