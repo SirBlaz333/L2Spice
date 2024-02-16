@@ -9,10 +9,10 @@
 #include <src/console/console_app.h>
 
 QString initStyles();
-void initDefaultSettings();
 
 int main(int argc, char *argv[])
 {
+    AppSettings::loadSettings();
     if (argc > 1) {
         ConsoleApplication console(argc, argv);
         return console.exec();
@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     MainWindow window;
     app.setStyleSheet(initStyles());
-    initDefaultSettings();
     window.show();
     return app.exec();
 }
@@ -34,9 +33,4 @@ QString initStyles()
         return styles;
     }
     return "";
-}
-
-void initDefaultSettings()
-{
-    AppSettings::loadSettings();
 }
