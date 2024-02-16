@@ -93,9 +93,9 @@ int ConsoleApplication::exec()
     result = TextUtils::convertHtmlToPlain(result);
     bool fileIsSaved = FileManager::save(outputFileName, result);
     if (!fileIsSaved) {
-        std::cout << "Cannot save the output file";
+        std::cout << "Cannot save the output file" << std::endl;
         return 1;
     }
-    std::cout << "Converted successfully!";
+    std::cout << "Converted successfully!" << std::endl;
     return 0;
 }
