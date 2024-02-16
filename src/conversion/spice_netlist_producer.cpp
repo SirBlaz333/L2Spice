@@ -200,7 +200,7 @@ Component createFakeModel()
     return modelComponent;
 }
 
-QString SpiceNetlistProducer::produceSpiceNotationNetlist(const Circuit &circuit,
+QString SpiceNetlistProducer::produceSpiceNetlist(const Circuit &circuit,
                                                           const ConversionParams &params)
 {
     QList<Component> components = circuit.getComponents();

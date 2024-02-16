@@ -25,7 +25,7 @@ public:
      * @param params - instance of the ConversionParams class.
      * @return SPICE netlist.
      */
-    QString produceSpiceNotationNetlist(const Circuit &circuit, const ConversionParams &params);
+    QString produceSpiceNetlist(const Circuit &circuit, const ConversionParams &params);
 };
 
 #endif // SPICE_NETLIST_PRODUCER_H

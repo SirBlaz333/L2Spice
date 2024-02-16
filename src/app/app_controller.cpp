@@ -6,7 +6,7 @@ QString AppController::convertToSpice(QString libreNetlist, ConversionParams &pa
 {
     Circuit circuit = parser.parseLibreNotation(libreNetlist);
     if (!circuit.isEmpty()) {
-        QString spiceNotation = producer.produceSpiceNotationNetlist(circuit, params);
+        QString spiceNotation = producer.produceSpiceNetlist(circuit, params);
         updater.setSimulatorVersion(params.getSimulatorVersion());
         return spiceNotation;
     }
