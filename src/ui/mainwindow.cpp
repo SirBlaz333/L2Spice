@@ -12,7 +12,7 @@
 #include <src/file/file_manager.h>
 
 const QString EMPTY = QString();
-const QUrl USER_MANUAL_URL = QUrl::fromLocalFile("user_manual.pdf");
+const QUrl USER_MANUAL_URL = QUrl::fromLocalFile("L2Spice_user_manual.pdf");
 const QUrl LIBRE_PCB_URL = QUrl("https://librepcb.org/docs/");
 const QString CIRCUIT_EXAMPLE = QString("example.lp");
 const QString LIBRE_PCB_EXTENSION = QString("Libre PCB Circuit File (*.lp)");
