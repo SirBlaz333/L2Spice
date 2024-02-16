@@ -3,6 +3,7 @@
 #include "src/utils/global_variables.h"
 #include <iostream>
 #include <qfileinfo.h>
+#include <src/utils/text_utils.h>
 #include <vector>
 
 const Flag HELP_FLAG = Flag("-h", "--help");
@@ -62,7 +63,8 @@ int ConsoleApplication::exec()
         throw std::runtime_error("Too many input parameters!");
     }
     if (has_option(args, HELP_FLAG)) {
-        std::cout << "HELP!!!" << std::endl;
+        QString help = FileManager::loadFile("settings/help.txt");
+        std::cout << help.toStdString() << std::endl;
         return 0;
     }
     if (has_option(args, VERSION_FLAG)) {
@@ -78,17 +80,19 @@ int ConsoleApplication::exec()
     QString inputFileName = QString::fromStdString(get_option(args, INPUT_FLAG));
     QString outputFileName = QString::fromStdString(get_option(args, OUTPUT_FLAG));
     QString result;
-    if(QFileInfo(inputFileName).suffix() == "lp") {
+    if (QFileInfo(inputFileName).suffix() == "lp") {
         QString input = FileManager::loadFile(inputFileName);
         ConversionParams conversionParams = getConversionParams(args);
         result = appController.convertToSpice(input, conversionParams);
     }
-    if(QFileInfo(inputFileName).suffix() == "cir" && QFileInfo(outputFileName).suffix() == "lp") {
+    if (QFileInfo(inputFileName).suffix() == "cir" && QFileInfo(outputFileName).suffix() == "lp") {
         QString newSpice = FileManager::loadFile(inputFileName);
         QString oldLibre = FileManager::loadFile(outputFileName);
         result = appController.updateLibre(oldLibre, newSpice);
     }
-    if (!FileManager::save(outputFileName, result)) {
+    result = TextUtils::convertHtmlToPlain(result);
+    bool fileIsSaved = FileManager::save(outputFileName, result);
+    if (!fileIsSaved) {
         std::cout << "Cannot save the output file";
         return 1;
     }

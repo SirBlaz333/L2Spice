@@ -10,6 +10,7 @@
 
 #include <src/app/app_settings.h>
 #include <src/file/file_manager.h>
+#include <src/utils/text_utils.h>
 
 const QString EMPTY = QString();
 const QUrl USER_MANUAL_URL = QUrl::fromLocalFile("L2Spice_user_manual.pdf");
@@ -121,12 +122,6 @@ QString saveSpiceFile(QWidget *parent, QString fileName, QString data, bool forc
     return saveFile(parent, fileName, data, SPICE_EXTENSION, dir, forcedFileDialog);
 }
 
-QString convertHtmlToPlain(QString htmlText) {
-    QTextDocument htmlDoc;
-    htmlDoc.setHtml(htmlText);
-    return htmlDoc.toPlainText();
-}
-
 void MainWindow::convertToSpice()
 {
     try {
@@ -138,7 +133,7 @@ void MainWindow::convertToSpice()
             return;
         }
         if (params.getSubcircuitStatus()) {
-            saveSubcircuitIfNeeded(convertHtmlToPlain(spiceNetlist), params);
+            saveSubcircuitIfNeeded(TextUtils::convertHtmlToPlain(spiceNetlist), params);
         } else {
             spiceNetlist = header.getHeader(params, ui->libreFileLabel->text()) + spiceNetlist;
         }

@@ -1,0 +1,17 @@
+L2Spice command line interface (CLI).
+
+Usage:
+	L2SPICE [OPTION]...
+	L2SPICE -i [FILE] -o [FILE] [OPTION]...
+
+Options:
+	-h, --help		displays the help menu
+	-v, --version		is the command line option used to displays the current version
+	-i, --input		indicates the input file
+	-o, --output		indicates the output file
+	-s, --subcircuit	converts to the subcircuit
+	-j, --jsim		converts to JSIM simulator. By default, converts to JoSIM.
+	-wc, --without-console	converts without console output
+	-wf, --without-file	converts without file output
+
+For more information, please read the user manual.

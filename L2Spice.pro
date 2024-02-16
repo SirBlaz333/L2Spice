@@ -39,6 +39,7 @@ SOURCES += \
     src/utils/attribute_utils.cpp \
     src/utils/character_utils.cpp \
     src/utils/global_variables.cpp \
+    src/utils/text_utils.cpp \
     src/utils/uuid_generator.cpp
 
 HEADERS += \
@@ -73,6 +74,7 @@ HEADERS += \
     src/utils/character_utils.h \
     src/utils/global_variables.h \
     src/utils/regex_utils.h \
+    src/utils/text_utils.h \
     src/utils/uuid_generator.h
 
 FORMS += \

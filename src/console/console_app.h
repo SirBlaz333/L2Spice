@@ -15,6 +15,8 @@ class ConsoleApplication
 public:
     ConsoleApplication(int argc, char **argv);
     int exec();
+private:
+    QString convertHtmlToPlain(QString);
 };
 
 #endif // CONSOLE_APP_H
