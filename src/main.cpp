@@ -14,15 +14,15 @@ void initDefaultSettings();
 int main(int argc, char *argv[])
 {
     if (argc > 1) {
-        ConsoleApplication c(argc, argv);
-        return c.exec();
+        ConsoleApplication console(argc, argv);
+        return console.exec();
     }
-    QApplication a(argc, argv);
-    MainWindow w;
-    a.setStyleSheet(initStyles());
+    QApplication app(argc, argv);
+    MainWindow window;
+    app.setStyleSheet(initStyles());
     initDefaultSettings();
-    w.show();
-    return a.exec();
+    window.show();
+    return app.exec();
 }
 
 QString initStyles()
