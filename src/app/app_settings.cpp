@@ -46,7 +46,7 @@ void AppSettings::loadSettings()
     }
 
     QDir dir(getSubcircuitDir());
-    if (!dir.exists()) {
+    if (!dir.exists() || getSubcircuitDir().isEmpty()) {
         setSubcircuitDir(initSubcircuitDir());
     }
 }
