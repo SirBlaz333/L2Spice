@@ -11,8 +11,6 @@ class ConsoleApplication
     AppHeader appHeader;
     int argc;
     char **argv;
-    bool showHelp;
-    bool convert;
 
 public:
     ConsoleApplication(int argc, char **argv);
